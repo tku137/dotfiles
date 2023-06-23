@@ -1,0 +1,18 @@
+layout {
+    pane size=1 borderless=true {
+        plugin location="zellij:compact-bar"
+    }
+    pane split_direction="vertical" {
+        pane command="nvim"
+        pane split_direction="horizontal" size="40%" {
+            pane command="ipython"
+            pane command="git" {
+                args "status"
+            }
+
+        }
+    }
+    pane size=1 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+}
