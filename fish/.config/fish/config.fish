@@ -4,6 +4,7 @@ end
 starship init fish | source
 direnv hook fish | source
 fzf_configure_bindings --directory=\cf
+zoxide init fish | source
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
