@@ -87,9 +87,9 @@ config.colors = {
   tab_bar = {
     active_tab = {
       -- The color of the background area for the tab
-      bg_color = '#2b2042',
+      bg_color = '#494d64',
       -- The color of the text for the tab
-      fg_color = '#c6a0f6',
+      fg_color = '#cad3f5',
 
       -- Specify whether you want "Half", "Normal" or "Bold" intensity for the
       -- label shown for this tab.
@@ -111,8 +111,8 @@ config.colors = {
     },
     -- Inactive tabs are the tabs that do not have focus
     inactive_tab = {
-      bg_color = '#1b1032',
-      fg_color = '#808080',
+      bg_color = '#24273a',
+      fg_color = '#a5adcb',
 
       -- The same options that were listed under the `active_tab` section above
       -- can also be used for `inactive_tab`.
@@ -121,8 +121,8 @@ config.colors = {
     -- You can configure some alternate styling when the mouse pointer
     -- moves over inactive tabs
     inactive_tab_hover = {
-      bg_color = '#3b3052',
-      fg_color = '#909090',
+      bg_color = '#363a4f',
+      fg_color = '#b8c0e0',
       italic = true,
 
       -- The same options that were listed under the `active_tab` section above
