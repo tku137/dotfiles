@@ -18,19 +18,29 @@ config.color_scheme = 'Catppuccin Macchiato'
 
 
 -- FONT
+-- MeslLGS Nerd Font is very good
+-- config.font = wezterm.font 'MesloLGS Nerd Font'
+-- JetBrains is very good
+config.font = wezterm.font 'JetBrainsMono Nerd Font'
+-- SourceCodePro is similar to FiraCode
+-- config.font = wezterm.font 'SauceCodePro Nerd Font'
+-- FiraCode is ok, but bad anti-aliasing
 -- config.font = wezterm.font 'FiraCode Nerd Font'
-config.font = wezterm.font_with_fallback({
-    {
-      family = "FiraCode Nerd Font Mono",
-      weight = "Regular",
-    },
-    {
-      -- Fallback font with all the Netd Font Symbols
-      family = "Symbols Nerd Font Mono",
-      scale = 0.9,
-    },
-  })
-config.font_size = 14.0
+
+-- config.font = wezterm.font_with_fallback({
+    -- {
+      -- family = "FiraCode Nerd Font",
+      -- weight = "Regular",
+    -- },
+    -- {
+    --   -- Fallback font with all the Netd Font Symbols
+    --   family = "Symbols Nerd Font Mono",
+    --   scale = 0.9,
+    -- },
+  -- })
+
+config.font_size = 15.0
+config.line_height = 1.1
 
 
 
@@ -68,11 +78,11 @@ config.window_frame = {
   -- Whatever font is selected here, it will have the
   -- main font setting appended to it to pick up any
   -- fallback fonts you may have used there.
-  font = wezterm.font { family = 'FiraCode Nerd Font Mono', weight = 'Bold' },
+  font = wezterm.font { family = 'JetBrainsMono Nerd Font', weight = 'Bold' },
 
   -- The size of the font in the tab bar.
   -- Default to 10.0 on Windows but 12.0 on other systems
-  font_size = 12.0,
+  font_size = 13.0,
 
   -- The overall background color of the tab bar when
   -- the window is focused
