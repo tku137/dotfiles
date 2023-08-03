@@ -4,6 +4,9 @@ local wezterm = require 'wezterm'
 -- This table will hold the configuration.
 local config = {}
 
+-- set font everywhere
+local font = 'JetBrainsMono Nerd Font'
+
 -- In newer versions of wezterm, use the config_builder which will
 -- help provide clearer error messages
 if wezterm.config_builder then
@@ -21,7 +24,7 @@ config.color_scheme = 'Catppuccin Macchiato'
 -- MeslLGS Nerd Font is very good
 -- config.font = wezterm.font 'MesloLGS Nerd Font'
 -- JetBrains is very good
-config.font = wezterm.font 'JetBrainsMono Nerd Font'
+config.font = wezterm.font(font)
 -- SourceCodePro is similar to FiraCode
 -- config.font = wezterm.font 'SauceCodePro Nerd Font'
 -- FiraCode is ok, but bad anti-aliasing
@@ -79,7 +82,7 @@ config.window_frame = {
   -- Whatever font is selected here, it will have the
   -- main font setting appended to it to pick up any
   -- fallback fonts you may have used there.
-  font = wezterm.font { family = 'JetBrainsMono Nerd Font', weight = 'Bold' },
+  font = wezterm.font { family = font, weight = 'Bold' },
 
   -- The size of the font in the tab bar.
   -- Default to 10.0 on Windows but 12.0 on other systems
