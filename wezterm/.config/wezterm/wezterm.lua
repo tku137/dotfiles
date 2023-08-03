@@ -54,6 +54,7 @@ config.scrollback_lines = 5000
 -- TWEAKS
 config.hide_mouse_cursor_when_typing = true
 config.hide_tab_bar_if_only_one_tab = true
+config.use_dead_keys = false
 
 -- overwrites ToggleFullScreen key assignment to ujse native macOS fullscreen
 config.native_macos_fullscreen_mode = false
