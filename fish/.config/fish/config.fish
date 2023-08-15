@@ -7,3 +7,6 @@ direnv hook fish | source
 fzf_configure_bindings --directory=\cf
 zoxide init fish | source
 
+if test -e /Users/tony/getml/google-cloud-sdk/path.fish.inc
+  source /Users/tony/getml/google-cloud-sdk/path.fish.inc
+end
