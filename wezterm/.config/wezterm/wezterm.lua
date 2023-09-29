@@ -15,8 +15,24 @@ end
 
 -- This is where you actually apply your config choices
 
+function get_appearance()
+  if wezterm.gui then
+    return wezterm.gui.get_appearance()
+  end
+  return 'Dark'
+end
+
+function scheme_for_appearance(appearance)
+  if appearance:find 'Dark' then
+    return 'Catppuccin Macchiato'
+  else
+    return 'Catppuccin Latte'
+  end
+end
+
 -- For example, changing the color scheme:
-config.color_scheme = 'Catppuccin Macchiato'
+-- config.color_scheme = 'Catppuccin Macchiato'
+config.color_scheme = scheme_for_appearance(get_appearance())
 
 
 
