@@ -5,7 +5,7 @@ local wezterm = require 'wezterm'
 local config = {}
 
 -- set font everywhere
-local font = 'JetBrainsMono Nerd Font'
+local font = 'JetBrainsMono NF'
 
 -- In newer versions of wezterm, use the config_builder which will
 -- help provide clearer error messages
