@@ -5,7 +5,7 @@ local wezterm = require 'wezterm'
 local config = {}
 
 -- set font everywhere
-local font = 'JetBrainsMono NF'
+local font = 'FiraCode Nerd Font'
 
 -- In newer versions of wezterm, use the config_builder which will
 -- help provide clearer error messages
@@ -31,8 +31,8 @@ function scheme_for_appearance(appearance)
 end
 
 -- For example, changing the color scheme:
--- config.color_scheme = 'Catppuccin Macchiato'
-config.color_scheme = scheme_for_appearance(get_appearance())
+config.color_scheme = 'Catppuccin Macchiato'
+-- config.color_scheme = scheme_for_appearance(get_appearance())
 
 
 
