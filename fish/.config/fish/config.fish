@@ -10,3 +10,6 @@ zoxide init fish | source
 if test -e /Users/tony/getml/google-cloud-sdk/path.fish.inc
   source /Users/tony/getml/google-cloud-sdk/path.fish.inc
 end
+
+# Created by `pipx` on 2024-01-23 22:33:03
+set PATH $PATH /Users/tku137/.local/bin
