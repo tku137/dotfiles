@@ -10,3 +10,6 @@ zoxide init fish | source
 if test -e /Users/tony/getml/google-cloud-sdk/path.fish.inc
   source /Users/tony/getml/google-cloud-sdk/path.fish.inc
 end
+
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+

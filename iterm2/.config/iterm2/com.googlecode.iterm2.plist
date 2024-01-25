@@ -1851,7 +1851,7 @@
 			<key>Custom Command</key>
 			<string>No</string>
 			<key>Custom Directory</key>
-			<string>No</string>
+			<string>Recycle</string>
 			<key>Default Bookmark</key>
 			<string>No</string>
 			<key>Description</key>
@@ -2301,6 +2301,8 @@
 	</dict>
 	<key>SoundForEsc</key>
 	<false/>
+	<key>TabStyleWithAutomaticOption</key>
+	<integer>1</integer>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>findMode_iTerm</key>
