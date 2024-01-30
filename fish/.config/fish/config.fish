@@ -13,3 +13,5 @@ end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
+# Created by `pipx` on 2024-01-23 22:33:03
+set PATH $PATH /Users/tku137/.local/bin
