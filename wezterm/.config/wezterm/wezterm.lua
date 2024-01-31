@@ -161,6 +161,8 @@ config.colors = {
   },
 }
 
+config.command_palette_bg_color = '#24273a'
+config.command_palette_fg_color = '#a5adcb'
 
 -- and finally, return the configuration to wezterm
 return config
