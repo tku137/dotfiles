@@ -19,17 +19,17 @@ layouts:
   - fullscreen
   # - tall-right
   - wide
-  # - two-pane
-  # - middle-wide
+  - two-pane
+  - middle-wide
   # - 3column-left
-  # - 3column-middle
+  # - middle-wide # The legacy name of "3column-middle"
   # - 3column-right
   # - 4column-left
   # - 4column-right
   - column
   # - row
   # - floating
-  # - widescreen-tall
+  - widescreen-tall
   # - widescreen-tall-right
   # - bsp
 
@@ -258,10 +258,52 @@ window-minimum-height: 0
 window-minimum-width: 0
 
 # List of bundle identifiers for applications to either be automatically floating or automatically tiled based on floating-is-blacklist (default []).
-floating: []
+floating:
+  - com.1password.1password
+  - com.macitbetter.betterzip
+  - com.apple.calculator
+  - com.apple.iCal
+  - com.coteditor.CotEditor
+  - com.daisydiskapp.DaisyDiskStandAlone
+  - com.hnc.Discord
+  - com.docker.docker
+  - org.mozilla.firefox
+  - com.apple.freeform
+  - com.apple.FontBook
+  - com.google.Chrome
+  - com.apple.Home
+  - com.googlecode.iterm2
+  - net.kovidgoyal.kitty
+  - org.libreoffice.script
+  - com.apple.mail
+  - com.apple.Maps
+  - org.gnome.meld
+  - com.apple.MobileSMS
+  - com.apple.Notes
+  - notion.id
+  - com.apple.iWork.Numbers
+  - com.dmitrynikolaev.numi
+  - md.obsidian
+  - app.omnivore.app
+  - com.apple.iWork.Pages
+  - com.witt-software.PDF-Squeezer
+  - com.apple.Photos
+  - com.apple.podcasts
+  - com.apple.Preview
+  - com.apple.QuickTimePlayerX
+  - com.apple.reminders
+  - com.apple.Safari
+  - com.torusknot.SourceTreeNotMAS
+  - com.tinyapp.TablePlus
+  - com.apple.TextEdit
+  - com.macromates.TextMate
+  - com.microsoft.VSCode
+  - com.vivaldi.Vivaldi
+  - com.apple.weather
+  - com.github.wez.wezterm
 
 # Boolean flag determining behavior of the floating list. true if the applications should be floating and all others tiled. false if the applications should be tiled and all others floating (default true).
-floating-is-blacklist: true
+floating-is-blacklist: false
 
 # true if screen frames should exclude the status bar. false if the screen frames should include the status bar (default false).
 ignore-menu-bar: false
