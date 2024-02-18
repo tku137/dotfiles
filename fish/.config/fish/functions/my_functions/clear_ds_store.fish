@@ -1,4 +1,4 @@
-function clear_ds_store --description 'Remove all .DS_Store files from the specified directory or current directory if none specified'
+function clear_ds_store --description "Remove all .DS_Store files from the specified directory or current directory if none specified"
     set target_dir $argv[1]
     set display_dir $target_dir  # Variable for display
 
@@ -12,7 +12,7 @@ function clear_ds_store --description 'Remove all .DS_Store files from the speci
     echo ".DS_Store files removed from $display_dir."
 end
 
-function cds --description 'Alias for clear_ds_store'
+function cds --description "Alias for clear_ds_store"
     clear_ds_store $argv
 end
 
