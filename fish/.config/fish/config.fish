@@ -3,8 +3,6 @@ if status is-interactive
 end
 set -gx LANG "en_US.UTF-8"
 
-set -gx fish_function_path $HOME/.config/fish/functions/my_functions $fish_function_path
-
 starship init fish | source
 direnv hook fish | source
 fzf_configure_bindings --directory=\cf
@@ -18,3 +16,10 @@ test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shel
 
 # Created by `pipx` on 2024-01-23 22:33:03
 set PATH $PATH /Users/tku137/.local/bin
+
+# fix missing user functions
+set -gx fish_function_path $HOME/.config/fish/functions/my_functions $fish_function_path
+for file in $HOME/.config/fish/functions/my_functions/*.fish
+    source $file
+end
+
