@@ -1,21 +1,10 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
-set -gx LANG "en_US.UTF-8"
 
 starship init fish | source
-direnv hook fish | source
-# fzf_configure_bindings --directory=\cf
 zoxide init fish | source
-
-if test -e /Users/tony/getml/google-cloud-sdk/path.fish.inc
-  source /Users/tony/getml/google-cloud-sdk/path.fish.inc
-end
-
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
-
-# Created by `pipx` on 2024-01-23 22:33:03
-set PATH $PATH /Users/tku137/.local/bin
+direnv hook fish | source
 
 # fix missing user functions
 set -gx fish_function_path $HOME/.config/fish/functions/my_functions $fish_function_path
@@ -23,3 +12,7 @@ for file in $HOME/.config/fish/functions/my_functions/*.fish
     source $file
 end
 
+# set up fzf
+function config_fzf_bindings --on-event fish_prompt
+    fzf_configure_bindings --directory=\cf --variables=\e\cv
+end
