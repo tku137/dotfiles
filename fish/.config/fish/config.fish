@@ -5,7 +5,7 @@ set -gx LANG "en_US.UTF-8"
 
 starship init fish | source
 direnv hook fish | source
-fzf_configure_bindings --directory=\cf
+# fzf_configure_bindings --directory=\cf
 zoxide init fish | source
 
 if test -e /Users/tony/getml/google-cloud-sdk/path.fish.inc
