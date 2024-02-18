@@ -17,7 +17,7 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 
 -- When indenting using < and > we have to set another option
-vim.opt.shiftwidth = 4
+vim.opt.shiftwidth = 2
 
 -- Enable system clipboard. This is the + register
 vim.opt.clipboard = "unnamed,unnamedplus"
