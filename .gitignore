@@ -23,3 +23,4 @@ tmux/.config/tmux/plugins/tmux-resurrect/
 tmux/.config/tmux/plugins/tmux.nvim/
 tmux/.config/tmux/plugins/tmux/
 iterm2/.config/iterm2/AppSupport
+fish/.config/fish/fish_variables
