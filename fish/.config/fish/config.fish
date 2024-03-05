@@ -13,6 +13,6 @@ for file in $HOME/.config/fish/functions/my_functions/*.fish
 end
 
 # set up fzf
-function config_fzf_bindings --on-event fish_prompt
-    fzf_configure_bindings --directory=\cf --variables=\e\cv
-end
+# function config_fzf_bindings --on-event fish_prompt
+#     fzf_configure_bindings --directory=\cf --variables=\e\cv
+# end
