@@ -189,3 +189,10 @@ command = "git config user.email"
 when = "git rev-parse --git-dir 2> /dev/null"
 format = "by [$output]($style) "
 style = "blue bold"
+
+[custom.gcloud_conditional]
+description = "Displays the current GCP project if .tf files are present"
+when = "sh -c '[ -n \"$(ls *.tf 2>/dev/null)\" ]'"
+command = "echo $(gcloud config get-value project)"
+shell = ["sh", "-c"]
+symbol = "☁️ "
