@@ -19,6 +19,11 @@ symbol = " "
 [directory]
 read_only = " 󰌾"
 
+[direnv]
+disabled = true
+symbol = " "
+allowed_msg = "allowed"
+
 [docker_context]
 symbol = " "
 
@@ -163,6 +168,13 @@ symbol = " "
 
 [scala]
 symbol = " "
+
+[shell]
+fish_indicator = '󰈺 '
+powershell_indicator = '_'
+unknown_indicator = 'mystery shell'
+style = 'cyan bold'
+disabled = true
 
 [swift]
 symbol = " "
