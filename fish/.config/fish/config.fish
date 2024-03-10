@@ -3,9 +3,17 @@ if status is-interactive
 end
 
 # init hooks
-starship init fish | source
-zoxide init fish | source
-direnv hook fish | source
+if type -q zoxide
+    zoxide init fish | source
+end
+
+if type -q direnv
+    direnv hook fish | source
+end
+
+if type -q starship
+    starship init fish | source
+end
 
 
 # set default fzf command options
