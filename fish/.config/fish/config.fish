@@ -39,3 +39,6 @@ end
 #   --bind 'ctrl-/:reload(eza --tree --color --icons --git --all)'
 #   --color header:italic
 #   --header 'CTRL-/: toggle hidden'"
+
+# fix libgit2 dyld path on intel macs
+set -x DYLD_LIBRARY_PATH /usr/local/opt/libgit2/lib $DYLD_LIBRARY_PATH
