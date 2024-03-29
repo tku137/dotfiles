@@ -5,7 +5,7 @@ function fzf_key_bindings --description 'Set the correct path for fzf key bindin
         case 'x86_64'
             set fzf_path /usr/local/opt/fzf/shell/key-bindings.fish
         case 'arm64'
-            set fzf_path /opt/homebrew/fzf/shell/key-bindings.fish
+            set fzf_path /opt/homebrew/opt/fzf/shell/key-bindings.fish
         case '*'
             echo "Unsupported architecture: $arch"
             return 1

@@ -15,6 +15,10 @@ if type -q starship
     starship init fish | source
 end
 
+if type -q fzf
+    fzf --fish | source
+end
+
 
 # set default fzf command options
 # CTRL-/ to toggle small preview window to see the full command
