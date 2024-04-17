@@ -203,6 +203,7 @@ format = "by [$output]($style) "
 style = "blue bold"
 
 [custom.gcloud_conditional]
+disabled = true
 description = "Displays the current GCP project if .tf files are present"
 when = "sh -c '[ -n \"$(ls *.tf 2>/dev/null)\" ]'"
 command = "echo $(gcloud config get-value project)"
