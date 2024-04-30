@@ -1,0 +1,15 @@
+layout {
+    pane size=1 borderless=true {
+        plugin location="zellij:tab-bar"
+    }
+    pane split_direction="vertical" {
+        pane
+        pane split_direction="horizontal" {
+            pane name="getML Engine" command="~/getml-1.4.0-x64-linux/getML"
+            pane name="Jupyter Server" command="jupyter-lab"
+        }
+    }
+    pane size=2 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+}
