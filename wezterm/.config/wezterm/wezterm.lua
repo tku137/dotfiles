@@ -1,194 +1,124 @@
--- Pull in the wezterm API
-local wezterm = require 'wezterm'
+local wezterm = require("wezterm")
 
--- This table will hold the configuration.
-local config = {}
+-- Use a single dark mode theme
+local dark_mode = "Catppuccin Macchiato"
+local light_mode = "Catppuccin Latte"
 
--- set font everywhere
-local font = 'FiraCode Nerd Font'
+-- Create base config object
+local config = wezterm.config_builder and wezterm.config_builder() or {}
 
--- In newer versions of wezterm, use the config_builder which will
--- help provide clearer error messages
-if wezterm.config_builder then
-  config = wezterm.config_builder()
-end
+-- Initialize keys table to avoid nil errors
+config.keys = config.keys or {}
 
--- This is where you actually apply your config choices
-
-function get_appearance()
-  if wezterm.gui then
-    return wezterm.gui.get_appearance()
-  end
-  return 'Dark'
-end
-
-function scheme_for_appearance(appearance)
-  if appearance:find 'Dark' then
-    return 'Catppuccin Macchiato'
-  else
-    return 'Catppuccin Latte'
-  end
-end
-
--- For example, changing the color scheme:
-config.color_scheme = 'Catppuccin Macchiato'
--- config.color_scheme = scheme_for_appearance(get_appearance())
-
-
-
--- FONT
--- MeslLGS Nerd Font is very good
--- config.font = wezterm.font 'MesloLGS Nerd Font'
--- JetBrains is very good
-config.font = wezterm.font(font)
--- SourceCodePro is similar to FiraCode
--- config.font = wezterm.font 'SauceCodePro Nerd Font'
--- FiraCode is ok, but bad anti-aliasing
--- config.font = wezterm.font 'FiraCode Nerd Font'
-
--- config.font = wezterm.font_with_fallback({
-    -- {
-      -- family = "FiraCode Nerd Font",
-      -- weight = "Regular",
-    -- },
-    -- {
-    --   -- Fallback font with all the Netd Font Symbols
-    --   family = "Symbols Nerd Font Mono",
-    --   scale = 0.9,
-    -- },
-  -- })
-
+-- FONT SETTINGS
+-- local font_family = "FiraCode Nerd Font"
+local font_family = "JetBrainsMono Nerd Font"
+config.font = wezterm.font(font_family)
 config.font_size = 15.0
 config.line_height = 1.1
 
+-- Set the color scheme to dark mode
+config.color_scheme = dark_mode
 
+-- Define the tab bar colors manually with slight adjustments
+config.use_fancy_tab_bar = true
 
--- WINDOW MANAGEMENT
+config.window_frame = {
+	font = wezterm.font({ family = font_family, weight = "Bold" }), -- Use font_family variable
+	font_size = 13.0,
+	active_titlebar_bg = "#1e2030",
+	inactive_titlebar_bg = "#1e2030",
+}
+
+config.colors = {
+	tab_bar = {
+		background = "#1e2030", -- Background color of the tab bar
+
+		active_tab = {
+			bg_color = "#2d3248", -- Background color of the active tab
+			fg_color = "#cad3f5", -- Foreground color of the active tab
+			intensity = "Normal",
+			underline = "None",
+			italic = true,
+			strikethrough = false,
+		},
+
+		inactive_tab = {
+			bg_color = "#2b2e40", -- Background color of inactive tabs
+			fg_color = "#a5adcb", -- Foreground color of inactive tabs
+			italic = false,
+		},
+
+		inactive_tab_hover = {
+			bg_color = "#3b3f52", -- Background color when hovering over inactive tabs
+			fg_color = "#b8c0e0", -- Foreground color when hovering over inactive tabs
+			italic = false,
+		},
+
+		new_tab = {
+			bg_color = "#1e2030", -- Background color of the new tab button
+			fg_color = "#b8c0e0", -- Foreground color of the new tab button
+		},
+
+		new_tab_hover = {
+			bg_color = "#3b3f52", -- Background color when hovering over the new tab button
+			fg_color = "#cad3f5", -- Foreground color when hovering over the new tab button
+			italic = true,
+		},
+	},
+}
+
+-- WINDOW SETTINGS
 config.initial_rows = 45
 config.initial_cols = 140
 config.scrollback_lines = 5000
 
-
-
--- TWEAKS
+-- GENERAL SETTINGS
 config.hide_mouse_cursor_when_typing = true
 config.hide_tab_bar_if_only_one_tab = true
 config.use_dead_keys = false
 
--- overwrites ToggleFullScreen key assignment to ujse native macOS fullscreen
-config.native_macos_fullscreen_mode = false
-config.keys = {
-  {
-    key = 'n',
-    mods = 'SHIFT|CTRL',
-    action = wezterm.action.ToggleFullScreen,
-  },
-}
+-- Ensure keys table is initialized before inserting keybindings
+config.keys = config.keys or {}
 
-config.pane_focus_follows_mouse = false
+-- Platform-specific settings
+local platform = wezterm.target_triple
+if platform:find("apple") then
+	config.native_macos_fullscreen_mode = false
+	-- Insert keybinding for macOS fullscreen toggle
+	table.insert(config.keys, { key = "n", mods = "SHIFT|CTRL", action = wezterm.action.ToggleFullScreen })
+elseif platform:find("windows") then
+	config.default_prog = { "powershell.exe", "-NoLogo" }
+	config.enable_csi_u_key_encoding = true
+end
 
+-- COMMAND PALETTE CUSTOMIZATIONS
+config.command_palette_bg_color = "#24273a"
+config.command_palette_fg_color = "#a5adcb"
 
--- TAB BAR
-config.use_fancy_tab_bar = true
-
-config.window_frame = {
-  -- The font used in the tab bar.
-  -- Roboto Bold is the default; this font is bundled
-  -- with wezterm.
-  -- Whatever font is selected here, it will have the
-  -- main font setting appended to it to pick up any
-  -- fallback fonts you may have used there.
-  font = wezterm.font { family = font, weight = 'Bold' },
-
-  -- The size of the font in the tab bar.
-  -- Default to 10.0 on Windows but 12.0 on other systems
-  font_size = 13.0,
-
-  -- The overall background color of the tab bar when
-  -- the window is focused
-  active_titlebar_bg = '#1e2030',
-
-  -- The overall background color of the tab bar when
-  -- the window is not focused
-  inactive_titlebar_bg = '#1e2030',
-}
-
-config.colors = {
-  tab_bar = {
-    active_tab = {
-      -- The color of the background area for the tab
-      bg_color = '#494d64',
-      -- The color of the text for the tab
-      fg_color = '#cad3f5',
-
-      -- Specify whether you want "Half", "Normal" or "Bold" intensity for the
-      -- label shown for this tab.
-      -- The default is "Normal"
-      intensity = 'Normal',
-
-      -- Specify whether you want "None", "Single" or "Double" underline for
-      -- label shown for this tab.
-      -- The default is "None"
-      underline = 'None',
-
-      -- Specify whether you want the text to be italic (true) or not (false)
-      -- for this tab.  The default is false.
-      italic = false,
-
-      -- Specify whether you want the text to be rendered with strikethrough (true)
-      -- or not for this tab.  The default is false.
-      strikethrough = false,
-    },
-    -- Inactive tabs are the tabs that do not have focus
-    inactive_tab = {
-      bg_color = '#24273a',
-      fg_color = '#a5adcb',
-
-      -- The same options that were listed under the `active_tab` section above
-      -- can also be used for `inactive_tab`.
-      italic = true,
-    },
-    -- You can configure some alternate styling when the mouse pointer
-    -- moves over inactive tabs
-    inactive_tab_hover = {
-      bg_color = '#363a4f',
-      fg_color = '#b8c0e0',
-      italic = true,
-
-      -- The same options that were listed under the `active_tab` section above
-      -- can also be used for `inactive_tab_hover`.
-    },
-  },
-}
-
-config.command_palette_bg_color = '#24273a'
-config.command_palette_fg_color = '#a5adcb'
-
-
--- nvim zen mode
-wezterm.on('user-var-changed', function(window, pane, name, value)
-    local overrides = window:get_config_overrides() or {}
-    if name == "ZEN_MODE" then
-        local incremental = value:find("+")
-        local number_value = tonumber(value)
-        if incremental ~= nil then
-            while (number_value > 0) do
-                window:perform_action(wezterm.action.IncreaseFontSize, pane)
-                number_value = number_value - 1
-            end
-            overrides.enable_tab_bar = false
-        elseif number_value < 0 then
-            window:perform_action(wezterm.action.ResetFontSize, pane)
-            overrides.font_size = nil
-            overrides.enable_tab_bar = true
-        else
-            overrides.font_size = number_value
-            overrides.enable_tab_bar = false
-        end
-    end
-    window:set_config_overrides(overrides)
+-- Neovim Zen Mode Integration
+wezterm.on("user-var-changed", function(window, pane, name, value)
+	local overrides = window:get_config_overrides() or {}
+	if name == "ZEN_MODE" then
+		local incremental = value:find("+")
+		local number_value = tonumber(value)
+		if incremental ~= nil then
+			while number_value > 0 do
+				window:perform_action(wezterm.action.IncreaseFontSize, pane)
+				number_value = number_value - 1
+			end
+			overrides.enable_tab_bar = false
+		elseif number_value < 0 then
+			window:perform_action(wezterm.action.ResetFontSize, pane)
+			overrides.font_size = nil
+			overrides.enable_tab_bar = true
+		else
+			overrides.font_size = number_value
+			overrides.enable_tab_bar = false
+		end
+	end
+	window:set_config_overrides(overrides)
 end)
 
--- and finally, return the configuration to wezterm
+-- Return the configuration
 return config
-
