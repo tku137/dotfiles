@@ -54,3 +54,16 @@ set -gx XDG_CACHE_HOME "$HOME/.cache"
 
 # set hatch config path
 set -gx HATCH_CONFIG "$XDG_CONFIG_HOME/hatch/config.toml"
+
+# set pyenv paths
+set -gx PYENV_ROOT $HOME/.pyenv
+set -gx PATH $PYENV_ROOT/bin $PATH
+
+status --is-interactive; and . (pyenv init --path | psub)
+status --is-interactive; and . (pyenv init - | psub)
+
+# Created by `pipx` on 2024-06-19 15:38:03
+set PATH $PATH /Users/tku137/.local/bin
+
+# Created by `userpath` on 2024-09-19 16:09:46
+set PATH $PATH /Users/tku137/.local/share/hatch/pythons/3.11/python/bin
