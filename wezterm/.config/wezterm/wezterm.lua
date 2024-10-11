@@ -1,9 +1,8 @@
+-- Pull in the wezterm API
 local wezterm = require("wezterm")
-local smart_splits = wezterm.plugin.require("https://github.com/mrjones2014/smart-splits.nvim")
 
--- Use a single dark mode theme
-local dark_mode = "Catppuccin Macchiato"
-local light_mode = "Catppuccin Latte"
+-- Pull in the smart_splits.nvim plugin
+local smart_splits = wezterm.plugin.require("https://github.com/mrjones2014/smart-splits.nvim")
 
 -- Create base config object
 local config = wezterm.config_builder and wezterm.config_builder() or {}
@@ -15,56 +14,96 @@ config.font = wezterm.font(font_family)
 config.font_size = 15.0
 config.line_height = 1.1
 
--- Set the color scheme to dark mode
-config.color_scheme = dark_mode
-
--- Define the tab bar colors manually with slight adjustments
+-- TAB BAR
 config.use_fancy_tab_bar = true
 
 config.window_frame = {
-	font = wezterm.font({ family = font_family, weight = "Bold" }), -- Use font_family variable
-	font_size = 13.0,
+	-- The font used in the tab bar.
+	-- Roboto Bold is the default; this font is bundled
+	-- with wezterm.
+	-- Whatever font is selected here, it will have the
+	-- main font setting appended to it to pick up any
+	-- fallback fonts you may have used there.
+	font = wezterm.font({ family = font_family, weight = "Bold" }),
+
+	-- The size of the font in the tab bar.
+	-- Default to 10.0 on Windows but 12.0 on other systems
+	font_size = 12.0,
+
+	-- The overall background color of the tab bar when
+	-- the window is focused
 	active_titlebar_bg = "#1e2030",
+
+	-- The overall background color of the tab bar when
+	-- the window is not focused
 	inactive_titlebar_bg = "#1e2030",
 }
 
+-- COLOR SCHEME SETTINGS
+-- Define the color schemes
+local dark_mode = "Catppuccin Macchiato"
+local light_mode = "Catppuccin Latte"
+-- Set the color scheme to dark mode
+config.color_scheme = dark_mode
+
 config.colors = {
 	tab_bar = {
-		background = "#1e2030", -- Background color of the tab bar
-
 		active_tab = {
-			bg_color = "#2d3248", -- Background color of the active tab
-			fg_color = "#cad3f5", -- Foreground color of the active tab
+			-- The color of the background area for the tab
+			bg_color = "#494d64",
+			-- The color of the text for the tab
+			fg_color = "#cad3f5",
+
+			-- Specify whether you want "Half", "Normal" or "Bold" intensity for the
+			-- label shown for this tab.
+			-- The default is "Normal"
 			intensity = "Normal",
+
+			-- Specify whether you want "None", "Single" or "Double" underline for
+			-- label shown for this tab.
+			-- The default is "None"
 			underline = "None",
+
+			-- Specify whether you want the text to be italic (true) or not (false)
+			-- for this tab.  The default is false.
 			italic = true,
+
+			-- Specify whether you want the text to be rendered with strikethrough (true)
+			-- or not for this tab.  The default is false.
 			strikethrough = false,
 		},
-
+		-- Inactive tabs are the tabs that do not have focus
 		inactive_tab = {
-			bg_color = "#2b2e40", -- Background color of inactive tabs
-			fg_color = "#a5adcb", -- Foreground color of inactive tabs
+			bg_color = "#24273a",
+			fg_color = "#a5adcb",
+
+			-- The same options that were listed under the `active_tab` section above
+			-- can also be used for `inactive_tab`.
 			italic = false,
 		},
-
+		-- You can configure some alternate styling when the mouse pointer
+		-- moves over inactive tabs
 		inactive_tab_hover = {
-			bg_color = "#3b3f52", -- Background color when hovering over inactive tabs
-			fg_color = "#b8c0e0", -- Foreground color when hovering over inactive tabs
-			italic = false,
+			bg_color = "#363a4f",
+			fg_color = "#b8c0e0",
+			italic = true,
 		},
 
 		new_tab = {
-			bg_color = "#1e2030", -- Background color of the new tab button
-			fg_color = "#b8c0e0", -- Foreground color of the new tab button
+			bg_color = "#24273a", -- Background color of the new tab button
+			fg_color = "#a5adcb", -- Foreground color of the new tab button
 		},
 
 		new_tab_hover = {
-			bg_color = "#3b3f52", -- Background color when hovering over the new tab button
+			bg_color = "#494d64", -- Background color when hovering over the new tab button
 			fg_color = "#cad3f5", -- Foreground color when hovering over the new tab button
 			italic = true,
 		},
 	},
 }
+
+config.command_palette_bg_color = "#24273a"
+config.command_palette_fg_color = "#a5adcb"
 
 -- WINDOW SETTINGS
 config.initial_rows = 45
@@ -75,7 +114,9 @@ config.scrollback_lines = 5000
 config.hide_mouse_cursor_when_typing = true
 config.hide_tab_bar_if_only_one_tab = true
 config.use_dead_keys = false
+config.pane_focus_follows_mouse = false
 
+-- KEYBINDINGS
 -- Ensure keys table is initialized before inserting keybindings
 config.keys = config.keys or {}
 
@@ -132,10 +173,6 @@ elseif platform:find("windows") then
 	config.enable_csi_u_key_encoding = true
 end
 
--- COMMAND PALETTE CUSTOMIZATIONS
-config.command_palette_bg_color = "#24273a"
-config.command_palette_fg_color = "#a5adcb"
-
 -- Neovim Zen Mode Integration
 wezterm.on("user-var-changed", function(window, pane, name, value)
 	local overrides = window:get_config_overrides() or {}
@@ -160,7 +197,7 @@ wezterm.on("user-var-changed", function(window, pane, name, value)
 	window:set_config_overrides(overrides)
 end)
 
--- apply smart_splits.nvim configuration
+-- Apply smart_splits.nvim configuration
 smart_splits.apply_to_config(config, {
 	-- the default config is here, if you'd like to use the default keys,
 	-- you can omit this configuration table parameter and just use
@@ -180,6 +217,9 @@ smart_splits.apply_to_config(config, {
 		resize = "META", -- modifier to use for pane resize, e.g. META+h to resize to the left
 	},
 })
+
+-- Disable the terminal bell
+config.audible_bell = "Disabled"
 
 -- Return the configuration
 return config
