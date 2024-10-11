@@ -8,9 +8,6 @@ local light_mode = "Catppuccin Latte"
 -- Create base config object
 local config = wezterm.config_builder and wezterm.config_builder() or {}
 
--- Initialize keys table to avoid nil errors
-config.keys = config.keys or {}
-
 -- FONT SETTINGS
 -- local font_family = "FiraCode Nerd Font"
 local font_family = "JetBrainsMono Nerd Font"
@@ -81,6 +78,48 @@ config.use_dead_keys = false
 
 -- Ensure keys table is initialized before inserting keybindings
 config.keys = config.keys or {}
+
+-- Leader is the same as the (modified) tmux prefix
+config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
+
+config.keys = {
+	-- splitting
+	{
+		mods = "LEADER",
+		key = "-",
+		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
+	},
+	{
+		mods = "LEADER",
+		key = "=",
+		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
+	},
+	{
+		mods = "LEADER",
+		key = "m",
+		action = wezterm.action.TogglePaneZoomState,
+	},
+	-- rotate panes
+	{
+		mods = "LEADER",
+		key = "Space",
+		action = wezterm.action.RotatePanes("Clockwise"),
+	},
+	-- show the pane selection mode, but have it swap the active and selected panes
+	{
+		mods = "LEADER",
+		key = "0",
+		action = wezterm.action.PaneSelect({
+			mode = "SwapWithActive",
+		}),
+	},
+	-- activate copy mode or vim mode
+	{
+		key = "Enter",
+		mods = "LEADER",
+		action = wezterm.action.ActivateCopyMode,
+	},
+}
 
 -- Platform-specific settings
 local platform = wezterm.target_triple
