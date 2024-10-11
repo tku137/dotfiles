@@ -25,37 +25,37 @@ local color_scheme = wezterm.color.get_builtin_schemes()[dark_mode]
 -- Set the color scheme to dark mode
 config.color_scheme = dark_mode
 
--- config.colors = {
--- 	tab_bar = {
--- 		active_tab = {
--- 			bg_color = color_scheme.ansi[4], -- A light grayish background
--- 			fg_color = color_scheme.brights[1], -- Foreground color for active tab
--- 			intensity = "Normal",
--- 			underline = "None",
--- 			italic = true,
--- 			strikethrough = false,
--- 		},
--- 		inactive_tab = {
--- 			bg_color = color_scheme.ansi[1], -- Dark background for inactive tabs
--- 			fg_color = color_scheme.brights[8], -- Muted color for text
--- 			italic = false,
--- 		},
--- 		inactive_tab_hover = {
--- 			bg_color = color_scheme.ansi[8], -- Slightly lighter background on hover
--- 			fg_color = color_scheme.brights[1], -- Highlighted color when hovering
--- 			italic = true,
--- 		},
--- 		new_tab = {
--- 			bg_color = color_scheme.ansi[1], -- Background for new tab button
--- 			fg_color = color_scheme.brights[6], -- Muted color for new tab text
--- 		},
--- 		new_tab_hover = {
--- 			bg_color = color_scheme.ansi[2], -- Background for hovering over new tab button
--- 			fg_color = color_scheme.brights[1], -- Foreground color when hovering
--- 			italic = true,
--- 		},
--- 	},
--- }
+config.colors = {
+	tab_bar = {
+		active_tab = {
+			bg_color = color_scheme.tab_bar.active_tab.bg_color,
+			fg_color = color_scheme.tab_bar.active_tab.fg_color,
+			intensity = color_scheme.tab_bar.active_tab.intensity,
+			underline = color_scheme.tab_bar.active_tab.underline,
+			italic = color_scheme.tab_bar.active_tab.italic,
+			strikethrough = color_scheme.tab_bar.active_tab.strikethrough,
+		},
+		inactive_tab = {
+			bg_color = color_scheme.tab_bar.inactive_tab.bg_color,
+			fg_color = color_scheme.tab_bar.inactive_tab.fg_color,
+			italic = color_scheme.tab_bar.inactive_tab.italic,
+		},
+		inactive_tab_hover = {
+			bg_color = color_scheme.tab_bar.inactive_tab_hover.bg_color,
+			fg_color = color_scheme.tab_bar.inactive_tab_hover.fg_color,
+			italic = color_scheme.tab_bar.inactive_tab_hover.italic,
+		},
+		new_tab = {
+			bg_color = color_scheme.tab_bar.new_tab.bg_color,
+			fg_color = color_scheme.tab_bar.new_tab.fg_color,
+		},
+		new_tab_hover = {
+			bg_color = color_scheme.tab_bar.new_tab_hover.bg_color,
+			fg_color = color_scheme.tab_bar.new_tab_hover.fg_color,
+			italic = color_scheme.tab_bar.new_tab_hover.italic,
+		},
+	},
+}
 
 config.command_palette_bg_color = color_scheme.background
 config.command_palette_fg_color = color_scheme.foreground
@@ -86,8 +86,8 @@ config.window_frame = {
 }
 
 -- WINDOW SETTINGS
-config.initial_rows = 45
-config.initial_cols = 140
+config.initial_rows = 30
+config.initial_cols = 120
 config.scrollback_lines = 5000
 
 -- GENERAL SETTINGS
