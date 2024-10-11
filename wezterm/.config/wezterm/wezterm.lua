@@ -17,7 +17,7 @@ config.line_height = 1.1
 -- COLOR SCHEME SETTINGS
 -- Define the color schemes
 local dark_mode = "Catppuccin Macchiato"
-local light_mode = "Catppuccin Latte"
+-- local light_mode = "Catppuccin Latte"
 
 -- Load the Catppuccin Macchiato colors
 local color_scheme = wezterm.color.get_builtin_schemes()[dark_mode]
@@ -96,6 +96,10 @@ config.hide_tab_bar_if_only_one_tab = true
 config.use_dead_keys = false
 config.pane_focus_follows_mouse = false
 
+config.macos_window_background_blur = 20
+config.window_background_opacity = 1.0
+config.text_background_opacity = 1.0
+
 -- KEYBINDINGS
 -- Ensure keys table is initialized before inserting keybindings
 config.keys = config.keys or {}
@@ -139,6 +143,29 @@ config.keys = {
 		key = "Enter",
 		mods = "LEADER",
 		action = wezterm.action.ActivateCopyMode,
+	},
+	-- open launcher
+	{
+		mods = "LEADER",
+		key = "p",
+		action = wezterm.action.ActivateCommandPalette,
+	},
+	-- integrate clipboard with system clipboard
+	{
+		mods = "CTRL|SHIFT",
+		key = "c",
+		action = wezterm.action.CopyTo("Clipboard"),
+	},
+	{
+		mods = "CTRL|SHIFT",
+		key = "v",
+		action = wezterm.action.PasteFrom("Clipboard"),
+	},
+	-- cycle through tabs
+	{
+		mods = "LEADER",
+		key = "Tab",
+		action = wezterm.action.PaneSelect,
 	},
 }
 
