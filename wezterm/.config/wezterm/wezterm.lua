@@ -11,7 +11,12 @@ local config = wezterm.config_builder and wezterm.config_builder() or {}
 -- local font_family = "FiraCode Nerd Font"
 local font_family = "JetBrainsMono Nerd Font"
 config.font = wezterm.font(font_family)
-config.font_size = 15.0
+local platform = wezterm.target_triple
+if platform:find("windows") then
+	config.font_size = 12.0
+else
+	config.font_size = 15.0
+end
 config.line_height = 1.1
 
 -- COLOR SCHEME SETTINGS
@@ -74,7 +79,7 @@ config.window_frame = {
 
 	-- The size of the font in the tab bar.
 	-- Default to 10.0 on Windows but 12.0 on other systems
-	font_size = 12.0,
+	-- font_size = 12.0,
 
 	-- The overall background color of the tab bar when
 	-- the window is focused
