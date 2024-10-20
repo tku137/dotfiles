@@ -110,7 +110,7 @@ config.text_background_opacity = 1.0
 config.keys = config.keys or {}
 
 -- Leader is the same as the (modified) tmux prefix
-config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
+config.leader = { key = "p", mods = "CTRL|SHIFT", timeout_milliseconds = 1000 }
 
 config.keys = {
 	-- splitting
