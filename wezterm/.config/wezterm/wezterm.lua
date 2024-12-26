@@ -10,7 +10,27 @@ local config = wezterm.config_builder and wezterm.config_builder() or {}
 -- FONT SETTINGS
 -- local font_family = "FiraCode Nerd Font"
 local font_family = "JetBrainsMono Nerd Font"
-config.font = wezterm.font(font_family)
+local caligraphic_font_family = "Maple Mono NF"
+-- local caligraphic_font_family = font_family
+config.font = wezterm.font({ family = font_family })
+config.bold_brightens_ansi_colors = true
+config.font_rules = {
+	{
+		intensity = "Bold",
+		italic = true,
+		font = wezterm.font({ family = caligraphic_font_family, weight = "Bold", style = "Italic" }),
+	},
+	{
+		italic = true,
+		intensity = "Half",
+		font = wezterm.font({ family = caligraphic_font_family, weight = "DemiBold", style = "Italic" }),
+	},
+	{
+		italic = true,
+		intensity = "Normal",
+		font = wezterm.font({ family = caligraphic_font_family, style = "Italic" }),
+	},
+}
 local platform = wezterm.target_triple
 if platform:find("windows") then
 	config.font_size = 12.0
