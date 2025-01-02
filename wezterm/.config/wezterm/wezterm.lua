@@ -41,8 +41,9 @@ config.line_height = 1.1
 
 -- COLOR SCHEME SETTINGS
 -- Define the color schemes
-local dark_mode = "Catppuccin Macchiato"
+-- local dark_mode = "Catppuccin Macchiato"
 -- local light_mode = "Catppuccin Latte"
+local dark_mode = "Tokyo Night Moon" -- Moon, Storm, Night, Day
 
 -- Load the Catppuccin Macchiato colors
 local color_scheme = wezterm.color.get_builtin_schemes()[dark_mode]
@@ -230,25 +231,25 @@ wezterm.on("user-var-changed", function(window, pane, name, value)
 end)
 
 -- Apply smart_splits.nvim configuration
-smart_splits.apply_to_config(config, {
-	-- the default config is here, if you'd like to use the default keys,
-	-- you can omit this configuration table parameter and just use
-	-- smart_splits.apply_to_config(config)
-
-	-- directional keys to use in order of: left, down, up, right
-	-- direction_keys = { "h", "j", "k", "l" },
-	-- if you want to use separate direction keys for move vs. resize, you
-	-- can also do this:
-	direction_keys = {
-		move = { "h", "j", "k", "l" },
-		resize = { "LeftArrow", "DownArrow", "UpArrow", "RightArrow" },
-	},
-	-- modifier keys to combine with direction_keys
-	modifiers = {
-		move = "META", -- modifier to use for pane movement, e.g. CTRL+h to move left
-		resize = "META", -- modifier to use for pane resize, e.g. META+h to resize to the left
-	},
-})
+-- smart_splits.apply_to_config(config, {
+-- 	-- the default config is here, if you'd like to use the default keys,
+-- 	-- you can omit this configuration table parameter and just use
+-- 	-- smart_splits.apply_to_config(config)
+--
+-- 	-- directional keys to use in order of: left, down, up, right
+-- 	-- direction_keys = { "h", "j", "k", "l" },
+-- 	-- if you want to use separate direction keys for move vs. resize, you
+-- 	-- can also do this:
+-- 	direction_keys = {
+-- 		move = { "h", "j", "k", "l" },
+-- 		resize = { "LeftArrow", "DownArrow", "UpArrow", "RightArrow" },
+-- 	},
+-- 	-- modifier keys to combine with direction_keys
+-- 	modifiers = {
+-- 		move = "META", -- modifier to use for pane movement, e.g. CTRL+h to move left
+-- 		resize = "META", -- modifier to use for pane resize, e.g. META+h to resize to the left
+-- 	},
+-- })
 
 -- Disable the terminal bell
 config.audible_bell = "Disabled"
