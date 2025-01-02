@@ -67,3 +67,6 @@ set PATH $PATH /Users/tku137/.local/bin
 
 # Created by `userpath` on 2024-09-19 16:09:46
 set PATH $PATH /Users/tku137/.local/share/hatch/pythons/3.11/python/bin
+
+# Set theme
+fish_config theme choose tokyonight_moon
