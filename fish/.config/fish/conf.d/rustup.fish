@@ -1,1 +1,5 @@
-source "$HOME/.cargo/env.fish"
+if type -q rustup
+    if test -f "$HOME/.cargo/env.fish"
+        source "$HOME/.cargo/env.fish"
+    end
+end
