@@ -25,28 +25,28 @@ if not type -q fisher
 end
 
 # set default fzf command options
-# CTRL-/ to toggle small preview window to see the full command
-# CTRL-Y to copy the command into clipboard using pbcopy
-# export FZF_CTRL_R_OPTS="
-#   --preview 'echo {}' --preview-window up:3:hidden:wrap
-#   --bind 'ctrl-/:toggle-preview'
-#   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
-#   --color header:italic
-#   --header 'CTRL-Y: copy command to clipboard, CTRL-/: toggle preview window'"
 
 # Preview file content using bat (https://github.com/sharkdp/bat)
-# export FZF_CTRL_T_OPTS="
-#   --preview 'bat --color=always --style=numbers --line-range=:500 {}'
-#   --bind 'ctrl-/:change-preview-window(down|hidden|)'
-#   --color header:italic
-#   --header 'CTRL-/: toggle preview window'"
+export FZF_CTRL_T_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview 'bat -n --color=always {}'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 
 # Print tree structure in the preview window
-# export FZF_ALT_C_OPTS="
-#   --preview 'eza --tree --color --icons --git {}'
-#   --bind 'ctrl-/:reload(eza --tree --color --icons --git --all)'
-#   --color header:italic
-#   --header 'CTRL-/: toggle hidden'"
+export FZF_ALT_C_OPTS="
+  --preview 'eza --tree --color --icons --git {}'
+  --bind 'ctrl-/:reload(eza --tree --color --icons --git --all)'
+  --color header:italic
+  --header 'CTRL-/: toggle hidden'"
+
+# set homebrew paths
+if test -d /opt/homebrew/bin
+    fish_add_path /opt/homebrew/bin
+end
+
+if test -d /opt/homebrew/opt/fzf/bin
+    fish_add_path /opt/homebrew/opt/fzf/bin
+end
 
 # fix libgit2 dyld path on intel macs
 set -x DYLD_LIBRARY_PATH /usr/local/opt/libgit2/lib $DYLD_LIBRARY_PATH
