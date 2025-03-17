@@ -19,7 +19,6 @@ if type -q fzf
     fzf --fish | source
 end
 
-
 # set default fzf command options
 # CTRL-/ to toggle small preview window to see the full command
 # CTRL-Y to copy the command into clipboard using pbcopy
@@ -69,4 +68,4 @@ set PATH $PATH /Users/tku137/.local/bin
 set PATH $PATH /Users/tku137/.local/share/hatch/pythons/3.11/python/bin
 
 # Set theme
-fish_config theme choose tokyonight_moon
+fish_config theme choose "TokyoNight Moon"
