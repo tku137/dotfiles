@@ -16,11 +16,46 @@ Thumbs.db
 *.log
 *.sqlite
 
-# tmux plugins
-##############
+# tmux plugins #
+################
 tmux/.config/tmux/plugins/tmux-sensible/
 tmux/.config/tmux/plugins/tmux-resurrect/
 tmux/.config/tmux/plugins/tmux.nvim/
 tmux/.config/tmux/plugins/tmux/
+
+# iterm stuff #
+###############
 iterm2/.config/iterm2/AppSupport
+
+# fish #
+########
+
+# Ignore generated fish variables file
 fish/.config/fish/fish_variables
+
+# Ignore everything under fish/.config/fish
+fish/.config/fish/*
+
+# Un-ignore the main configuration files
+!fish/.config/fish/config.fish
+!fish/.config/fish/fish_plugins
+
+# Un-ignore the functions directory
+!fish/.config/fish/functions/
+
+# Ignore everything in functions…
+fish/.config/fish/functions/*
+
+# …except your my functions in myfunctions
+!fish/.config/fish/functions/myfunctions/
+!fish/.config/fish/functions/myfunctions/**
+
+# Un-ignore the functions directory
+!fish/.config/fish/conf.d/
+
+# Ignore everything in functions…
+fish/.config/fish/conf.d/*
+
+# …except your my functions in myfunctions
+!fish/.config/fish/conf.d/01-init.fish
+!fish/.config/fish/conf.d/rustup.fish

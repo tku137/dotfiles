@@ -19,6 +19,11 @@ if type -q fzf
     fzf --fish | source
 end
 
+# Bootstrap Fisher if not installed
+if not type -q fisher
+    curl -sL https://git.io/fisher | source
+end
+
 # set default fzf command options
 # CTRL-/ to toggle small preview window to see the full command
 # CTRL-Y to copy the command into clipboard using pbcopy
