@@ -19,9 +19,12 @@ if type -q fzf
     fzf --fish | source
 end
 
-# Bootstrap Fisher if not installed
+# Bootstrap fisher if not installed
 if not type -q fisher
     curl -sL https://git.io/fisher | source
+    if status is-interactive
+        fisher update
+    end
 end
 
 # set default fzf command options
