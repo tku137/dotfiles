@@ -3,9 +3,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
-
 -- Indentation settings
 vim.opt.expandtab = true -- Convert tabs to spaces
 vim.opt.shiftwidth = 4 -- Amount to indent with < and >
