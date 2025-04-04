@@ -7,7 +7,7 @@ background-blur = 20
 background-opacity = 1.0
 
 # Theme configuration
-theme = tokyonight_moon
+theme = light:tokyonight-day,dark:tokyonight_moon
 
 # Window dimensions
 window-width = 120
