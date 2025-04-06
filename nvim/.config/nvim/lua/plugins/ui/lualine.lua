@@ -1,9 +1,7 @@
 local colors = require("tokyonight.colors").setup()
 
 local project_root = {
-  function()
-    return vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
-  end,
+  require("utils.helpers").project_root,
   icon = "󱉭",
   separator = "",
   color = { fg = colors.blue },
