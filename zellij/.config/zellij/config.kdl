@@ -432,4 +432,4 @@ default_mode "locked"
 // Whether to show startup tips on session start
 // Default: true
 //
-// show_startup_tips false
+show_startup_tips false
