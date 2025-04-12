@@ -1,5 +1,6 @@
 {
   "gitsigns.nvim": { "branch": "main", "commit": "17ab794b6fce6fce768430ebc925347e349e1d60" },
+  "bufferline.nvim": { "branch": "main", "commit": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3" },
   "lazy.nvim": { "branch": "main", "commit": "6c3bda4aca61a13a9c63f1c1d1b16b9d3be90d7a" },
   "lualine-pretty-path": { "branch": "main", "commit": "852cb06f3562bced4776a924e56a9e44d0ce634f" },
   "lualine.nvim": { "branch": "master", "commit": "7de0a690bc1878dd6fc347c599a19a0f34f48dec" },
