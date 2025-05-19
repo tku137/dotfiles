@@ -7,7 +7,13 @@ return {
       vim.lsp.enable({
         "lua_ls",
         "basedpyright",
+        "yamlls",
       })
     end,
+  },
+  {
+    "b0o/SchemaStore.nvim",
+    lazy = true,
+    version = false, -- last release is way too old
   },
 }
