@@ -18,6 +18,8 @@ return {
     opts = {
       bigfile = { enabled = true },
       quickfile = { enabled = true },
+      picker = { enabled = true },
+      input = { enabled = true },
       terminal = {
         win = {
           keys = {
