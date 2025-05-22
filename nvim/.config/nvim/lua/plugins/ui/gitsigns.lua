@@ -20,42 +20,147 @@ return {
         topdelete = { text = "" },
         changedelete = { text = "▎" },
       },
-      on_attach = function(buffer)
-        local gs = require("gitsigns")
-
-        local function map(mode, l, r, desc)
-          vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
-        end
-
-        -- stylua: ignore start
-        map("n", "]h", function()
+      on_attach = true,
+    },
+    keys = {
+      -- navigate hunks
+      {
+        "]h",
+        function()
           if vim.wo.diff then
             vim.cmd.normal({ "]c", bang = true })
           else
-            gs.nav_hunk("next")
+            require("gitsigns").nav_hunk("next")
           end
-        end, "Next Hunk")
-        map("n", "[h", function()
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Next Hunk",
+      },
+      {
+        "[h",
+        function()
           if vim.wo.diff then
             vim.cmd.normal({ "[c", bang = true })
           else
-            gs.nav_hunk("prev")
+            require("gitsigns").nav_hunk("prev")
           end
-        end, "Prev Hunk")
-        map("n", "]H", function() gs.nav_hunk("last") end, "Last Hunk")
-        map("n", "[H", function() gs.nav_hunk("first") end, "First Hunk")
-        map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
-        map({ "n", "v" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
-        map("n", "<leader>ghS", gs.stage_buffer, "Stage Buffer")
-        map("n", "<leader>ghu", gs.undo_stage_hunk, "Undo Stage Hunk")
-        map("n", "<leader>ghR", gs.reset_buffer, "Reset Buffer")
-        map("n", "<leader>ghp", gs.preview_hunk_inline, "Preview Hunk Inline")
-        map("n", "<leader>ghb", function() gs.blame_line({ full = true }) end, "Blame Line")
-        map("n", "<leader>ghB", function() gs.blame() end, "Blame Buffer")
-        map("n", "<leader>ghd", gs.diffthis, "Diff This")
-        map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff This ~")
-        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
-      end,
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Previous Hunk",
+      },
+      {
+        "]H",
+        function()
+          require("gitsigns").nav_hunk("last")
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Last Hunk",
+      },
+      {
+        "[H",
+        function()
+          require("gitsigns").nav_hunk("first")
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "First Hunk",
+      },
+
+      -- stage/reset hunks
+      {
+        "<leader>ghs",
+        ":Gitsigns stage_hunk<CR>",
+        mode = { "n", "v" },
+        buffer = true,
+        desc = "Stage Hunk",
+      },
+      {
+        "<leader>ghr",
+        ":Gitsigns reset_hunk<CR>",
+        mode = { "n", "v" },
+        buffer = true,
+        desc = "Reset Hunk",
+      },
+      {
+        "<leader>ghS",
+        function()
+          require("gitsigns").stage_buffer()
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Stage Buffer",
+      },
+      {
+        "<leader>ghu",
+        function()
+          require("gitsigns").undo_stage_hunk()
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Undo Stage Hunk",
+      },
+      {
+        "<leader>ghR",
+        function()
+          require("gitsigns").reset_buffer()
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Reset Buffer",
+      },
+
+      -- preview, blame, diff
+      {
+        "<leader>ghp",
+        function()
+          require("gitsigns").preview_hunk_inline()
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Preview Hunk Inline",
+      },
+      {
+        "<leader>ghb",
+        function()
+          require("gitsigns").blame_line({ full = true })
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Blame Line",
+      },
+      {
+        "<leader>ghB",
+        function()
+          require("gitsigns").blame()
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Blame Buffer",
+      },
+      {
+        "<leader>ghd",
+        function()
+          require("gitsigns").diffthis()
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Diff This",
+      },
+      {
+        "<leader>ghD",
+        function()
+          require("gitsigns").diffthis("~")
+        end,
+        mode = "n",
+        buffer = true,
+        desc = "Diff This ~",
+      },
+
+      -- text-object for a hunk
+      { "ih", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, buffer = true, desc = "Select Hunk" },
     },
   },
   -- {
