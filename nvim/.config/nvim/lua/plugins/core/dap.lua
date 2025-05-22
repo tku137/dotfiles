@@ -249,7 +249,7 @@ return {
       dap.listeners.before.event_terminated["dapui_close"] = dapui.close
       dap.listeners.before.event_exited["dapui_close"] = dapui.close
 
-      -- use LazyVim’s icons for DAP signs
+      -- Use custom icons and highlights for DAP signs
       local sign = vim.fn.sign_define
       sign("DapStopped", {
         text = " ",

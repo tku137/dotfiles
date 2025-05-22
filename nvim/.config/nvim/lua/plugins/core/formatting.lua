@@ -30,6 +30,7 @@ return {
     end,
     formatters_by_ft = {
       lua = { "stylua" },
+      -- TODO: Add this to readme
       -- To add language specific formatters in their own config file, use this snippet:
       -- {
       --   "stevearc/conform.nvim",

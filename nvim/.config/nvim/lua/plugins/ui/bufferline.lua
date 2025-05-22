@@ -3,6 +3,7 @@ return {
   event = "VeryLazy",
   dependencies = "nvim-tree/nvim-web-devicons",
   keys = {
+    -- TODO: use proper snacks toggle
     { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
     { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
     { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },

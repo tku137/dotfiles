@@ -26,6 +26,7 @@ return {
     sections = {
       lualine_a = { "mode" },
       lualine_b = { "branch", "diff", "diagnostics" },
+      -- TODO: add aerial status component with leftsep var?
       lualine_c = { project_root, "pretty_path" },
       -- lualine_x = { "filetype", "lsp_status" },
       lualine_x = {
