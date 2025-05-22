@@ -33,7 +33,10 @@ return {
         },
       },
       "Weissle/persistent-breakpoints.nvim",
-      "LiadOz/nvim-dap-repl-highlights",
+      {
+        "LiadOz/nvim-dap-repl-highlights",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+      },
     },
     -- Load only when a debug command is invoked
     event = "VeryLazy",
