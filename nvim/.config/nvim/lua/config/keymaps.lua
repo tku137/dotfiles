@@ -98,10 +98,6 @@ map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
 map("v", "<", "<gv")
 map("v", ">", ">gv")
 
--- Commenting
-map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
-map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
-
 -- Open lazy package manager
 map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
@@ -204,6 +200,7 @@ map("n", "<leader>ff", function() Snacks.picker.files() end, { desc = "Find File
 map("n", "<leader>fg", function() Snacks.picker.git_files() end, { desc = "Find Git Files" })
 map("n", "<leader>fp", function() Snacks.picker.projects() end, { desc = "Projects" })
 map("n", "<leader>fr", function() Snacks.picker.recent() end, { desc = "Recent" })
+map("n", "<leader>fz", function() Snacks.picker.zoxide() end, { desc = "Zoxide" })
 
 -- Search (grep related)
 map("n", "<leader>sg", function() Snacks.picker.grep() end, { desc = "Grep" })

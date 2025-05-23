@@ -1,5 +1,11 @@
 return {
   {
+    "numToStr/Comment.nvim",
+    opts = {
+      -- add any options here
+    },
+  },
+  {
     "folke/todo-comments.nvim",
     cmd = { "TodoTrouble", "TodoTelescope" },
     event = "VimEnter",
