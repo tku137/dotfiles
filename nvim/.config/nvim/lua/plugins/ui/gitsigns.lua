@@ -4,6 +4,7 @@ return {
   -- stage & unstage hunks in a commit.
   {
     "lewis6991/gitsigns.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     opts = {
       signs = {
         add = { text = "▎" },
@@ -20,8 +21,23 @@ return {
         topdelete = { text = "" },
         changedelete = { text = "▎" },
       },
-      on_attach = true,
     },
+    config = function(_, opts)
+      require("gitsigns").setup(opts)
+
+      -- Create the Snacks toggle right after gitsigns is set up
+      Snacks.toggle
+        .new({
+          name = "Git Signs",
+          get = function()
+            return require("gitsigns.config").config.signcolumn
+          end,
+          set = function(state)
+            require("gitsigns").toggle_signs(state)
+          end,
+        })
+        :map("<leader>uG")
+    end,
     keys = {
       -- navigate hunks
       {
@@ -163,18 +179,4 @@ return {
       { "ih", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, buffer = true, desc = "Select Hunk" },
     },
   },
-  -- {
-  --   "gitsigns.nvim",
-  --   opts = function()
-  --     Snacks.toggle({
-  --       name = "Git Signs",
-  --       get = function()
-  --         return require("gitsigns.config").config.signcolumn
-  --       end,
-  --       set = function(state)
-  --         require("gitsigns").toggle_signs(state)
-  --       end,
-  --     }):map("<leader>uG")
-  --   end,
-  -- },
 }
