@@ -1,5 +1,14 @@
 -- Shorthand for creating mappings
-local map = vim.keymap.set
+-- Includes a duplicate check
+local seen = {}
+local function map(mode, lhs, rhs, opts)
+  local key = table.concat(type(mode) == "table" and mode or { mode }) .. lhs
+  if seen[key] then
+    vim.notify("Duplicate mapping in keymaps.lua:\n" .. key, vim.log.levels.WARN)
+  end
+  seen[key] = true
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
 
 -- Smart vertical move: use gj/gk (screen lines) for plain j/k or ↓/↑, but keep normal j/k when a count is given
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -74,6 +83,9 @@ map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result
 map("i", ",", ",<c-g>u")
 map("i", ".", ".<c-g>u")
 map("i", ";", ";<c-g>u")
+map("i", "<CR>", ";<c-g>u")
+map("i", "!", ";<c-g>u")
+map("i", "?", ";<c-g>u")
 
 -- Quick save file
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
@@ -112,7 +124,7 @@ map("n", "<leader>xq", function()
   end
 end, { desc = "Quickfix List" })
 
--- Diagnostic nav (new API): jumpgnostics and filtered versions (errors, warnings)
+-- Diagnostic nav (new API): jump diagnostics and filtered versions (errors, warnings)
 local function diagnostic_jump(delta, severity)
   return function()
     vim.diagnostic.jump({
@@ -185,7 +197,7 @@ map("n", "<leader>:", function() Snacks.picker.command_history() end, { desc = "
 map("n", "<leader>n", function() Snacks.picker.notifications() end, { desc = "Notification History" })
 map("n", "<leader>e", function() Snacks.explorer() end, { desc = "File Explorer" })
 
--- Find
+-- Find (files related)
 map("n", "<leader>fb", function() Snacks.picker.buffers() end, { desc = "Buffers" })
 map("n", "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "Find Config File" })
 map("n", "<leader>ff", function() Snacks.picker.files() end, { desc = "Find Files" })
@@ -193,17 +205,14 @@ map("n", "<leader>fg", function() Snacks.picker.git_files() end, { desc = "Find 
 map("n", "<leader>fp", function() Snacks.picker.projects() end, { desc = "Projects" })
 map("n", "<leader>fr", function() Snacks.picker.recent() end, { desc = "Recent" })
 
--- grep
-map("n", "<leader>sb", function() Snacks.picker.lines() end, { desc = "Buffer Lines" })
-map("n", "<leader>sB", function() Snacks.picker.grep_buffers() end, { desc = "Grep Open Buffers" })
+-- Search (grep related)
 map("n", "<leader>sg", function() Snacks.picker.grep() end, { desc = "Grep" })
 map({ "n", "x" }, "<leader>sw", function() Snacks.picker.grep_word() end, { desc = "Visual selection or word" })
-
--- Search
 map("n", '<leader>s"', function() Snacks.picker.registers() end, { desc = "Registers" })
 map("n", '<leader>s/', function() Snacks.picker.search_history() end, { desc = "Search History" })
 map("n", "<leader>sa", function() Snacks.picker.autocmds() end, { desc = "Autocmds" })
 map("n", "<leader>sb", function() Snacks.picker.lines() end, { desc = "Buffer Lines" })
+map("n", "<leader>sB", function() Snacks.picker.grep_buffers() end, { desc = "Grep Open Buffers" })
 map("n", "<leader>sc", function() Snacks.picker.command_history() end, { desc = "Command History" })
 map("n", "<leader>sC", function() Snacks.picker.commands() end, { desc = "Commands" })
 map("n", "<leader>sd", function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
