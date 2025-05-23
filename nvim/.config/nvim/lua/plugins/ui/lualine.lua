@@ -46,11 +46,11 @@ return {
           color = function() return { fg = Snacks.util.color("Constant") } end,
         },
         -- stylua: ignore
-        -- {
-        --   function() return "  " .. require("dap").status() end,
-        --   cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
-        --   color = function() return { fg = Snacks.util.color("Debug") } end,
-        -- },
+        {
+          function() return "  " .. require("dap").status() end,
+          cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
+          color = function() return { fg = Snacks.util.color("Debug") } end,
+        },
       },
       lualine_y = {
         { "progress", separator = " ", padding = { left = 1, right = 0 } },
