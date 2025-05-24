@@ -30,6 +30,10 @@ return {
       opts = {},
     },
     "folke/lazydev.nvim",
+    {
+      "Kaiser-Yang/blink-cmp-git",
+      dependencies = "nvim-lua/plenary.nvim",
+    },
   },
   --- @module 'blink.cmp'
   --- @type blink.cmp.Config
@@ -78,9 +82,22 @@ return {
     },
 
     sources = {
-      default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+      default = { "git", "lsp", "path", "snippets", "buffer", "lazydev" },
       providers = {
-        lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
+        lazydev = {
+          module = "lazydev.integrations.blink",
+          score_offset = 100,
+        },
+        git = {
+          module = "blink-cmp-git",
+          name = "Git",
+          enabled = function()
+            return vim.tbl_contains({ "octo", "gitcommit", "markdown" }, vim.bo.filetype)
+          end,
+          opts = {
+            -- options for the blink-cmp-git
+          },
+        },
       },
     },
 
