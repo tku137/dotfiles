@@ -1,14 +1,5 @@
 -- Shorthand for creating mappings
--- Includes a duplicate check
-local seen = {}
-local function map(mode, lhs, rhs, opts)
-  local key = table.concat(type(mode) == "table" and mode or { mode }) .. lhs
-  if seen[key] then
-    vim.notify("Duplicate mapping in keymaps.lua:\n" .. key, vim.log.levels.WARN)
-  end
-  seen[key] = true
-  vim.keymap.set(mode, lhs, rhs, opts)
-end
+local map = vim.keymap.set
 
 -- Smart vertical move: use gj/gk (screen lines) for plain j/k or ↓/↑, but keep normal j/k when a count is given
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
