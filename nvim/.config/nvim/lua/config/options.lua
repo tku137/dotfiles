@@ -83,6 +83,8 @@ vim.opt.termguicolors = true
 -- Smoothscroll available since nvim 0.10
 vim.opt.smoothscroll = true
 
+vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
+
 -- Cursor styling
 -- vim.opt.guicursor = {
 --   "n-v-c:block", -- Normal, visual, command-line: block cursor

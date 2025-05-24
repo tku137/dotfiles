@@ -9,6 +9,24 @@ local project_root = {
   color = { fg = colors.blue },
 }
 
+-- Returns a closure that lualine calls later
+local function ft_cond(ft, negate)
+  return function()
+    --  xor-style logic: when negate is true, invert the test
+    return (vim.bo.filetype == ft) ~= (negate or false)
+  end
+end
+
+-- Condition function resembling == ft
+local only_cond = function(ft)
+  return ft_cond(ft, false)
+end
+
+-- Condition function resembling ~= ft
+local except_cond = function(ft)
+  return ft_cond(ft, true)
+end
+
 return {
   "nvim-lualine/lualine.nvim",
   event = "VeryLazy",
@@ -27,8 +45,25 @@ return {
       lualine_a = { "mode" },
       lualine_b = { "branch", "diff", "diagnostics" },
       -- TODO: add aerial status component with leftsep var?
-      lualine_c = { project_root, "pretty_path" },
-      -- lualine_x = { "filetype", "lsp_status" },
+      lualine_c = {
+        {
+          "filetype",
+          cond = only_cond("snacks_picker_list"),
+          icon_only = true,
+          colored = true,
+        },
+        {
+          project_root[1],
+          icon = project_root.icon,
+          separator = project_root.separator,
+          color = project_root.color,
+          cond = except_cond("snacks_picker_list"),
+        },
+        {
+          "pretty_path",
+          cond = except_cond("snacks_picker_list"),
+        },
+      },
       lualine_x = {
         Snacks.profiler.status(),
         -- Displays showcmd
