@@ -71,12 +71,12 @@ map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result
 -- Insert-mode punctuation undo breakpoints:
 -- typing “,” “.” or “;” ends the current undo block (<C-g>u),
 -- so one <u> undoes only up to the last comma/period/semicolon.
-map("i", ",", ",<c-g>u")
-map("i", ".", ".<c-g>u")
-map("i", ";", ";<c-g>u")
-map("i", "<CR>", ";<c-g>u")
-map("i", "!", ";<c-g>u")
-map("i", "?", ";<c-g>u")
+map("i", ",", ",<C-g>u", { desc = "undo-break after comma" })
+map("i", ".", ".<C-g>u", { desc = "undo-break after period" })
+map("i", ";", ";<C-g>u", { desc = "undo-break after semicolon" })
+map("i", "!", "!<C-g>u", { desc = "undo-break after exclamation" })
+map("i", "?", "?<C-g>u", { desc = "undo-break after question" })
+map("i", "<CR>", "<C-g>u<CR>", { desc = "undo-break before newline" })
 
 -- Quick save file
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
