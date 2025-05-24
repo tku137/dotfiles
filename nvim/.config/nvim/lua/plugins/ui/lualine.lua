@@ -9,23 +9,7 @@ local project_root = {
   color = { fg = colors.blue },
 }
 
--- Returns a closure that lualine calls later
-local function ft_cond(ft, negate)
-  return function()
-    --  xor-style logic: when negate is true, invert the test
-    return (vim.bo.filetype == ft) ~= (negate or false)
-  end
-end
-
--- Condition function resembling == ft
-local only_cond = function(ft)
-  return ft_cond(ft, false)
-end
-
--- Condition function resembling ~= ft
-local except_cond = function(ft)
-  return ft_cond(ft, true)
-end
+local cond = require("utils.ft_helpers")
 
 return {
   "nvim-lualine/lualine.nvim",
@@ -48,7 +32,7 @@ return {
       lualine_c = {
         {
           "filetype",
-          cond = only_cond("snacks_picker_list"),
+          cond = cond.is_picker_filetype(),
           icon_only = true,
           colored = true,
         },
@@ -57,11 +41,11 @@ return {
           icon = project_root.icon,
           separator = project_root.separator,
           color = project_root.color,
-          cond = except_cond("snacks_picker_list"),
+          cond = cond.is_not_picker_filetype(),
         },
         {
           "pretty_path",
-          cond = except_cond("snacks_picker_list"),
+          cond = cond.is_not_picker_filetype(),
         },
       },
       lualine_x = {
