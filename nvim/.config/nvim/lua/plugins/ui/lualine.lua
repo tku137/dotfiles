@@ -20,7 +20,7 @@ return {
   opts = {
     options = {
       theme = "auto",
-      globalstatus = vim.o.laststatus == 3,
+      globalstatus = true,
       disabled_filetypes = { statusline = { "snacks_dashboard" } },
     },
     sections = {
