@@ -7,7 +7,7 @@ return {
   },
   {
     "folke/todo-comments.nvim",
-    cmd = { "TodoTrouble", "TodoTelescope" },
+    cmd = "TodoTrouble",
     event = "VimEnter",
     opts = {},
     keys = {
