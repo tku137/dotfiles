@@ -19,7 +19,7 @@ return {
           { "<leader>gh", group = "hunks" },
           { "<leader>q", group = "quit/session" },
           { "<leader>s", group = "search" },
-          { "<leader>sr", group = "replace", icon = { icon = "󰛔 ", color = "orange" } },
+          { "<leader>sr", group = "replace", icon = { icon = "󰛔 ", color = "blue" } },
           { "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },
           { "<leader>x", group = "diagnostics/quickfix", icon = { icon = "󱖫 ", color = "green" } },
           { "[", group = "prev" },
@@ -46,11 +46,6 @@ return {
           },
           -- better descriptions
           { "gx", desc = "Open with system app" },
-        },
-      },
-      icons = {
-        rules = {
-          { plugin = "grug-far.nvim", icon = "󰛔 ", color = "orange" },
         },
       },
     },
