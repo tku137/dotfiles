@@ -11,6 +11,18 @@ local project_root = {
 
 local cond = require("utils.ft_helpers")
 
+-- Returns formatted list of spell languages if spell checking is enabled.
+local function spell_status()
+  if vim.wo.spell then
+    local langs = vim.bo.spelllang or ""
+    langs = vim.trim(langs)
+    if langs ~= "" then
+      return langs
+    end
+  end
+  return nil
+end
+
 ---@class NoiceStatus
 ---@field has fun(): boolean
 ---@field get fun(): string|nil
@@ -67,6 +79,16 @@ return {
           function() return require("noice").api.status.mode.get() end,
           cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
           color = function() return { fg = Snacks.util.color("Constant") } end,
+        },
+        -- Spell status indicator
+        -- stylua: ignore
+        {
+          function()
+            local langs = spell_status()
+            return " " .. langs
+          end,
+          cond = function() return spell_status() ~= nil end,
+          color = function() return { fg = Snacks.util.color("Statement") } end,
         },
         -- stylua: ignore
         {

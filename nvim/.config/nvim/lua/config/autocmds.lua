@@ -145,3 +145,29 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo[event.buf].buflisted = false
   end,
 })
+
+-- Automatically set spellchecking languages for certain text files
+-- Create an autocommand for both .typ and .tex files that calls the apply_spell_language() function.
+-- Search for pattern in n header lines and set desired lang if pattern is present
+-- with respect to pinned main file
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  pattern = { "*.tex" },
+  callback = function()
+    local tex_pattern = "\\usepackage%[[^%]]*n?german[^%]]*%]{babel}"
+    local header_lines = 25
+    local desired_lang = "de,en"
+    local main_file = require("utils.spell_utils").get_vimtex_main_file()
+    require("utils.spell_utils").apply_spell_language(main_file, tex_pattern, header_lines, desired_lang)
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  pattern = { "*.typ" },
+  callback = function()
+    local typ_pattern = '#set%s+text%(lang:%s*"de"%s*%)'
+    local header_lines = 10
+    local desired_lang = "de,en"
+    local main_file = require("utils.spell_utils").get_tinymist_main_file()
+    require("utils.spell_utils").apply_spell_language(main_file, typ_pattern, header_lines, desired_lang)
+  end,
+})
