@@ -43,9 +43,37 @@ return {
     },
     sections = {
       lualine_a = { "mode" },
-      lualine_b = { "branch", "diff", "diagnostics" },
-      -- TODO: add aerial status component with leftsep var?
+      lualine_b = {
+        "branch",
+        {
+          "diff",
+          symbols = {
+            added = require("config.icons").git.added,
+            modified = require("config.icons").git.modified,
+            removed = require("config.icons").git.removed,
+          },
+          source = function()
+            local gitsigns = vim.b.gitsigns_status_dict
+            if gitsigns then
+              return {
+                added = gitsigns.added,
+                modified = gitsigns.changed,
+                removed = gitsigns.removed,
+              }
+            end
+          end,
+        },
+      },
       lualine_c = {
+        {
+          "diagnostics",
+          symbols = {
+            error = require("config.icons").diagnostics.Error,
+            warn = require("config.icons").diagnostics.Warn,
+            info = require("config.icons").diagnostics.Info,
+            hint = require("config.icons").diagnostics.Hint,
+          },
+        },
         {
           "filetype",
           cond = cond.is_picker_filetype(),
@@ -62,6 +90,27 @@ return {
         {
           "pretty_path",
           cond = cond.is_not_picker_filetype(),
+        },
+        {
+          "aerial",
+          sep = " ", -- separator between symbols
+          sep_icon = "", -- separator between icon and symbol
+
+          -- The number of symbols to render top-down. In order to render only 'N' last
+          -- symbols, negative numbers may be supplied. For instance, 'depth = -1' can
+          -- be used in order to render only current symbol.
+          depth = 5,
+
+          -- When 'dense' mode is on, icons are not rendered near their symbols. Only
+          -- a single icon that represents the kind of current symbol is rendered at
+          -- the beginning of status line.
+          dense = false,
+
+          -- The separator to be used to separate symbols in dense mode.
+          dense_sep = ".",
+
+          -- Color the symbol icons.
+          colored = true,
         },
       },
       lualine_x = {

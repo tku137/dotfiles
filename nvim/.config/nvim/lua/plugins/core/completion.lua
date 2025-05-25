@@ -79,8 +79,29 @@ return {
       -- By default, you may press `<c-space>` to show the documentation.
       -- Optionally, set `auto_show = true` to show the documentation after a delay.
       documentation = { auto_show = true, auto_show_delay_ms = 500 },
+
+      -- The menu is the completion popup menu
+      menu = {
+        draw = {
+          components = {
+            -- Use custom icons for each kind of completion item
+            kind_icon = {
+              text = function(ctx)
+                local icons_config = require("config.icons")
+                if icons_config and icons_config.kinds and icons_config.kinds[ctx.kind] then
+                  -- Add a space after the icon for better visual separation
+                  return icons_config.kinds[ctx.kind] .. " "
+                end
+                return " " -- Default fallback icon
+              end,
+            },
+          },
+        },
+      },
     },
 
+    -- Sources are the sources of completion items
+    -- Built-in and custom sources are supported.
     sources = {
       default = { "git", "lsp", "path", "snippets", "buffer", "lazydev" },
       providers = {
