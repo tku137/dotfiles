@@ -94,6 +94,17 @@ return {
                 end
                 return " " -- Default fallback icon
               end,
+              highlight = function(ctx)
+                -- Reuse blink.cmp’s default highlight groups:
+                -- “BlinkCmpKindFunction”, “BlinkCmpKindClass”, …
+                return "BlinkCmpKind" .. ctx.kind
+              end,
+            },
+            -- Keep the plain-text kind column, but reuse same HL
+            kind = {
+              highlight = function(ctx)
+                return "BlinkCmpKind" .. ctx.kind
+              end,
             },
           },
         },
