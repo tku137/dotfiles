@@ -1,9 +1,13 @@
 --  See :help lua-guide-autocommands
 
+local function augroup(name)
+  return vim.api.nvim_create_augroup(name, { clear = true })
+end
+
 -- Most important autocmd that reloads the config when it's saved :)
 vim.api.nvim_create_autocmd("BufWritePost", {
   desc = "Reload Neovim config on save",
-  group = vim.api.nvim_create_augroup("reload_config", { clear = true }),
+  group = augroup("reload_config"),
   pattern = { "init.lua", "lua/config/*.lua" },
   callback = function()
     vim.cmd("source $MYVIMRC")
@@ -15,7 +19,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 --  See :help vim.highlight.on_yank()
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
-  group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
+  group = augroup("highlight-yank"),
   callback = function()
     vim.highlight.on_yank()
   end,
@@ -24,7 +28,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 -- Checks if files have changed externally when returning to Neovim and reloads them
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
   desc = "File reload on external changes",
-  group = vim.api.nvim_create_augroup("checktime", { clear = true }),
+  group = augroup("checktime"),
   callback = function()
     if vim.o.buftype ~= "nofile" then
       vim.cmd("checktime")
@@ -35,7 +39,7 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 -- Jump back to last edit position when reopening files
 vim.api.nvim_create_autocmd("BufReadPost", {
   desc = "Last cursor position on buffer open",
-  group = vim.api.nvim_create_augroup("last_loc", { clear = true }),
+  group = augroup("last_loc"),
   callback = function(event)
     local exclude = { "gitcommit" }
     local buf = event.buf
@@ -54,7 +58,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- Auto create dir when saving a file, in case some intermediate directory does not exist
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   desc = "Auto create directory",
-  group = vim.api.nvim_create_augroup("auto_create_dir", { clear = true }),
+  group = augroup("auto_create_dir"),
   callback = function(event)
     if event.match:match("^%w%w+:[\\/][\\/]") then
       return
@@ -67,7 +71,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 -- Resize splits if window got resized
 vim.api.nvim_create_autocmd({ "VimResized" }, {
   desc = "Resize splits on window resize",
-  group = vim.api.nvim_create_augroup("resize_splits", { clear = true }),
+  group = augroup("resize_splits"),
   callback = function()
     local current_tab = vim.fn.tabpagenr()
     vim.cmd("tabdo wincmd =")
@@ -78,7 +82,7 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 -- Wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Wrap and spell for text filetypes",
-  group = vim.api.nvim_create_augroup("wrap_spell", { clear = true }),
+  group = augroup("wrap_spell"),
   pattern = { "text", "plaintex", "typst", "gitcommit", "markdown", "neorg" },
   callback = function()
     vim.opt_local.wrap = true
@@ -89,7 +93,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Fix conceallevel for JSON files
 vim.api.nvim_create_autocmd({ "FileType" }, {
   desc = "Fix conceallevel for JSON files",
-  group = vim.api.nvim_create_augroup("json_conceal", { clear = true }),
+  group = augroup("json_conceal"),
   pattern = { "json", "jsonc", "json5" },
   callback = function()
     vim.opt_local.conceallevel = 0
@@ -99,7 +103,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 -- Close with <q> for specific filetypes
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Close some filetypes with q key",
-  group = vim.api.nvim_create_augroup("close_with_q", { clear = true }),
+  group = augroup("close_with_q"),
   pattern = {
     "PlenaryTestPopup",
     "checkhealth",
@@ -135,7 +139,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Make it easier to close man-files when opened inline
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Close man-files opened inline",
-  group = vim.api.nvim_create_augroup("man_unlisted", { clear = true }),
+  group = augroup("man_unlisted"),
   pattern = { "man" },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
