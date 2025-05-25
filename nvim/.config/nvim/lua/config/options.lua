@@ -83,6 +83,7 @@ vim.opt.termguicolors = true
 -- Smoothscroll available since nvim 0.10
 vim.opt.smoothscroll = true
 
+-- Only consider relevant things to be part of a session so unnecessary things are ignored
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 
 -- Cursor styling

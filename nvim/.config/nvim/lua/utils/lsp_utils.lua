@@ -12,6 +12,7 @@ function M.toggle_basedpyright_settings(opts)
   end
 
   -- Toggle the typeCheckingMode
+  ---@diagnostic disable-next-line: undefined-field
   local analysis = client.config.settings.basedpyright.analysis
   if analysis.typeCheckingMode == "basic" then
     analysis.typeCheckingMode = "recommended"
@@ -52,6 +53,7 @@ function M.toggle_yaml_schema_store(opts)
   end
 
   -- Toggle the schemaStore.enable setting
+  ---@diagnostic disable-next-line: undefined-field
   local schemaStore = client.config.settings.yaml.schemaStore
   schemaStore.enable = not schemaStore.enable
 

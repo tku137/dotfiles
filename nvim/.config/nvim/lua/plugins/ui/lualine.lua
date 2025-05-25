@@ -11,6 +11,10 @@ local project_root = {
 
 local cond = require("utils.ft_helpers")
 
+---@class NoiceStatus
+---@field has fun(): boolean
+---@field get fun(): string|nil
+
 return {
   "nvim-lualine/lualine.nvim",
   event = "VeryLazy",

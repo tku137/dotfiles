@@ -72,6 +72,7 @@ return {
       },
     },
     init = function()
+      ---@diagnostic disable-next-line: duplicate-set-field
       package.preload["nvim-web-devicons"] = function()
         require("mini.icons").mock_nvim_web_devicons()
         return package.loaded["nvim-web-devicons"]
@@ -97,6 +98,7 @@ return {
     -- stylua: ignore
     keys = {
       { "<leader>n", function()
+        ---@diagnostic disable-next-line: undefined-field
         if Snacks.config.picker and Snacks.config.picker.enabled then
           Snacks.picker.notifications()
         else
