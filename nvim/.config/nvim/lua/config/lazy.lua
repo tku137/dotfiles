@@ -22,7 +22,6 @@ require("config.options")
 require("lazy").setup({
   spec = {
     -- import plugins
-    { import = "plugins" }, -- Absolute bare basics, needed very early
     { import = "plugins.core" }, -- Core functionalities for modern dev tool
     { import = "plugins.editor" }, -- Enhancements to general editor experience
     { import = "plugins.ui" }, -- UI components and colorscheme
