@@ -72,7 +72,7 @@ return {
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
       -- Adjusts spacing to ensure icons are aligned
-      nerd_font_variant = "mono",
+      nerd_font_variant = "normal",
     },
 
     completion = {
@@ -89,10 +89,9 @@ return {
               text = function(ctx)
                 local icons_config = require("config.icons")
                 if icons_config and icons_config.kinds and icons_config.kinds[ctx.kind] then
-                  -- Add a space after the icon for better visual separation
-                  return icons_config.kinds[ctx.kind] .. " "
+                  return icons_config.kinds[ctx.kind]
                 end
-                return " " -- Default fallback icon
+                return ctx.kind_icon or " " -- Default fallback icon
               end,
               highlight = function(ctx)
                 -- Reuse blink.cmp’s default highlight groups:
