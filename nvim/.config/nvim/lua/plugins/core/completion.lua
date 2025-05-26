@@ -1,12 +1,13 @@
 return {
   {
     "saghen/blink.cmp",
-    event = "VimEnter",
+    event = "InsertEnter",
     version = "1.*",
     dependencies = {
       {
         -- Snippet Engine
         "L3MON4D3/LuaSnip",
+        event = "InsertEnter",
         version = "2.*",
         build = (function()
           -- Build Step is needed for regex support in snippets.

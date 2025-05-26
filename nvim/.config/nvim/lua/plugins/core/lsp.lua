@@ -3,8 +3,7 @@ return {
     -- Main LSP Configuration
     -- Custom LSP settings go into after/lsp/<servername>.lua
     "neovim/nvim-lspconfig",
-    lazy = false,
-    priority = 1000,
+    event = { "BufReadPost", "BufNewFile" },
     dependencies = {
       {
         -- Useful status updates for LSP.

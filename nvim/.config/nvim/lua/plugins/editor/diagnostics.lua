@@ -2,7 +2,7 @@ return {
   -- better diagnostics list and others
   {
     "folke/trouble.nvim",
-    cmd = { "Trouble" },
+    cmd = { "TroubleToggle", "Trouble" },
     opts = {
       modes = {
         lsp = {
