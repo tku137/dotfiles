@@ -8,7 +8,6 @@ return {
     vscode = true,
     ---@type Flash.Config
     opts = {},
-    -- stylua: ignore
     specs = {
       {
         "folke/snacks.nvim",

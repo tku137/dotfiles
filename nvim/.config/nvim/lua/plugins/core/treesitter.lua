@@ -1,10 +1,12 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false,
+    branch = "main",
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
+      { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
     },
     opts = {
 
@@ -48,17 +50,6 @@ return {
 
       -- Indentation based on treesitter for the = operator.
       indent = { enable = true },
-
-      -- Incremental selection based on the named nodes from the grammar.
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "<BS>",
-        },
-      },
 
       -- Add all the textobjects modules in one place:
       textobjects = {
