@@ -123,20 +123,4 @@ return {
       { "<leader>gf", mode = "n", desc = "Fugit2", "<cmd>Fugit2<cr>" },
     },
   },
-  {
-    "pwntester/octo.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "folke/snacks.nvim",
-      "nvim-tree/nvim-web-devicons",
-    },
-    opts = {
-      enabled = function()
-        return vim.tbl_contains({ "octo", "gitcommit", "markdown" }, vim.bo.filetype)
-      end,
-      picker = "snacks",
-      users = "assignable", -- Users for assignees or reviewers. Values: "search" | "mentionable" | "assignable"
-      default_merge_method = "squash", -- default merge method which should be used for both `Octo pr merge` and merging from picker, could be `commit`, `rebase` or `squash`
-    },
-  },
 }
