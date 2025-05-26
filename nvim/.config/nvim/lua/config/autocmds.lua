@@ -135,6 +135,13 @@ vim.api.nvim_create_autocmd("FileType", {
     end)
   end,
 })
+-- dap-view needs special handling
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = { "dap-view", "dap-view-term", "dap-repl" }, -- dap-repl is set by `nvim-dap`
+  callback = function(evt)
+    vim.keymap.set("n", "q", "<C-w>q", { buffer = evt.buf })
+  end,
+})
 
 -- Make it easier to close man-files when opened inline
 vim.api.nvim_create_autocmd("FileType", {
