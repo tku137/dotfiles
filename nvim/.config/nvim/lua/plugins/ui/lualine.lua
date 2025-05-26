@@ -29,10 +29,14 @@ end
 
 return {
   "nvim-lualine/lualine.nvim",
-  event = "VeryLazy",
+  event = "VeryLazy", -- Make sure all components are available
   dependencies = {
     "nvim-tree/nvim-web-devicons",
     "bwpge/lualine-pretty-path",
+    {
+      "AndreM222/copilot-lualine",
+      event = "VeryLazy",
+    },
     "folke/snacks.nvim", -- ensure snacks loads first
   },
   opts = {
@@ -114,6 +118,11 @@ return {
         },
       },
       lualine_x = {
+        {
+          "copilot",
+          show_colors = true,
+          show_loading = true,
+        },
         Snacks.profiler.status(),
         -- Displays showcmd
         -- stylua: ignore

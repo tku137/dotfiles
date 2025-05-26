@@ -1,5 +1,4 @@
--- Options are automatically loaded before lazy.nvim startup
-
+-- Leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
