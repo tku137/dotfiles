@@ -76,21 +76,21 @@ return {
       { "<leader>do", function() require("dap").step_out() end, desc = "Step Out", },
 
       -- DAP View
-      { "<leader>dvv", function() require("dap-view").toggle({}) end, desc = "DAP View", },
+      { "<leader>dvv", function() require("dap-view").toggle() end, desc = "DAP View", },
       { "<leader>dvr", function() require("dap-view").jump_to_view("repl") end, desc = "REPL", },
       { "<leader>dvw", function() require("dap-view").jump_to_view("watches") end, desc = "Jump to Watches", },
       { "<leader>dvs", function() require("dap-view").jump_to_view("scopes") end, desc = "Jump to Scopes", },
       { "<leader>dvb", function() require("dap-view").jump_to_view("breakpoints") end, desc = "Jump to Breakpoints", },
       { "<leader>dve", function() require("dap-view").jump_to_view("exceptions") end, desc = "Jump to Exceptions", },
       { "<leader>dvt", function() require("dap-view").jump_to_view("threads") end, desc = "Jump to Threads", },
-      { "<leader>dvc", function() require("dap-view").jump_to_view("Console") end, desc = "Jump to Console", },
+      { "<leader>dvc", function() require("dap-view").jump_to_view("console") end, desc = "Jump to Console", },
       { "<leader>dvR", function() require("dap-view").show_view("repl") end, desc = "Show REPL", },
       { "<leader>dvW", function() require("dap-view").show_view("watches") end, desc = "Show Watches", },
       { "<leader>dvS", function() require("dap-view").show_view("scopes") end, desc = "Show Scopes", },
       { "<leader>dvB", function() require("dap-view").show_view("breakpoints") end, desc = "Show Breakpoints", },
       { "<leader>dvE", function() require("dap-view").show_view("exceptions") end, desc = "Show Exceptions", },
       { "<leader>dvT", function() require("dap-view").show_view("threads") end, desc = "Show Threads", },
-      { "<leader>dvC", function() require("dap-view").show_view("Console") end, desc = "Show Console", },
+      { "<leader>dvC", function() require("dap-view").show_view("console") end, desc = "Show Console", },
       { "<leader>de", function() require("dap-view").eval() end, desc = "Eval", mode = { "n", "v" }, },
 
       -- Advanced features
