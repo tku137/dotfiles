@@ -1,19 +1,28 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "main",
+    -- branch = "main",
     build = ":TSUpdate",
-    event = "BufReadPre",
+    -- main = "nvim-treesitter.configs", -- Sets main module to use for opts
+    lazy = true,
+    event = { "BufReadPost", "BufNewFile" },
+    -- event = "BufReadPre",
+    ---@param opts TSConfig
+    config = function(_, opts)
+      -- **Important:** use the configs module to setup
+      require("nvim-treesitter.configs").setup(opts) -- load the above options
+    end,
     dependencies = {
-      { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
+      { "nvim-treesitter/nvim-treesitter-textobjects" },
+      -- { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
     },
+    opts_extend = { "ensure_installed" },
     opts = {
 
       -- A list of parser names, or "all" (the listed parsers MUST always be installed)
       ensure_installed = {
         "bash",
         "c",
-        "dap_repl",
         "diff",
         "git_config",
         "gitcommit",
@@ -28,6 +37,7 @@ return {
         "markdown",
         "markdown_inline",
         "printf",
+        "python",
         "query",
         "regex",
         "toml",
