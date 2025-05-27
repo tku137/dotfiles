@@ -120,7 +120,7 @@ return {
       -- Sources are the sources of completion items
       -- Built-in and custom sources are supported.
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "git", "lazydev" },
+        default = { "git", "lsp", "path", "snippets", "buffer", "lazydev" },
         providers = {
           lazydev = {
             module = "lazydev.integrations.blink",
@@ -128,6 +128,7 @@ return {
           },
           git = {
             module = "blink-cmp-git",
+            score_offset = -50,
             name = "Git",
             enabled = function()
               return vim.tbl_contains({ "octo", "gitcommit", "markdown" }, vim.bo.filetype)

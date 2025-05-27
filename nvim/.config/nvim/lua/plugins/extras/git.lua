@@ -6,6 +6,8 @@ return {
     cmd = "Neogit",
     dependencies = {
       "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+      "folke/snacks.nvim",
     },
     keys = {
       {
@@ -110,12 +112,14 @@ return {
   },
   {
     "SuperBo/fugit2.nvim",
+    build = false,
     lazy = true,
     opts = {
       width = 100,
     },
     dependencies = {
       "MunifTanjim/nui.nvim",
+      "nvim-tree/nvim-web-devicons",
       "nvim-lua/plenary.nvim",
     },
     cmd = { "Fugit2", "Fugit2Diff", "Fugit2Graph" },
