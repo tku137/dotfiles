@@ -13,7 +13,6 @@ return {
       -- INFO: To add language specific linters in their own config file, use this snippet:
       -- {
       --   "mfussenegger/nvim-lint",
-      --   after = "nvim-lint",
       --   ft = "python",
       --   opts = { linters_by_ft = { python = { "ruff" } } },
       -- },

@@ -14,7 +14,7 @@ vim.diagnostic.config({
 return {
   {
     -- Main LSP Configuration
-    -- Custom LSP settings go into after/lsp/<servername>.lua
+    -- INFO: Custom LSP settings go into after/lsp/<servername>.lua
     "neovim/nvim-lspconfig",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {

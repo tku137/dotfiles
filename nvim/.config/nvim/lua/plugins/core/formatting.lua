@@ -36,7 +36,6 @@ return {
       -- INFO: To add language specific formatters in their own config file, use this snippet:
       -- {
       --   "stevearc/conform.nvim",
-      --   after = "conform.nvim",
       --   ft = "python",
       --   opts = { formatters_by_ft = { python = { "ruff_organize_imports", "ruff_format" } } },
       -- },

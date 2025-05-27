@@ -17,14 +17,12 @@ return {
   -- Formatter
   {
     "stevearc/conform.nvim",
-    after = "conform.nvim",
     opts = { formatters_by_ft = { python = { "ruff_organize_imports", "ruff_format" } } },
   },
 
   -- Linter
   {
     "mfussenegger/nvim-lint",
-    after = "nvim-lint",
     opts = { linters_by_ft = { python = { "ruff" } } },
   },
 
@@ -32,8 +30,6 @@ return {
   {
     -- Python DAP support via debugpy
     "mfussenegger/nvim-dap-python",
-    -- Load only after the core nvim-dap plugin
-    after = "mfussenegger/nvim-dap",
     -- Only activate in Python files
     ft = "python",
     -- Keys for debugging tests (uses built-in methods)
@@ -82,6 +78,7 @@ return {
   {
     "geg2102/nvim-python-repl",
     lazy = true,
+    ft = "python",
     dependencies = {
       "nvim-treesitter",
     },
