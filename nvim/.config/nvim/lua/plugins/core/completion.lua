@@ -1,3 +1,14 @@
+local source_priority = {
+  copilot = 4,
+  avante = 3,
+  git = 2,
+  lsp = 1,
+  path = 0,
+  snippets = -1,
+  buffer = -2,
+  lazydev = -10,
+}
+
 return {
   {
     "saghen/blink.cmp",
@@ -128,7 +139,7 @@ return {
           },
           git = {
             module = "blink-cmp-git",
-            score_offset = -50,
+            score_offset = -20,
             name = "Git",
             enabled = function()
               return vim.tbl_contains({ "octo", "gitcommit", "markdown" }, vim.bo.filetype)
@@ -149,7 +160,23 @@ return {
       -- the rust implementation via `'prefer_rust_with_warning'`
       --
       -- See :h blink-cmp-config-fuzzy for more information
-      fuzzy = { implementation = "lua" },
+      fuzzy = {
+        implementation = "lua",
+        sorts = {
+          -- 1) Custom source-priority comparator
+          function(a, b)
+            local pa = source_priority[a.source_id] or 0
+            local pb = source_priority[b.source_id] or 0
+            if pa ~= pb then
+              return pa > pb
+            end
+            -- 2) Fallback to Blink’s default scoring
+            return a.score > b.score
+          end,
+          -- 3) Then by sort_text to stabilize ties
+          "sort_text",
+        },
+      },
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },

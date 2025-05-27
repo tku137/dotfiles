@@ -31,10 +31,13 @@ return {
   },
   {
     "saghen/blink.cmp",
-    dependencies = { "giuxtaposition/blink-cmp-copilot" },
+    dependencies = {
+      { "giuxtaposition/blink-cmp-copilot", lazy = true },
+      { "Kaiser-Yang/blink-cmp-avante", lazy = true },
+    },
     opts = {
       sources = {
-        default = { "copilot" },
+        default = { "copilot", "avante" },
         providers = {
           copilot = {
             name = "copilot",
@@ -43,6 +46,18 @@ return {
               kind = "Copilot",
             },
             score_offset = -10,
+            async = true,
+          },
+          avante = {
+            module = "blink-cmp-avante",
+            name = "Avante",
+            enabled = function()
+              return vim.tbl_contains({ "AvanteInput" }, vim.bo.filetype)
+            end,
+            opts = {
+              -- options for blink-cmp-avante
+            },
+            score_offset = -40,
             async = true,
           },
         },
