@@ -1,6 +1,7 @@
 local source_priority = {
-  copilot = 4,
-  avante = 3,
+  copilot = 5,
+  avante = 4,
+  conventional_commits = 3,
   git = 2,
   lsp = 1,
   path = 0,
@@ -47,6 +48,7 @@ return {
         "Kaiser-Yang/blink-cmp-git",
         dependencies = "nvim-lua/plenary.nvim",
       },
+      { "disrupted/blink-cmp-conventional-commits" },
     },
     opts_extend = {
       "sources.completion.enabled_providers",
@@ -131,7 +133,7 @@ return {
       -- Sources are the sources of completion items
       -- Built-in and custom sources are supported.
       sources = {
-        default = { "git", "lsp", "path", "snippets", "buffer", "lazydev" },
+        default = { "git", "conventional_commits", "lsp", "path", "snippets", "buffer", "lazydev" },
         providers = {
           lazydev = {
             module = "lazydev.integrations.blink",
@@ -147,6 +149,14 @@ return {
             opts = {
               -- options for the blink-cmp-git
             },
+          },
+          conventional_commits = {
+            name = "Conventional Commits",
+            module = "blink-cmp-conventional-commits",
+            enabled = function()
+              return vim.bo.filetype == "gitcommit"
+            end,
+            opts = {}, -- none so far
           },
         },
       },
