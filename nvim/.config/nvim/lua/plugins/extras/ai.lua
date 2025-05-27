@@ -42,7 +42,7 @@ return {
             opts = {
               kind = "Copilot",
             },
-            score_offset = 100,
+            score_offset = -10,
             async = true,
           },
         },
