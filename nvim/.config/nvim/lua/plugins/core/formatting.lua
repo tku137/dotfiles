@@ -12,6 +12,7 @@ return {
       desc = "Format buffer",
     },
   },
+  opts_extend = { "formatters_by_ft" },
   opts = {
     notify_on_error = false,
     format_on_save = function(bufnr)
@@ -30,16 +31,14 @@ return {
     end,
     formatters_by_ft = {
       lua = { "stylua" },
+      fish = { "fish_indent" },
       -- TODO: Add this to readme
-      -- To add language specific formatters in their own config file, use this snippet:
+      -- INFO: To add language specific formatters in their own config file, use this snippet:
       -- {
       --   "stevearc/conform.nvim",
       --   after = "conform.nvim",
-      --   opts = function(_, opts)
-      --     opts.formatters_by_ft = opts.formatters_by_ft or {}
-      --     opts.formatters_by_ft.python = { "ruff_organize_imports", "ruff_format" }
-      --     return opts
-      --   end,
+      --   ft = "python",
+      --   opts = { formatters_by_ft = { python = { "ruff_organize_imports", "ruff_format" } } },
       -- },
     },
   },

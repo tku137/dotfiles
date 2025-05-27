@@ -2,6 +2,7 @@ return {
   {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
+    opts_extend = { "linters_by_ft" },
     config = function()
       local lint = require("lint")
 
@@ -9,15 +10,12 @@ return {
       lint.linters_by_ft = lint.linters_by_ft or {}
 
       -- TODO: add this to readme
-      -- To add language specific linters in their own config file, use this snippet:
+      -- INFO: To add language specific linters in their own config file, use this snippet:
       -- {
       --   "mfussenegger/nvim-lint",
       --   after = "nvim-lint",
-      --   opts = function(_, opts)
-      --     opts.linters_by_ft = opts.linters_by_ft or {}
-      --     opts.linters_by_ft.python = { "ruff" }
-      --     return opts
-      --   end,
+      --   ft = "python",
+      --   opts = { linters_by_ft = { python = { "ruff" } } },
       -- },
 
       -- Create autocommand which carries out the actual linting

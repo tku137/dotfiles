@@ -26,14 +26,22 @@ return {
       -- Allows extra capabilities provided by blink.cmp
       "saghen/blink.cmp",
     },
-    config = function()
+    opts_extend = { "servers" },
+    opts = { servers = { "lua_ls", "yamlls" } },
+    config = function(_, opts)
       -- WARN: make sure to have LSPs installed either
       -- system wide or project specific
-      vim.lsp.enable({
-        "lua_ls",
-        "basedpyright",
-        "yamlls",
-      })
+
+      -- TODO: add this to readme
+      -- INFO: To add language specific LSP in their own config file, use this snippet:
+      -- {
+      --   "neovim/nvim-lspconfig",
+      --    opts = { servers = { "ruff", "basedpyright" } },
+      -- },
+
+      -- opts.servers is a list of servers to enable, merged from all
+      -- language specific config files
+      vim.lsp.enable(opts.servers)
     end,
   },
 
