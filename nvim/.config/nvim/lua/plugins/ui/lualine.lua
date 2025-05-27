@@ -120,6 +120,26 @@ return {
       lualine_x = {
         {
           "copilot",
+          symbols = {
+            status = {
+              icons = {
+                enabled = " ",
+                sleep = " ", -- auto-trigger disabled
+                disabled = " ",
+                warning = " ",
+                unknown = " ",
+              },
+              hl = {
+                enabled = colors.fg,
+                sleep = colors.teal,
+                disabled = colors.fg_dark,
+                warning = colors.orange,
+                unknown = colors.red,
+              },
+            },
+            spinners = "dots", -- has some premade spinners
+            spinner_color = colors.blue,
+          },
           show_colors = true,
           show_loading = true,
         },
