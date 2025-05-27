@@ -22,7 +22,11 @@ return {
       "TSUpdate",
       "TSUpdateSync",
     },
-    build = ":TSUpdate",
+    build = function()
+      -- silently update all treesitter parsers on fresh install
+      -- otherwise installation can "hang" when a bunch of parsers are installed
+      vim.cmd("silent! TSUpdate")
+    end,
     init = function(plugin)
       -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
       -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
