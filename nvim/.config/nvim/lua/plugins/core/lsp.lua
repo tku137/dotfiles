@@ -1,3 +1,16 @@
+local icons = require("config.icons").diagnostics
+
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = icons.Error,
+      [vim.diagnostic.severity.WARN] = icons.Warn,
+      [vim.diagnostic.severity.INFO] = icons.Info,
+      [vim.diagnostic.severity.HINT] = icons.Hint,
+    },
+  },
+})
+
 return {
   {
     -- Main LSP Configuration
