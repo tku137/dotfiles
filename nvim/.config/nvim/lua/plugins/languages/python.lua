@@ -17,13 +17,8 @@ return {
   -- Formatter
   {
     "stevearc/conform.nvim",
+    opts_extend = { "formatters_by_ft.python" }, -- important to convince lazy.nvim to merge this!
     opts = { formatters_by_ft = { python = { "ruff_organize_imports", "ruff_format" } } },
-  },
-
-  -- Linter
-  {
-    "mfussenegger/nvim-lint",
-    opts = { linters_by_ft = { python = { "ruff" } } },
   },
 
   -- DAP
@@ -78,7 +73,6 @@ return {
   {
     "geg2102/nvim-python-repl",
     lazy = true,
-    ft = "python",
     dependencies = {
       "nvim-treesitter",
     },
@@ -119,7 +113,7 @@ return {
           require("nvim-python-repl").toggle_execute()
           vim.notify(
             "Automatic REPL execution "
-            .. (require("nvim-python-repl.config").defaults["execute_on_send"] and "Enabled" or "Disabled")
+              .. (require("nvim-python-repl.config").defaults["execute_on_send"] and "Enabled" or "Disabled")
           )
         end,
         desc = "Toggle automatic execution",
@@ -131,7 +125,7 @@ return {
           require("nvim-python-repl").toggle_vertical()
           vim.notify(
             "REPL split set to "
-            .. (require("nvim-python-repl.config").defaults["vsplit"] and "Vertical" or "Horizontal")
+              .. (require("nvim-python-repl.config").defaults["vsplit"] and "Vertical" or "Horizontal")
           )
         end,
         desc = "Toggle vertical/horizontal split",
