@@ -29,26 +29,78 @@ return {
   {
     "sindrets/diffview.nvim",
     cmd = { "DiffviewOpen" },
-    opts = {
-      enhanced_diff_hl = true,
-      view = {
-        default = { winbar_info = true },
-        file_history = { winbar_info = true },
-      },
-      hooks = {
-        diff_buf_read = function(bufnr)
-          vim.b[bufnr].view_activated = false
-        end,
-      },
-    },
+    opts = function()
+      local actions = require("diffview.actions")
+
+      return {
+        enhanced_diff_hl = true,
+        view = {
+          default = { winbar_info = true },
+          file_history = { winbar_info = true },
+        },
+        hooks = {
+          diff_buf_read = function(bufnr)
+            vim.b[bufnr].view_activated = false
+          end,
+        },
+
+        -- 2️⃣  only the key-maps that matter
+        -- stylua: ignore
+        keymaps = {
+          view = {
+            -- disable originals
+            ["<leader>co"] = false,
+            ["<leader>ct"] = false,
+            ["<leader>cb"] = false,
+            ["<leader>ca"] = false,
+            ["<leader>cO"] = false,
+            ["<leader>cT"] = false,
+            ["<leader>cB"] = false,
+            ["<leader>cA"] = false,
+            ["dx"] = false,
+            ["dX"] = false,
+            -- local-leader replacements
+            { "n", "<localleader>o", actions.conflict_choose("ours"),       { desc = "Choose OURS" } },
+            { "n", "<localleader>t", actions.conflict_choose("theirs"),     { desc = "Choose THEIRS" } },
+            { "n", "<localleader>b", actions.conflict_choose("base"),       { desc = "Choose BASE" } },
+            { "n", "<localleader>a", actions.conflict_choose("all"),        { desc = "Choose ALL" } },
+            { "n", "<localleader>x", actions.conflict_choose("none"),       { desc = "Delete conflict" } },
+            { "n", "<localleader>O", actions.conflict_choose_all("ours"),   { desc = "Choose OURS for all" } },
+            { "n", "<localleader>T", actions.conflict_choose_all("theirs"), { desc = "Choose THEIRS for all" } },
+            { "n", "<localleader>B", actions.conflict_choose_all("base"),   { desc = "Choose BASE for all" } },
+            { "n", "<localleader>A", actions.conflict_choose_all("all"),    { desc = "Choose ALL for all" } },
+            { "n", "<localleader>X", actions.conflict_choose_all("none"),   { desc = "Delete conflict for all" } },
+          },
+          file_panel = {
+            ["<leader>cO"] = false,
+            ["<leader>cT"] = false,
+            ["<leader>cB"] = false,
+            ["<leader>cA"] = false,
+            ["dX"] = false,
+            { "n", "<localleader>O", actions.conflict_choose_all("ours"),   { desc = "OURS for all" } },
+            { "n", "<localleader>T", actions.conflict_choose_all("theirs"), { desc = "THEIRS for all" } },
+            { "n", "<localleader>B", actions.conflict_choose_all("base"),   { desc = "BASE for all" } },
+            { "n", "<localleader>A", actions.conflict_choose_all("all"),    { desc = "ALL for all" } },
+            { "n", "<localleader>X", actions.conflict_choose_all("none"),   { desc = "Delete conflict for the whole file" } },
+          },
+        },
+      }
+    end,
     keys = {
       {
-        prefix .. "D",
+        prefix .. "v",
         "<Cmd>DiffviewOpen<CR>",
         desc = "Open DiffView",
         mode = "n",
       },
+      {
+        prefix .. "q",
+        "<Cmd>DiffviewClose<CR>",
+        desc = "Close DiffView",
+        mode = "n",
+      },
     },
+    -- temp comment
     specs = {
       {
         "NeogitOrg/neogit",
@@ -124,7 +176,7 @@ return {
     },
     cmd = { "Fugit2", "Fugit2Diff", "Fugit2Graph" },
     keys = {
-      { "<leader>gf", mode = "n", desc = "Fugit2", "<cmd>Fugit2<cr>" },
+      { "<leader>gF", mode = "n", desc = "Fugit2", "<cmd>Fugit2<cr>" },
     },
   },
 }

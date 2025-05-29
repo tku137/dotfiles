@@ -1,6 +1,6 @@
 -- Leader key
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+vim.g.maplocalleader = ","
 
 -- Indentation settings
 vim.opt.expandtab = true -- Convert tabs to spaces
