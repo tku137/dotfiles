@@ -153,6 +153,19 @@ end
 autoformat_toggle(false):map("<leader>uf") -- global toggle
 autoformat_toggle(true):map("<leader>uF") -- buffer-local toggle
 
+-- Toggle automatic spell checker language switching
+Snacks.toggle
+  .new({
+    name = "Spell Language Auto Switching",
+    get = function()
+      return require("utils.spell_utils").is_enabled()
+    end,
+    set = function(_)
+      require("utils.spell_utils").toggle()
+    end,
+  })
+  :map("<leader>uk")
+
 -- stylua: ignore start
 
 -- A bunch of nice to have Snacks toggles
