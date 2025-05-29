@@ -1,70 +1,72 @@
 local M = {}
 
---- Toggle BasedPyright typeCheckingMode and inlay hints
+---Toggle typeCheckingMode and inlay-hints for **basedpyright** without restart
+---@param opts? { silent?: boolean }
 function M.toggle_basedpyright_settings(opts)
   opts = opts or {}
-
-  -- Get the LSP client for basedpyright
   local client = vim.lsp.get_clients({ name = "basedpyright" })[1]
   if not client then
     vim.notify("BasedPyright LSP is not active", vim.log.levels.WARN)
     return
   end
 
-  -- Toggle the typeCheckingMode
-  ---@diagnostic disable-next-line: undefined-field
   local analysis = client.config.settings.basedpyright.analysis
-  if analysis.typeCheckingMode == "basic" then
-    analysis.typeCheckingMode = "recommended"
-  else
-    analysis.typeCheckingMode = "basic"
-  end
+  -- flip the mode
+  analysis.typeCheckingMode = (analysis.typeCheckingMode == "basic") and "recommended" or "basic"
 
-  -- Toggle the inlayHints settings
-  local hints = analysis.inlayHints
+  -- flip the three inlay-hint booleans
+  local hints = analysis.inlayHints or {}
   hints.variableTypes = not hints.variableTypes
   hints.functionReturnTypes = not hints.functionReturnTypes
-  hints.callArgumentNames = not hints.callArgumentNames
+  hints.parameterNames = not hints.parameterNames --  ← renamed
+  analysis.inlayHints = hints
 
-  -- Restart the LSP to apply changes
-  vim.lsp.stop_client(client.id)
-  vim.defer_fn(function()
-    vim.cmd("LspStart basedpyright")
-    if not opts.silent then
-      vim.notify(
-        "BasedPyright restarted with typeCheckingMode: "
-          .. analysis.typeCheckingMode
-          .. "\nInlay Hints: "
-          .. (hints.variableTypes and "enabled" or "disabled")
-      )
-    end
-  end, 100)
+  -- push the change to the running server
+  ---@diagnostic disable-next-line: inject-field
+  client.config.settings.basedpyright.analysis = analysis
+  ---@diagnostic disable-next-line: param-type-mismatch
+  client.notify("workspace/didChangeConfiguration", {
+    settings = client.config.settings,
+  })
+
+  if not opts.silent then
+    vim.notify(
+      ("BasedPyright: %s, inlay-hints %s"):format(analysis.typeCheckingMode, hints.variableTypes and "on" or "off"),
+      vim.log.levels.INFO
+    )
+  end
 end
 
 -- Toggle yamlls schemaStore.enable setting
+---@param opts? { silent?: boolean }
 function M.toggle_yaml_schema_store(opts)
   opts = opts or {}
 
-  -- Get the YAML LSP client for yamlls
+  -- grab the first attached yamlls client
   local client = vim.lsp.get_clients({ name = "yamlls" })[1]
   if not client then
     vim.notify("YAML LSP is not active", vim.log.levels.WARN)
     return
   end
 
-  -- Toggle the schemaStore.enable setting
-  ---@diagnostic disable-next-line: undefined-field
-  local schemaStore = client.config.settings.yaml.schemaStore
-  schemaStore.enable = not schemaStore.enable
+  -- flip the setting in the client-side copy
+  local cfg = client.config.settings
+  ---@diagnostic disable-next-line: need-check-nil
+  local store = cfg.yaml.schemaStore or {}
+  store.enable = not store.enable
+  ---@diagnostic disable-next-line: need-check-nil, inject-field
+  cfg.yaml.schemaStore = store
 
-  -- Restart the LSP to apply changes
-  vim.lsp.stop_client(client.id)
-  vim.defer_fn(function()
-    vim.cmd("LspStart yamlls")
-    if not opts.silent then
-      vim.notify("YAML LSP restarted with schemaStore.enable = " .. tostring(schemaStore.enable))
-    end
-  end, 100)
+  -- notify the server
+  ---@diagnostic disable-next-line: param-type-mismatch
+  client.notify("workspace/didChangeConfiguration", { settings = cfg })
+
+  if not opts.silent then
+    vim.notify(
+      ("yamlls: yaml.schemaStore.enable = %s (applied live)"):format(tostring(store.enable)),
+      vim.log.levels.INFO
+    )
+  end
 end
 
 -- Loads and merges extra schema files from a list.
