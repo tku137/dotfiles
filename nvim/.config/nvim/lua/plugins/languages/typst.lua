@@ -7,13 +7,14 @@ return {
   },
 
   -- LSP
-  -- brew install tinymist typstyle
+  -- brew install tinymist
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "tinymist" } },
   },
 
   -- Formatter
+  -- brew install typstyle
   {
     "stevearc/conform.nvim",
     opts = {

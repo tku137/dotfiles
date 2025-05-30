@@ -13,9 +13,7 @@ function M.is_enabled()
   return auto_spell_switch_enabled
 end
 
-------------------------------------------------------------
--- Caching Setup
-------------------------------------------------------------
+-- Caching setup
 local main_file_cache = setmetatable({}, { __mode = "kv" })
 
 -- Automatic cache invalidation when a buffer is deleted or wiped out.
@@ -25,9 +23,7 @@ vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
   end,
 })
 
-------------------------------------------------------------
--- Helper Functions
-------------------------------------------------------------
+-- Helper functions
 
 -- Search for a given pattern in the first 'max_lines' of the buffer (performance consideration).
 -- This can be used for an import pattern in a markup file type, but potentially also for other patterns in any file type.
@@ -73,10 +69,7 @@ local function is_current_buffer(filepath)
   return vim.api.nvim_buf_get_name(0) == filepath
 end
 
-------------------------------------------------------------
--- Main File Detection for TypSet Systems
-------------------------------------------------------------
-
+-- Main file detection for Typst
 function M.get_tinymist_main_file()
   -- Try to retrieve the main file from tinymist LSP client
   local current_buf = vim.api.nvim_get_current_buf()
@@ -135,9 +128,7 @@ function M.get_vimtex_main_file()
   return vimtex_main
 end
 
-------------------------------------------------------------
--- Spell Language Application for Each File Type
-------------------------------------------------------------
+-- Spell language application for each filetype
 
 -- Apply the appropriate spell language based on file type and file content.
 function M.apply_spell_language(main_file, pattern, header_lines, desired_lang, default_lang)

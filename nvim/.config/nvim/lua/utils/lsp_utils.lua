@@ -72,6 +72,8 @@ end
 -- Loads and merges extra schema files from a list.
 -- 'files' is a list of absolute file paths.
 -- 'default_base' is the fallback base directory for relative URLs.
+---@param files string[] List of file paths to load schemas from.
+---@param default_base? string Fallback base directory for relative URLs.
 function M.load_schema_files(files, default_base)
   default_base = default_base or vim.fn.getcwd()
   local schemas = {}
