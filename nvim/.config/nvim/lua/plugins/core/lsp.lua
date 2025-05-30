@@ -75,7 +75,6 @@ return {
       "saghen/blink.cmp",
     },
     opts_extend = { "servers" },
-    opts = { servers = { "lua_ls", "yamlls" } },
     config = function(_, opts)
       -- WARN: make sure to have LSPs installed either
       -- system wide or project specific

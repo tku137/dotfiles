@@ -1,5 +1,19 @@
 local prefix = "<Leader>g"
 return {
+  -- Treesitter
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "diff",
+        "git_config",
+        "gitcommit",
+        "git_rebase",
+        "gitignore",
+        "gitattributes",
+      },
+    },
+  },
   {
     "NeogitOrg/neogit",
     lazy = true,

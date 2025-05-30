@@ -22,10 +22,11 @@ return {
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = { ensure_installed = { "python" } },
+    opts = { ensure_installed = { "python", "requirements" } },
   },
 
   -- LSP
+  -- brew install ruff basedpyright
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "ruff", "basedpyright" } },

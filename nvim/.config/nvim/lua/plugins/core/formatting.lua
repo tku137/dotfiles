@@ -30,14 +30,11 @@ return {
       end
     end,
     formatters_by_ft = {
-      lua = { "stylua" },
-      fish = { "fish_indent" },
       -- TODO: Add this to readme
       -- INFO: To add language specific formatters in their own config file, use this snippet:
       -- Important to set opts_extended so lazy.nvim merges the nested formatters_by_ft correctly!
       -- {
       --   "stevearc/conform.nvim",
-      --   ft = "python",
       --   opts_extend = { "formatters_by_ft.python" }, -- important to convince lazy.nvim to merge this!
       --   opts = { formatters_by_ft = { python = { "ruff_organize_imports", "ruff_format" } } },
       -- },

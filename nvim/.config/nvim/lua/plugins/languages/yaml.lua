@@ -1,4 +1,4 @@
--- Add a keympa to toggle yamlls using schemastore or not
+-- Add a keymap to toggle yamlls using schemastore or not
 Snacks.toggle
   .new({
     name = "YAML SchemaStore Toggle",
@@ -13,4 +13,18 @@ Snacks.toggle
   })
   :map("<leader>uy")
 
-return {}
+return {
+
+  -- Treesitter
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = { ensure_installed = { "yaml" } },
+  },
+
+  -- LSP
+  -- brew install yaml-language-server
+  {
+    "neovim/nvim-lspconfig",
+    opts = { servers = { "yamlls" } },
+  },
+}

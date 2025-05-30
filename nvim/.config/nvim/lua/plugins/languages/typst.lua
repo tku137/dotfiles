@@ -7,6 +7,7 @@ return {
   },
 
   -- LSP
+  -- brew install tinymist typstyle
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "tinymist" } },
