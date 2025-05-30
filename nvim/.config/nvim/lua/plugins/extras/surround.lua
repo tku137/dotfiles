@@ -5,6 +5,15 @@
 return {
   "echasnovski/mini.surround",
   lazy = true,
+  keys = {
+    { "gsa", mode = { "n", "x" }, desc = "Add surrounding" },
+    { "gsd", mode = { "n", "x" }, desc = "Delete surrounding" },
+    { "gsf", mode = { "n", "x" }, desc = "Find surrounding (to the right)" },
+    { "gsF", mode = { "n", "x" }, desc = "Find surrounding (to the left)" },
+    { "gsh", mode = { "n", "x" }, desc = "Highlight surrounding" },
+    { "gsr", mode = { "n", "x" }, desc = "Replace surrounding" },
+    { "gsn", mode = { "n", "x" }, desc = "Update `n_lines`" },
+  },
   opts = {
     mappings = {
       add = "gsa", -- Add surrounding in Normal and Visual modes
