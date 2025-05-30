@@ -14,7 +14,8 @@ return {
   },
 
   -- LSP
-  -- brew install vscode-langservers-extracted
+  -- brew install vscode-langservers-extracted jsonlint
+  -- NOTE: for some reason, jsonlint is needed
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "jsonls" } },
