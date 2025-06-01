@@ -94,6 +94,7 @@ return {
       -- { "]R", "<Plug>(vimtex-]R)", desc = "Next End of Frame",  mode = "n", ft = "tex" },
 
       -- WARN: textobjects seem to interfere with mini.ai
+      -- INFO: TeX textobjects are defined in after/ftplugin/tex.lua
       --
       -- -- Text Objects
       -- { "ic", "<Plug>(vimtex-ic)", desc = "Inner Command", mode = { "o", "x" }, ft = "tex" },
@@ -130,6 +131,7 @@ return {
     opts = {
       spec = {
         { mode = { "n", "v" }, { prefix, group = "VimTex" } },
+        -- INFO: TeX textobjects are defined in after/ftplugin/tex.lua
       },
     },
   },
