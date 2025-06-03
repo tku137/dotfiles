@@ -18,40 +18,46 @@ end
 
 return {
   {
-    "mfussenegger/nvim-dap",
+    "jay-babu/mason-nvim-dap.nvim",
     dependencies = {
       {
-        -- Fancy debugger UI
-        "igorlfs/nvim-dap-view",
-        opts = {
-          winbar = {
-            default_section = "scopes",
-            headers = {
-              breakpoints = "Breakpoints",
-              scopes = "Scopes",
-              exceptions = "Exceptions",
-              watches = "Watches",
-              threads = "Threads",
-              repl = "REPL",
-              console = "Console",
-            },
-            controls = {
-              enabled = true, -- Enable winbar controls
+        "mfussenegger/nvim-dap",
+        dependencies = {
+          {
+            -- Fancy debugger UI
+            "igorlfs/nvim-dap-view",
+            opts = {
+              winbar = {
+                default_section = "scopes",
+                headers = {
+                  breakpoints = "Breakpoints",
+                  scopes = "Scopes",
+                  exceptions = "Exceptions",
+                  watches = "Watches",
+                  threads = "Threads",
+                  repl = "REPL",
+                  console = "Console",
+                },
+                controls = {
+                  enabled = true, -- Enable winbar controls
+                },
+              },
             },
           },
+          {
+            -- Show variable values inline
+            "theHamsta/nvim-dap-virtual-text",
+            opts = {
+              commented = true, -- Prefix virtual text with comment string
+            },
+          },
+          "Weissle/persistent-breakpoints.nvim",
         },
       },
-      {
-        -- Show variable values inline
-        "theHamsta/nvim-dap-virtual-text",
-        opts = {
-          commented = true, -- prefix virtual text with comment string
-        },
-      },
-      "Weissle/persistent-breakpoints.nvim",
     },
     -- Load only when a debug command is invoked
     event = "VeryLazy",
+    opts_extend = { "ensure_installed" },
     -- stylua: ignore
     keys = {
       -- Standard F-key controls
@@ -104,7 +110,10 @@ return {
       { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate", },
       { "<leader>dw", function() require("dap.ui.widgets").hover() end, desc = "Widgets", },
     },
-    config = function()
+    config = function(_, opts)
+      -- Run mason-nvim-dap setup first
+      require("mason-nvim-dap").setup(opts)
+
       local dap, dv = require("dap"), require("dap-view")
 
       -- Initialize dap-view with defaults
