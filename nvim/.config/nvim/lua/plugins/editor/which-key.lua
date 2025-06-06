@@ -15,7 +15,6 @@ return {
           { "<leader>d", group = "debug" },
           { "<leader>dp", group = "profiler" },
           { "<leader>dv", group = "dap-view" },
-          { "<leader>dy", group = "python" },
           { "<leader>f", group = "file/find" },
           { "<leader>g", group = "git" },
           { "<leader>gh", group = "hunks" },

@@ -60,12 +60,12 @@ vim.diagnostic.config({
 })
 
 return {
-  -- Main LSP config
   {
-    "mason-org/mason-lspconfig.nvim",
+    -- Main LSP Configuration
+    -- INFO: Custom LSP settings go into after/lsp/<servername>.lua
+    "neovim/nvim-lspconfig",
+    event = { "BufReadPost", "BufNewFile" },
     dependencies = {
-      { "mason-org/mason.nvim", opts = {} },
-      "neovim/nvim-lspconfig",
       {
         -- Useful status updates for LSP.
         "j-hui/fidget.nvim",
@@ -74,14 +74,23 @@ return {
       -- Allows extra capabilities provided by blink.cmp
       "saghen/blink.cmp",
     },
-    opts_extend = { "ensure_installed" },
-    opts = {
-      automatic_installation = true, -- Pulls servers on first open
-    },
+    opts_extend = { "servers" },
     config = function(_, opts)
-      require("mason-lspconfig").setup(opts)
+      -- WARN: make sure to have LSPs installed either
+      -- system wide or project specific
 
-      -- Which-Key toggle to switch between displaying of diagnostics
+      -- TODO: add this to readme
+      -- INFO: To add language specific LSP in their own config file, use this snippet:
+      -- {
+      --   "neovim/nvim-lspconfig",
+      --    opts = { servers = { "ruff", "basedpyright" } },
+      -- },
+
+      -- opts.servers is a list of servers to enable, merged from all
+      -- language specific config files
+      vim.lsp.enable(opts.servers)
+
+      -- Which-Key toggle to swithc between displaying of diagnostics
       -- as either virtual text or virtual lines
       Snacks.toggle
         .new({

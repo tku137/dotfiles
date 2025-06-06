@@ -1,4 +1,3 @@
--- Prefix for interactive REPL (iPython) sessions
 local prefix = "<Leader>cI"
 
 -- Add a keymap for toggling BasedPyright settings
@@ -26,16 +25,11 @@ return {
     opts = { ensure_installed = { "python", "requirements" } },
   },
 
-  -- Install tools configured below
-  {
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-    opts = { ensure_installed = { "ruff", "basedpyright", "debugpy" } },
-  },
-
   -- LSP
+  -- brew install ruff basedpyright
   {
-    "mason-org/mason-lspconfig.nvim",
-    opts = { ensure_installed = { "ruff", "basedpyright" } },
+    "neovim/nvim-lspconfig",
+    opts = { servers = { "ruff", "basedpyright" } },
   },
 
   -- Formatter
@@ -47,36 +41,14 @@ return {
 
   -- DAP
   {
-    "jay-babu/mason-nvim-dap.nvim",
-    optional = true,
-    opts = function(_, opts)
-      opts.ensure_installed = { "python" }
-      if not opts.handlers then
-        opts.handlers = {}
-      end
-      opts.handlers.python = function() end -- make sure python doesn't get set up by mason-nvim-dap, it's being set up by nvim-dap-python
-    end,
-  },
-  {
+    -- Python DAP support via debugpy
     "mfussenegger/nvim-dap-python",
-    dependencies = "mfussenegger/nvim-dap",
-    ft = "python", -- NOTE: ft: lazy-load on filetype
-    config = function(_, opts)
-      local path = vim.fn.exepath("python")
-      local debugpy = require("mason-registry").get_package("debugpy")
-      if debugpy:is_installed() then
-        path = vim.fn.expand("$MASON/packages/debugpy")
-        if vim.fn.has("win32") == 1 then
-          path = path .. "/venv/Scripts/python"
-        else
-          path = path .. "/venv/bin/python"
-        end
-      end
-      require("dap-python").setup(path, opts)
-    end,
+    -- Only activate in Python files
+    ft = "python",
+    -- Keys for debugging tests (uses built-in methods)
     keys = {
       {
-        "<leader>dyt",
+        "<leader>dPt",
         function()
           require("dap-python").test_method()
         end,
@@ -84,7 +56,7 @@ return {
         ft = "python",
       },
       {
-        "<leader>dyc",
+        "<leader>dPc",
         function()
           require("dap-python").test_class()
         end,
@@ -92,6 +64,10 @@ return {
         ft = "python",
       },
     },
+    config = function()
+      -- Use the 'uv' strategy to auto-detect your debugpy interpreter
+      require("dap-python").setup("uv")
+    end,
   },
 
   -- Test

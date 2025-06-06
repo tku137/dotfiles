@@ -13,19 +13,15 @@ return {
     },
   },
 
-  -- Install tools configured below
-  {
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-    opts = { ensure_installed = { "lua_ls", "stylua" } },
-  },
-
   -- LSP
+  -- brew install lua-language-server
   {
-    "mason-org/mason-lspconfig.nvim",
-    opts = { ensure_installed = { "lua_ls" } },
+    "neovim/nvim-lspconfig",
+    opts = { servers = { "lua_ls" } },
   },
 
   -- Formatter
+  -- brew install stylua
   {
     "stevearc/conform.nvim",
     opts_extend = { "formatters_by_ft.lua" }, -- important to convince lazy.nvim to merge this!
