@@ -8,6 +8,8 @@ return {
 
   -- LSP
   -- brew install fish-lsp
+  -- OR
+  -- mise use -g npm:fish-lsp@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "fish_lsp" } },
@@ -22,6 +24,7 @@ return {
   },
 
   -- Linter
+  -- Also comes with the fish shell
   {
     "mfussenegger/nvim-lint",
     opts_extend = { "linters_by_ft.fish" }, -- important to convince lazy.nvim to merge this!

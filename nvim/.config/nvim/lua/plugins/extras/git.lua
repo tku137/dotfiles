@@ -31,14 +31,6 @@ return {
         mode = "n",
       },
     },
-
-    specs = {
-      {
-        "catppuccin",
-        optional = true,
-        opts = { integrations = { neogit = true } },
-      },
-    },
   },
   {
     "sindrets/diffview.nvim",

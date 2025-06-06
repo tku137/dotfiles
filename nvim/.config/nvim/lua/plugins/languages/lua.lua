@@ -15,6 +15,8 @@ return {
 
   -- LSP
   -- brew install lua-language-server
+  -- OR
+  -- mise use -g lua-language-server@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "lua_ls" } },
@@ -22,6 +24,8 @@ return {
 
   -- Formatter
   -- brew install stylua
+  -- OR
+  -- mise use -g stylua@latest
   {
     "stevearc/conform.nvim",
     opts_extend = { "formatters_by_ft.lua" }, -- important to convince lazy.nvim to merge this!

@@ -23,6 +23,8 @@ return {
 
   -- LSP
   -- brew install yaml-language-server
+  -- OR
+  -- mise use -g npm:yaml-language-server@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "yamlls" } },

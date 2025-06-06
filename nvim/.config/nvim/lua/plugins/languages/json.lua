@@ -15,6 +15,8 @@ return {
 
   -- LSP
   -- brew install vscode-langservers-extracted jsonlint
+  -- OR
+  -- mise use -g npm:vscode-json-languageserver@latest npm:jsonlint@latest
   -- NOTE: for some reason, jsonlint is needed
   {
     "neovim/nvim-lspconfig",

@@ -8,6 +8,8 @@ return {
 
   -- LSP
   -- brew install tinymist
+  -- OR
+  -- mise use -g aqua:Myriad-Dreamin/tinymist@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "tinymist" } },
@@ -15,6 +17,8 @@ return {
 
   -- Formatter
   -- brew install typstyle
+  -- OR
+  -- mise use -g aqua:Enter-tainer/typstyle@latest
   {
     "stevearc/conform.nvim",
     opts = {

@@ -8,6 +8,8 @@ return {
 
   -- LSP
   -- brew install taplo
+  -- OR
+  -- mise use -g taplo@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "taplo" } },

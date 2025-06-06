@@ -27,12 +27,16 @@ return {
 
   -- LSP
   -- brew install ruff basedpyright
+  -- OR
+  -- mise use -g ruff@latest
+  -- mise use -g pipx:basedpyright@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "ruff", "basedpyright" } },
   },
 
   -- Formatter
+  -- mise use -g ruff@latest
   {
     "stevearc/conform.nvim",
     opts_extend = { "formatters_by_ft.python" }, -- important to convince lazy.nvim to merge this!
@@ -40,6 +44,7 @@ return {
   },
 
   -- DAP
+  -- mise use -g pipx:debugpy@latest
   {
     -- Python DAP support via debugpy
     "mfussenegger/nvim-dap-python",
@@ -48,7 +53,7 @@ return {
     -- Keys for debugging tests (uses built-in methods)
     keys = {
       {
-        "<leader>dPt",
+        "<leader>dyt",
         function()
           require("dap-python").test_method()
         end,
@@ -56,7 +61,7 @@ return {
         ft = "python",
       },
       {
-        "<leader>dPc",
+        "<leader>dyc",
         function()
           require("dap-python").test_class()
         end,

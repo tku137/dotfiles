@@ -12,6 +12,8 @@ return {
 
   -- LSP
   -- brew install marksman
+  -- OR
+  -- mise use -g marksman@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "marksman" } },
@@ -19,6 +21,8 @@ return {
 
   -- Formatter
   -- brew install prettier prettierd
+  -- OR
+  -- mise use -g npm:@fsouza/prettierd@latest
   {
     "stevearc/conform.nvim",
     opts_extend = { "formatters_by_ft.markdown" }, -- important to convince lazy.nvim to merge this!
