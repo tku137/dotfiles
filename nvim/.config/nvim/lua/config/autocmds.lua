@@ -15,6 +15,16 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   end,
 })
 
+-- Fix strange bug where first buffer has no filetype set and
+-- thus treesitter and other plugins do not work
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    if vim.bo.filetype == "" then
+      vim.cmd("filetype detect")
+    end
+  end,
+})
+
 -- Highlight when yanking (copying) text
 --  See :help vim.highlight.on_yank()
 vim.api.nvim_create_autocmd("TextYankPost", {
