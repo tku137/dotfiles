@@ -34,6 +34,11 @@ return {
   -- Other plugins
   {
     "MeanderingProgrammer/render-markdown.nvim",
+    cmd = "RenderMarkdown",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts_extend = { "file_types" }, -- important to convince lazy.nvim to merge this!
     opts = {
       code = {
         sign = false,
@@ -47,8 +52,14 @@ return {
       checkbox = {
         enabled = false,
       },
+      completions = {
+        lsp = {
+          enabled = true,
+        },
+      },
+      filetypes = { "Avante", "markdown", "norg", "rmd", "org", "codecompanion" },
     },
-    ft = { "markdown", "norg", "rmd", "org", "codecompanion" },
+    ft = { "Avante", "markdown", "norg", "rmd", "org", "codecompanion" },
     config = function(_, opts)
       require("render-markdown").setup(opts)
       Snacks.toggle({
