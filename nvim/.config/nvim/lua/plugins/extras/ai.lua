@@ -99,10 +99,14 @@ return {
         auto_suggestions = false,
       },
       provider = "copilot",
-      copilot = {
-        model = model_for_coding,
-        temperature = 0,
-        max_tokens = 8192,
+      providers = {
+        copilot = {
+          model = model_for_coding,
+          extra_request_body = {
+            temperature = 0,
+            max_tokens = 8192,
+          },
+        },
       },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
@@ -111,9 +115,9 @@ return {
       or "make",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
-      "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
+      "folke/snacks.nvim",
       {
         -- support for image pasting
         "HakonHarnes/img-clip.nvim",
@@ -131,7 +135,6 @@ return {
           },
         },
       },
-      -- TODO: configure render-markdown wiht opts_extend = { "file_types" }
       -- {
       --   -- Make sure to set this up properly if you have lazy=true
       --   "MeanderingProgrammer/render-markdown.nvim",
