@@ -1,14 +1,14 @@
 -- Add a keymap for toggling postgres_lsp
--- This toggles postgres_lsp on/off using the new Neovim 0.11+ vim.lsp API
+-- This toggles postgres_lsp on/off to reduce clutter
+-- in projects where we do not use postgres sql files.
 Snacks.toggle
   .new({
-    name = "PostgreSQL LSP",
+    name = "Postgres LSP",
     get = function()
-      local clients = vim.lsp.get_clients({ name = "postgres_lsp" })
-      return #clients > 0
+      return vim.lsp.is_enabled("postgres_lsp")
     end,
     set = function()
-      require("utils.lsp_utils").toggle_postgres_lsp({ silent = true })
+      require("utils.lsp_utils").toggle_postgres({ silent = true })
     end,
   })
   :map("<leader>cP")
@@ -26,7 +26,11 @@ return {
   -- mise use -g npm:@postgrestools/postgrestools@latest
   {
     "neovim/nvim-lspconfig",
-    opts = { servers = { "sqlls", "postgres_lsp" } },
+    -- opts = { servers = { "sqlls", "postgres_lsp" } },
+    -- Disable postgres_lsp at start and use the snacks toggle defined
+    -- above to enable it when needed. This reduces clutter for
+    -- non postgres sql files. We always use sqlls as a baseline.
+    opts = { servers = { "sqlls" } },
   },
 
   -- Formatter

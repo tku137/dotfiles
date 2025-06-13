@@ -96,4 +96,27 @@ function M.load_schema_files(files, default_base)
   return schemas
 end
 
+function M.toggle_postgres(opts)
+  opts = opts or {}
+  local name = "postgres_lsp"
+  local active = vim.lsp.is_enabled(name)
+
+  if active then
+    vim.lsp.stop_client(vim.lsp.get_clients({ name = name }), true)
+    if not opts.silent then
+      vim.notify("Postgres LSP disabled")
+    end
+  else
+    vim.lsp.enable(name)
+    -- start immediately for the current buffer if the ft matches
+    if vim.bo.filetype == "sql" or vim.bo.filetype == "psql" then
+      ---@diagnostic disable-next-line: missing-fields
+      vim.lsp.start({ name = name })
+    end
+    if not opts.silent then
+      vim.notify("Postgres LSP enabled")
+    end
+  end
+end
+
 return M
