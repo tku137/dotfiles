@@ -11,7 +11,7 @@ Snacks.toggle
       require("utils.lsp_utils").toggle_postgres({ silent = true })
     end,
   })
-  :map("<leader>cP")
+  :map("<leader>cp")
 
 return {
 
@@ -22,7 +22,10 @@ return {
   },
 
   -- LSP
-  -- (no brew bottle available)
+  -- brew install sql-language-server
+  -- OR
+  -- mise use -g npm:sql-language-server@latest
+  -- no brew bottle available for this:
   -- mise use -g npm:@postgrestools/postgrestools@latest
   {
     "neovim/nvim-lspconfig",
@@ -36,7 +39,6 @@ return {
   -- Formatter
   -- brew install sqlfluff
   -- OR
-  -- mise use -g npm:sql-language-server@latest
   -- mise use -g pipx:sqlfluff@latest
   {
     "stevearc/conform.nvim",

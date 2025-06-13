@@ -1,4 +1,6 @@
+-- Where git plugin keymaps should be put
 local prefix = "<Leader>g"
+
 return {
   -- Treesitter
   {
@@ -50,9 +52,10 @@ return {
           end,
         },
 
-        -- 2️⃣  only the key-maps that matter
+        -- Disable original keymaps and only use key-maps that matter
         -- stylua: ignore
         keymaps = {
+          -- These keymaps are only active in the diff view
           view = {
             -- disable originals
             ["<leader>co"] = false,
@@ -65,6 +68,7 @@ return {
             ["<leader>cA"] = false,
             ["dx"] = false,
             ["dX"] = false,
+
             -- local-leader replacements
             { "n", "<localleader>o", actions.conflict_choose("ours"),       { desc = "Choose OURS" } },
             { "n", "<localleader>t", actions.conflict_choose("theirs"),     { desc = "Choose THEIRS" } },
@@ -77,6 +81,8 @@ return {
             { "n", "<localleader>A", actions.conflict_choose_all("all"),    { desc = "Choose ALL for all" } },
             { "n", "<localleader>X", actions.conflict_choose_all("none"),   { desc = "Delete conflict for all" } },
           },
+
+          -- These keymaps are only active in the file panel
           file_panel = {
             ["<leader>cO"] = false,
             ["<leader>cT"] = false,
@@ -126,6 +132,7 @@ return {
       -- The template contents are in a table in this module
       local templates_data = require("gitignore.templates")
 
+      -- Override the default generate function to use Snacks.picker for template selection
       ---@diagnostic disable-next-line: duplicate-set-field
       gitignore.generate = function(opts)
         Snacks.picker({

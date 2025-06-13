@@ -82,7 +82,7 @@ map("i", "<CR>", "<C-g>u<CR>", { desc = "undo-break before newline" })
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 -- Run original “K” (uses 'keywordprg', usually man or :help) on word under cursor
--- "K" is taken vor LSP hover, so we use <leader>K instead
+-- "K" is taken for LSP hover, so we use <leader>K instead
 map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
 
 -- Better indenting
@@ -131,18 +131,18 @@ map("n", "[w", diagnostic_jump(-1, "WARN"), { desc = "Prev Warning" })
 
 -- Auto-format toggles that ... conform :D with conform.nvim (taken from recipes)
 -- Helper: build a Snacks toggle object
-local function autoformat_toggle(buf)
+local function autoformat_toggle(is_buffer)
   return Snacks.toggle({
-    name = "Auto Format (" .. (buf and "Buffer" or "Global") .. ")",
+    name = "Auto Format (" .. (is_buffer and "Buffer" or "Global") .. ")",
     get = function()
-      if buf then
+      if is_buffer then
         -- can be nil if not set, better catch that
         return vim.b.disable_autoformat ~= true
       end
       return vim.g.disable_autoformat ~= true
     end,
     set = function(state)
-      if buf then
+      if is_buffer then
         vim.b.disable_autoformat = not state
       else
         vim.g.disable_autoformat = not state
@@ -212,6 +212,7 @@ map("n", "<leader>fe", function() Snacks.explorer() end, { desc = "Snacks Explor
 
 -- Search (grep related)
 map("n", "<leader>sg", function() Snacks.picker.grep() end, { desc = "Grep" })
+---@diagnostic disable-next-line: undefined-field
 map("n", "<leader>sG", function() Snacks.picker.grep({ cwd = vim.loop.cwd() }) end, { desc = "Grep (cwd)" })
 map({ "n", "x" }, "<leader>sw", function() Snacks.picker.grep_word() end, { desc = "Visual selection or word" })
 map("n", '<leader>s"', function() Snacks.picker.registers() end, { desc = "Registers" })
@@ -226,7 +227,7 @@ map("n", "<leader>sD", function() Snacks.picker.diagnostics_buffer() end, { desc
 map("n", "<leader>sh", function() Snacks.picker.help() end, { desc = "Help Pages" })
 map("n", "<leader>sH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
 map("n", "<leader>si", function() Snacks.picker.icons() end, { desc = "Icons" })
-map("n", "<leade>sj", function() Snacks.picker.jumps() end, { desc = "Jumps" })
+map("n", "<leader>sj", function() Snacks.picker.jumps() end, { desc = "Jumps" })
 map("n", "<leader>sk", function() Snacks.picker.keymaps() end, { desc = "Keymaps" })
 map("n", "<leader>sl", function() Snacks.picker.loclist() end, { desc = "Location List" })
 map("n", "<leader>sm", function() Snacks.picker.marks() end, { desc = "Marks" })
@@ -242,7 +243,7 @@ map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto De
 map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Goto Declaration" })
 map("n", "gr", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "References" })
 map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation" })
-map("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto T[y]pe Definition" })
+map("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition" })
 map("n", "gK", function() return vim.lsp.buf.signature_help() end, { desc = "Signature Help" })
 map("i", "<c-k>", function() return vim.lsp.buf.signature_help() end, { desc = "Signature Help" })
 map("n", "<leader>ss", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols" })

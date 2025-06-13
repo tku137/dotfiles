@@ -1,3 +1,4 @@
+-- Adds keymaps to pin/unpin the main file for compilation
 return {
   on_attach = function(client, bufnr)
     vim.keymap.set("n", "<localleader>m", function()

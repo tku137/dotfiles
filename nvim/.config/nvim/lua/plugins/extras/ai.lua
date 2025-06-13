@@ -1,3 +1,5 @@
+-- Everything related to AI plugins, such as Copilot, Avante, etc.
+
 -- Chosen LLM model used for all AI plugins
 local model_for_coding = "claude-sonnet-4"
 

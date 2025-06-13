@@ -91,27 +91,28 @@ return {
       local ai = require("mini.ai")
       return {
         n_lines = 500,
+        -- Custom textobjects for enhanced text manipulation and selection
         custom_textobjects = {
-          o = ai.gen_spec.treesitter({
+          o = ai.gen_spec.treesitter({ -- blocks, conditionals, loops
             a = { "@block.outer", "@conditional.outer", "@loop.outer" },
             i = { "@block.inner", "@conditional.inner", "@loop.inner" },
           }),
-          f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
-          C = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
-          t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" },
-          d = { "%f[%d]%d+" },
-          e = {
+          f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }), -- functions
+          C = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }), -- classes
+          t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" }, -- HTML/XML tags
+          d = { "%f[%d]%d+" }, -- digits/numbers
+          e = { -- camelCase/snake_case words
             { "%u[%l%d]+%f[^%l%d]", "%f[%S][%l%d]+%f[^%l%d]", "%f[%P][%l%d]+%f[^%l%d]", "^[%l%d]+%f[^%l%d]" },
             "^().*()$",
           },
-          g = ai_buffer,
-          u = ai.gen_spec.function_call(),
-          U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }),
-          r = { "%f[%w]https?://[%w-_%.%?%.:/%+=&]+%f[^%w-_%.%?%.:/%+=&]" }, -- url [A]dress
-          p = { "%f[%w]/[%w_/%-%.]+" }, -- [p]ath
-          m = { "%f[%w][%w%.%+%-_]*%w@[%w%.%-]*%w%.%a%a+%f[^%w]" }, -- e[m]ail
-          c = ai.gen_spec.treesitter({ a = "@comment.outer", i = "@comment.inner" }), -- [c]omment
-          E = ai.gen_spec.treesitter({ a = "@environment.outer", i = "@environment.inner" }), -- [e]nvironment
+          g = ai_buffer, -- entire buffer
+          u = ai.gen_spec.function_call(), -- function calls
+          U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- function calls without dots
+          r = { "%f[%w]https?://[%w-_%.%?%.:/%+=&]+%f[^%w-_%.%?%.:/%+=&]" }, -- URLs
+          p = { "%f[%w]/[%w_/%-%.]+" }, -- file paths
+          m = { "%f[%w][%w%.%+%-_]*%w@[%w%.%-]*%w%.%a%a+%f[^%w]" }, -- email addresses
+          c = ai.gen_spec.treesitter({ a = "@comment.outer", i = "@comment.inner" }), -- comments
+          E = ai.gen_spec.treesitter({ a = "@environment.outer", i = "@environment.inner" }), -- environments (LaTeX, etc.)
         },
       }
     end,

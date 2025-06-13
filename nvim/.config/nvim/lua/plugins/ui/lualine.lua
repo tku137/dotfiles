@@ -9,6 +9,8 @@ local project_root = {
   color = { fg = colors.blue },
 }
 
+-- Filetype-based condition functions for lualine components
+-- Provides helpers to show/hide components based on current buffer's filetype
 local cond = require("utils.ft_helpers")
 
 -- Returns formatted list of spell languages if spell checking is enabled.
@@ -23,6 +25,7 @@ local function spell_status()
   return nil
 end
 
+-- Type annotation to silence luals
 ---@class NoiceStatus
 ---@field has fun(): boolean
 ---@field get fun(): string|nil
@@ -32,9 +35,9 @@ return {
   event = "VeryLazy", -- Make sure all components are available
   dependencies = {
     "nvim-tree/nvim-web-devicons",
-    "bwpge/lualine-pretty-path",
+    "bwpge/lualine-pretty-path", -- LazyVim style path display
     {
-      "AndreM222/copilot-lualine",
+      "AndreM222/copilot-lualine", -- copilot status
       event = "VeryLazy",
     },
     "folke/snacks.nvim", -- ensure snacks loads first

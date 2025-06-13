@@ -8,6 +8,8 @@ return {
 
   -- LSP
   -- brew install llvm
+  -- OR
+  -- mise use -g clang@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "clangd" } },
@@ -29,6 +31,8 @@ return {
 
   -- DAP
   -- brew install llvm
+  -- OR
+  -- mise use -g clang@latest
   {
     "mfussenegger/nvim-dap",
     lazy = true,

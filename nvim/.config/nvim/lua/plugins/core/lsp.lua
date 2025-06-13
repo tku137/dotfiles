@@ -1,18 +1,22 @@
+-- Use custom diagnostic icons
 local icons = require("config.icons").diagnostics
 
--- Default config to show diagnostics as virtual text
+-- The following are predefined configs to be able to easily switch
+-- between virtual text and virtual lines for diagnostics display.
+
+-- Default config to show diagnostics as virtual TEXT
 local diagnostic_virtual_text_config = {
   virtual_text = { spacing = 4, prefix = "●" },
   virtual_lines = false,
 }
 
--- Default config to show diagnostics as virtual lines
+-- Default config to show diagnostics as virtual LINES
 local diagnostic_virtual_lines_config = {
   virtual_text = false,
   virtual_lines = { only_current_line = false },
 }
 
--- Set virtual text for diagnostics as default
+-- Set virtual TEXT for diagnostics as default
 vim.diagnostic.config(diagnostic_virtual_text_config)
 
 -- Configure all other global diagnostics settings
@@ -51,7 +55,7 @@ vim.diagnostic.config({
     },
   },
   -- options for vim.lsp.buf.format
-  -- `bufnr` and `filter` is handled by the LazyVim formatter,
+  -- `bufnr` and `filter` is handled by the formatter,
   -- but can be also overridden when specified
   format = {
     formatting_options = nil,
@@ -60,9 +64,9 @@ vim.diagnostic.config({
 })
 
 return {
+  -- Main LSP Configuration
+  -- INFO: Custom LSP settings go into after/lsp/<servername>.lua
   {
-    -- Main LSP Configuration
-    -- INFO: Custom LSP settings go into after/lsp/<servername>.lua
     "neovim/nvim-lspconfig",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
@@ -90,7 +94,7 @@ return {
       -- language specific config files
       vim.lsp.enable(opts.servers)
 
-      -- Which-Key toggle to swithc between displaying of diagnostics
+      -- Which-Key toggle to switch between displaying of diagnostics
       -- as either virtual text or virtual lines
       Snacks.toggle
         .new({

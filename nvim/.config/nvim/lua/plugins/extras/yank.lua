@@ -1,3 +1,4 @@
+-- Enhanced yank/paste functionality with history and visual feedback
 return {
   {
     "gbprod/yanky.nvim",
@@ -7,7 +8,7 @@ return {
     },
     keys = {
       {
-        "<leader>p",
+        "<leader>y",
         function()
           vim.cmd([[YankyRingHistory]])
         end,

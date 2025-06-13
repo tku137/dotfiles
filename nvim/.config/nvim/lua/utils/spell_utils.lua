@@ -1,14 +1,68 @@
+--- Spell Language Utilities
+---
+--- This module provides intelligent spell checking language detection and switching
+--- for various file types in Neovim. It automatically detects the appropriate
+--- spell checking language based on file content patterns and provides functions
+--- to manage spell language settings dynamically.
+---
+--- The module supports:
+--- - Automatic spell language switching based on file content patterns
+--- - Caching of main file detection for performance
+--- - Integration with LSP clients (Typst/tinymist, LaTeX/VimTeX)
+--- - Configurable language detection patterns for different file types
+--- - Toggle functionality to enable/disable automatic language switching
+---
+--- Key features:
+--- - Detects main files for multi-file projects (Typst, LaTeX)
+--- - Searches for language import patterns in file headers
+--- - Applies appropriate spell language based on detected patterns
+--- - Provides fallback to default language when no pattern is found
+--- - Caches results for improved performance
+---
+--- Usage examples:
+---   local spell_utils = require("utils.spell_utils")
+---
+---   -- Toggle automatic spell language switching
+---   spell_utils.toggle()
+---
+---   -- Check if auto-switching is enabled
+---   if spell_utils.is_enabled() then
+---     print("Auto spell switching is active")
+---   end
+---
+---   -- Get main file for Typst projects
+---   local main_file = spell_utils.get_tinymist_main_file()
+---
+---   -- Apply spell language based on content pattern
+---   spell_utils.apply_spell_language(
+---     main_file,
+---     "#import \"@preview/linguify",  -- Pattern to search for
+---     10,                             -- Lines to search in header
+---     "de_de",                        -- Language to set if pattern found
+---     "en_us"                         -- Default fallback language
+---   )
+---
+--- @module 'spell_utils'
+
+--- @class SpellUtils
+--- @field toggle fun(): nil Toggle automatic spell language switching on/off
+--- @field is_enabled fun(): boolean Check if automatic spell language switching is enabled
+--- @field get_tinymist_main_file fun(): string|nil Get the main file for Typst projects via tinymist LSP
+--- @field get_vimtex_main_file fun(): string|nil Get the main file for LaTeX projects via VimTeX
+--- @field apply_spell_language fun(main_file: string|nil, pattern: string, header_lines: integer, desired_lang: string, default_lang?: string): nil Apply spell language based on pattern detection
 local M = {}
 
 -- Global flag for auto spell language switching (default is enabled)
+--- @type boolean
 local auto_spell_switch_enabled = true
 
--- Toggle the spell language auto switching on/off
+--- Toggle the spell language auto switching on/off
 function M.toggle()
   auto_spell_switch_enabled = not auto_spell_switch_enabled
 end
 
--- Return the current state of auto spell language switching
+--- Return the current state of auto spell language switching
+--- @return boolean True if auto spell switching is enabled, false otherwise
 function M.is_enabled()
   return auto_spell_switch_enabled
 end
@@ -25,8 +79,12 @@ vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
 
 -- Helper functions
 
--- Search for a given pattern in the first 'max_lines' of the buffer (performance consideration).
--- This can be used for an import pattern in a markup file type, but potentially also for other patterns in any file type.
+--- Search for a given pattern in the first 'max_lines' of the current buffer (performance consideration).
+--- This can be used for an import pattern in a markup file type, but potentially also for other patterns in any file type.
+--- @param max_lines integer Maximum number of lines to search from the beginning of the buffer
+--- @param pattern string The pattern to search for (Lua pattern syntax)
+--- @return boolean True if the pattern is found, false otherwise
+--- @diagnostic disable-next-line: unused-local
 local function find_pattern_in_buffer(max_lines, pattern)
   local lines = vim.api.nvim_buf_get_lines(0, 0, max_lines, false)
   for _, line in ipairs(lines) do
@@ -69,7 +127,10 @@ local function is_current_buffer(filepath)
   return vim.api.nvim_buf_get_name(0) == filepath
 end
 
--- Main file detection for Typst
+--- Get the main file for Typst projects via tinymist LSP client
+--- This function queries the tinymist LSP client to find the pinned main file
+--- for the current Typst project, with caching for performance.
+--- @return string|nil The path to the main Typst file, or nil if not found
 function M.get_tinymist_main_file()
   -- Try to retrieve the main file from tinymist LSP client
   local current_buf = vim.api.nvim_get_current_buf()
@@ -107,6 +168,10 @@ function M.get_tinymist_main_file()
   return fallback
 end
 
+--- Get the main file for LaTeX projects via VimTeX
+--- This function checks if VimTeX has a main file defined and returns it,
+--- with fallback to the current buffer and caching for performance.
+--- @return string|nil The path to the main LaTeX file, or nil if not found
 function M.get_vimtex_main_file()
   -- Fallback: return the current buffer's filename if no main file is pinned
   local current_buf = vim.api.nvim_get_current_buf()
@@ -130,7 +195,14 @@ end
 
 -- Spell language application for each filetype
 
--- Apply the appropriate spell language based on file type and file content.
+--- Apply the appropriate spell language based on file type and file content.
+--- This function searches for a pattern in the main file (or current buffer) header
+--- and sets the spell language accordingly.
+--- @param main_file string|nil The path to the main file to check (if nil, uses current buffer)
+--- @param pattern string The pattern to search for in the file header
+--- @param header_lines integer Number of lines from the beginning to search
+--- @param desired_lang string The spell language to set if pattern is found
+--- @param default_lang? string The default spell language to use if pattern is not found (defaults to "en")
 function M.apply_spell_language(main_file, pattern, header_lines, desired_lang, default_lang)
   if not auto_spell_switch_enabled then
     return

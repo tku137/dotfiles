@@ -1,7 +1,46 @@
+--- LSP Utility Functions
+---
+--- This module provides utility functions for interacting with and configuring
+--- Language Server Protocol (LSP) clients in Neovim. It includes functions for
+--- dynamically toggling LSP settings, managing schema configurations, and
+--- controlling LSP client behavior without requiring manual server restarts.
+---
+--- The module exports functions that can be used to:
+--- - Toggle BasedPyright type checking modes and inlay hints dynamically
+--- - Toggle YAML language server schema store settings
+--- - Load and merge external schema files for YAML validation
+--- - Enable/disable PostgreSQL LSP client
+---
+--- Usage examples:
+---   local lsp_utils = require("utils.lsp_utils")
+---
+---   -- Toggle BasedPyright settings (type checking + inlay hints)
+---   lsp_utils.toggle_basedpyright_settings()
+---   lsp_utils.toggle_basedpyright_settings({ silent = true })
+---
+---   -- Toggle YAML schema store
+---   lsp_utils.toggle_yaml_schema_store()
+---
+---   -- Load additional YAML schemas
+---   local schemas = lsp_utils.load_schema_files({
+---     "/path/to/schema1.lua",
+---     "/path/to/schema2.lua"
+---   }, "/project/root")
+---
+---   -- Toggle PostgreSQL LSP
+---   lsp_utils.toggle_postgres()
+---
+--- @module 'lsp_utils'
+
+--- @class LspUtils
+--- @field toggle_basedpyright_settings fun(opts?: { silent?: boolean }): nil Toggle BasedPyright type checking and inlay hints
+--- @field toggle_yaml_schema_store fun(opts?: { silent?: boolean }): nil Toggle YAML schema store setting
+--- @field load_schema_files fun(files: string[], default_base?: string): table[] Load and merge schema files
+--- @field toggle_postgres fun(opts?: { silent?: boolean }): nil Toggle PostgreSQL LSP client
 local M = {}
 
 ---Toggle typeCheckingMode and inlay-hints for **basedpyright** without restart
----@param opts? { silent?: boolean }
+---@param opts? { silent?: boolean } Optional configuration table
 function M.toggle_basedpyright_settings(opts)
   opts = opts or {}
   local client = vim.lsp.get_clients({ name = "basedpyright" })[1]
@@ -37,8 +76,8 @@ function M.toggle_basedpyright_settings(opts)
   end
 end
 
--- Toggle yamlls schemaStore.enable setting
----@param opts? { silent?: boolean }
+--- Toggle yamlls schemaStore.enable setting without restart
+---@param opts? { silent?: boolean } Optional configuration table
 function M.toggle_yaml_schema_store(opts)
   opts = opts or {}
 
@@ -69,11 +108,11 @@ function M.toggle_yaml_schema_store(opts)
   end
 end
 
--- Loads and merges extra schema files from a list.
--- 'files' is a list of absolute file paths.
--- 'default_base' is the fallback base directory for relative URLs.
----@param files string[] List of file paths to load schemas from.
----@param default_base? string Fallback base directory for relative URLs.
+--- Loads and merges extra schema files from a list.
+--- This function loads schema files and converts relative URLs to absolute file URIs.
+--- @param files string[] List of absolute file paths to load schemas from
+--- @param default_base? string Fallback base directory for relative URLs (defaults to current working directory)
+--- @return table[] Array of schema objects loaded from the files
 function M.load_schema_files(files, default_base)
   default_base = default_base or vim.fn.getcwd()
   local schemas = {}
@@ -96,6 +135,8 @@ function M.load_schema_files(files, default_base)
   return schemas
 end
 
+--- Toggle PostgreSQL LSP client enable/disable state
+--- @param opts? { silent?: boolean } Optional configuration table
 function M.toggle_postgres(opts)
   opts = opts or {}
   local name = "postgres_lsp"

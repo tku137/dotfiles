@@ -1,3 +1,4 @@
+-- Aerial.nvim: A code outline window for Neovim with LSP support and Treesitter fallback
 return {
   {
     "stevearc/aerial.nvim",

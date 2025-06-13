@@ -88,14 +88,18 @@ return {
       -- stage/reset hunks
       {
         "<leader>ghs",
-        ":Gitsigns stage_hunk<CR>",
+        function()
+          require("gitsigns").stage_hunk()
+        end,
         mode = { "n", "v" },
         buffer = true,
         desc = "Stage Hunk",
       },
       {
         "<leader>ghr",
-        ":Gitsigns reset_hunk<CR>",
+        function()
+          require("gitsigns").reset_hunk()
+        end,
         mode = { "n", "v" },
         buffer = true,
         desc = "Reset Hunk",
@@ -112,7 +116,7 @@ return {
       {
         "<leader>ghu",
         function()
-          require("gitsigns").undo_stage_hunk()
+          require("gitsigns").stage_hunk()
         end,
         mode = "n",
         buffer = true,
@@ -176,7 +180,15 @@ return {
       },
 
       -- text-object for a hunk
-      { "ih", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, buffer = true, desc = "Select Hunk" },
+      {
+        "ih",
+        function()
+          require("gitsigns").select_hunk()
+        end,
+        mode = { "o", "x" },
+        buffer = true,
+        desc = "Select Hunk",
+      },
     },
   },
 }

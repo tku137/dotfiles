@@ -1,3 +1,6 @@
+-- This enforces the order in which suggestions form different sources
+-- are shown in the blink.cmp completion menu. The higher the number,
+-- the higher the source appears in the menu.
 local source_priority = {
   copilot = 5,
   avante = 4,
@@ -32,8 +35,8 @@ return {
         end)(),
         dependencies = {
           -- `friendly-snippets` contains a variety of premade snippets.
-          --    See the README about individual language/framework/plugin snippets:
-          --    https://github.com/rafamadriz/friendly-snippets
+          -- See the README about individual language/framework/plugin snippets:
+          -- https://github.com/rafamadriz/friendly-snippets
           {
             "rafamadriz/friendly-snippets",
             config = function()
@@ -84,6 +87,7 @@ return {
 
         -- Add non-stretch accept that is much more confortable to use
         ["<C-z>"] = { "select_and_accept" },
+        ["<C-y>"] = { "select_and_accept" },
         -- ["<CR>"] = { "select_and_accept" },
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:

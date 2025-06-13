@@ -19,6 +19,7 @@ return {
       { "<leader>tO", function() require("neotest").output_panel.toggle() end, desc = "Toggle Output Panel (Neotest)" },
       { "<leader>tS", function() require("neotest").run.stop() end, desc = "Stop (Neotest)" },
       { "<leader>tw", function() require("neotest").watch.toggle(vim.fn.expand("%")) end, desc = "Toggle Watch (Neotest)" },
+---@diagnostic disable-next-line: missing-fields
       { "<leader>td", function() require("neotest").run.run({strategy = "dap"}) end, desc = "Debug Nearest" },
     },
     opts = {

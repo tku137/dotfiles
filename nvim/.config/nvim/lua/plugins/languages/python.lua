@@ -15,7 +15,7 @@ Snacks.toggle
       require("utils.lsp_utils").toggle_basedpyright_settings({ silent = true })
     end,
   })
-  :map("<leader>up")
+  :map("<leader>cb")
 
 return {
 

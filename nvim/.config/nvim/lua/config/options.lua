@@ -95,6 +95,7 @@ vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "
 --   "sm:block-blinkwait175-blinkoff150-blinkon175", -- Showmatch: block cursor with specific blinking settings
 -- }
 
+-- Correctly set up clipboard especially for remote sessions
 vim.opt.clipboard = "unnamedplus"
 if vim.env.SSH_TTY then
   local function paste()
