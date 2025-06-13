@@ -36,7 +36,7 @@ return {
   {
     "saghen/blink.cmp",
     dependencies = {
-      { "giuxtaposition/blink-cmp-copilot", lazy = true },
+      { "fang2hou/blink-copilot", lazy = true },
       { "Kaiser-Yang/blink-cmp-avante", lazy = true },
     },
     opts = {
@@ -45,11 +45,8 @@ return {
         providers = {
           copilot = {
             name = "copilot",
-            module = "blink-cmp-copilot",
-            opts = {
-              kind = "Copilot",
-            },
-            score_offset = -10,
+            module = "blink-copilot",
+            score_offset = 100,
             async = true,
           },
           avante = {
