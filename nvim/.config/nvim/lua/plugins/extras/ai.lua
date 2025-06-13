@@ -17,7 +17,6 @@ return {
     opts = {
       suggestion = {
         enabled = false,
-        -- debounce = 200,
         auto_trigger = true,
         hide_during_completion = true,
         keymap = {
@@ -132,14 +131,6 @@ return {
           },
         },
       },
-      -- {
-      --   -- Make sure to set this up properly if you have lazy=true
-      --   "MeanderingProgrammer/render-markdown.nvim",
-      --   opts = {
-      --     file_types = { "Avante" },
-      --   },
-      --   ft = { "Avante" },
-      -- },
     },
   },
 }
