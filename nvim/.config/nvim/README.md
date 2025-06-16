@@ -2,13 +2,14 @@
 
 A modern, modular and highly opinionated Neovim configuration.
 
+> Always a WIP...
+
 ## Quick Start
 
 1. **Prerequisites**:
    - Neovim 0.11+ required (this config uses the new `vim.lsp` API)
    - Git
    - a [Nerd Font](https://www.nerdfonts.com/)
-   - [lazygit](https://github.com/jesseduffield/lazygit) (optional)
    - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
    - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
    - [fzf](https://github.com/junegunn/fzf)
@@ -16,6 +17,9 @@ A modern, modular and highly opinionated Neovim configuration.
    - [fd](https://github.com/sharkdp/fd)
 2. **Installation**: Clone this repository to your Neovim config directory
 3. **First Run**: Open Neovim and let Lazy.nvim automatically install all plugins
+
+> [!NOTE]
+> For a full list of used third-party tools and their installation instructions, see the [Prerequisites](#prerequisites) section below.
 
 ## Configuration Structure
 
@@ -480,7 +484,7 @@ This configuration follows several key principles:
 
 ## Custom functionality
 
-This config includes some custom functionality that is not available in other Neovim configurations:
+This configuration includes some custom functionality coded inside this config (not available as plugins):
 
 - **BasedPyright Dynamic Toggle**: Live switching between basic and strict type checking modes with inlay hints toggle without LSP restart (`lsp_utils.toggle_basedpyright_settings()`) with `<Leader>cb`
 - **YAML Schema Validation**: Validate YAML files with custom schema loading from `.yamlls.extra.lua` files and live schema store toggle (`lsp_utils.toggle_yaml_schema_store()`) with `<Leader>uy`. Custom schema file declaration can be achieved using for example
@@ -488,12 +492,12 @@ This config includes some custom functionality that is not available in other Ne
 ```lua
 -- .yamlls.extra.lua
 return {
-	{
-		name = "Project Config",
-		description = "Schema for project-specific configuration",
-		fileMatch = { "**/config/**/*.testconfig.yaml" },
-		url = "./projectconfig.schema.json",
-	},
+  {
+    name = "Project Config",
+    description = "Schema for project-specific configuration",
+    fileMatch = { "**/config/**/*.projectconfig.yaml" },
+    url = "./projectconfig.schema.json",
+  },
 }
 ```
 
@@ -501,6 +505,96 @@ return {
 - **PostgreSQL Dialect switching**: Additionally activate the `postgres_lsp` on demand with `<Leader>cp`. The `sqlls` LSP is used as a basis and you can specifically turn in a Postgres LSP (providing much better support), since it is impossible to distinguish dialects.
 - **Project Root Detection**: Smart project and git root discovery functions for consistent workspace navigation (`helpers.project_root()`, `helpers.git_root()`)
 - **Filetype-Aware UI Components**: Conditional lualine components with filetype-based visibility logic for cleaner status line management (`ft_helpers.is_ft()`, `ft_helpers.is_not_ft()`)
+
+## Prerequisites
+
+1. **Prerequisites**:
+   - Neovim 0.11+ required (this config uses the new `vim.lsp` API)
+   - Git
+   - a [Nerd Font](https://www.nerdfonts.com/)
+   - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
+   - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
+   - [fzf](https://github.com/junegunn/fzf)
+   - [ripgrep](https://github.com/BurntSushi/ripgrep)
+   - [fd](https://github.com/sharkdp/fd)
+   - [lazygit](https://github.com/jesseduffield/lazygit) (optional)
+2. **Third-party tools for preconfigured languages**:
+   - **Package Manangers:**
+     - npm
+     - pipx
+   - **LSPs:**
+     - **ruff** - Python LSP and linter (`brew install ruff` or `mise use -g ruff@latest`)
+     - **basedpyright** - Python type checker (`brew install basedpyright` or `mise use -g pipx:basedpyright@latest`)
+     - **clangd** - C/C++ LSP (`brew install llvm` or `mise use -g clang@latest`)
+     - **lua-language-server** - Lua LSP (`brew install lua-language-server` or `mise use -g lua-language-server@latest`)
+     - **marksman** - Markdown LSP (`brew install marksman` or `mise use -g marksman@latest`)
+     - **vscode-langservers-extracted** - JSON LSP (`brew install vscode-langservers-extracted` or `mise use -g npm:vscode-json-languageserver@latest`)
+     - **jsonlint** - JSON linting (`brew install jsonlin` or `mise use -g npm:jsonlint@latest`)
+     - **yaml-language-server** - YAML LSP (`brew install yaml-language-server` or `mise use -g npm:yaml-language-server@latest`)
+     - **tinymist** - Typst LSP (`brew install tinymist` or `mise use -g aqua:Myriad-Dreamin/tinymist@latest`)
+     - **texlab** - LaTeX LSP (`brew install texlab` or `mise use -g ubi:latex-lsp/texlab@latest`)
+     - **fish-lsp** - Fish shell LSP (`brew install fish-lsp` or `mise use -g npm:fish-lsp@latest`)
+     - **postgres_lsp** - PostgreSQL LSP (`mise use -g npm:@postgrestools/postgrestools@latest`)
+     - **sql-language-server** - SQL LSP (`brew install sql-language-server` or `mise use -g npm:sql-language-server@latest`)
+     - **sqlfluff** - SQLFluff LSP (`brew install sqlfluff` or `mise use -g pipx:sqlfluff@latest`)
+   - **Formatters:**
+     - **stylua** - Lua formatter (`brew install stylua` or `mise use -g stylua@latest`)
+     - **prettierd/prettier** - Markdown formatter (`brew install prettier prettierd` or `mise use -g npm:@fsouza/prettierd@latest`)
+     - **typstyle** - Typst formatter (`brew install typstyle` or `mise use -g aqua:Enter-tainer/typstyle@latest`)
+     - **fish_indent** - Fish formatter (comes with fish shell)
+     - **taplo** - TOML formatter (`brew install taplo` or `mise use -g taplo@latest`)
+   - **Linters:**
+     - **fish** - Fish shell linter (comes with fish shell)
+   - **Debug Adapters:**
+     - **debugpy** - Python debugger (`mise use -g pipx:debugpy@latest`)
+     - **lldb-dap** - C/C++ debugger (comes with LLVM or Xcode)
+   - **Test runners:**
+     - **pytest** - Python testing (used by neotest-python)
+   - **Additional Tools:**
+     - **ipython** - Interactive Python REPL
+     - **pplatex** - latex error parsing (optional, for vimtex)
+     - **uv** - python package manager (used by dap-python for auto-detection)
+
+### Install basic prerequisites
+
+Using homebrew:
+
+```bash
+brew install neovim
+brew install git
+brew install gcc  # or use xcode-select --install for macOS
+brew install curl
+brew install fzf
+brew install ripgrep
+brew install fd
+brew install lazygit
+```
+
+or mise:
+
+```bash
+mise use -g neovim@latest
+mise use -g git@latest
+mise use -g gcc@latest
+mise use -g curl@latest
+mise use -g fzf@latest
+mise use -g ripgrep@latest
+mise use -g fd@latest
+mise use -g lazygit@latest
+```
+
+### Install all third-party dependencies at once
+
+> [!WARNING]
+> Postgrestools and debugpy are not available with homebrew!
+
+```bash
+brew install fish-lsp llvm lua-language-server marksman prettier prettierd ruff basedpyright sql-language-server sqlfluff stylua taplo texlab tinymist typstyle vscode-langservers-extracted jsonlint yaml-language-server
+```
+
+```bash
+mise use -g aqua:Enter-tainer/typstyle@latest aqua:Myriad-Dreamin/tinymist@latest clang@latest lua-language-server@latest marksman@latest npm:@fsouza/prettierd@latest npm:@postgrestools/postgrestools@latest npm:fish-lsp@latest npm:sql-language-server@latest npm:vscode-json-languageserver@latest npm:jsonlint@latest npm:yaml-language-server@latest pipx:basedpyright@latest pipx:debugpy@latest pipx:sqlfluff@latest ruff@latest stylua@latest taplo@latest ubi:latex-lsp/texlab@latest
+```
 
 ## Troubleshooting
 
