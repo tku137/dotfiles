@@ -10,6 +10,7 @@ A modern, modular and highly opinionated Neovim configuration.
    - Neovim 0.11+ required (this config uses the new `vim.lsp` API)
    - Git
    - a [Nerd Font](https://www.nerdfonts.com/)
+   - Treesitter CLI
    - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
    - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
    - [fzf](https://github.com/junegunn/fzf)
@@ -512,6 +513,7 @@ return {
    - Neovim 0.11+ required (this config uses the new `vim.lsp` API)
    - Git
    - a [Nerd Font](https://www.nerdfonts.com/)
+   - Treesitter CLI
    - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
    - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
    - [fzf](https://github.com/junegunn/fzf)
@@ -564,6 +566,7 @@ brew install neovim
 brew install git
 brew install gcc  # or use xcode-select --install for macOS
 brew install curl
+brew install tree-sitter
 brew install fzf
 brew install ripgrep
 brew install fd
@@ -577,6 +580,7 @@ mise use -g neovim@latest
 mise use -g git@latest
 mise use -g gcc@latest
 mise use -g curl@latest
+mise use -g tree-sitter@latest
 mise use -g fzf@latest
 mise use -g ripgrep@latest
 mise use -g fd@latest
