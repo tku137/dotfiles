@@ -559,6 +559,9 @@ return {
 
 ### Install basic prerequisites
 
+> [!NOTE]
+> It is generally recommended to use a system package manager like apt or homebrew for the basic tools where versioning is not important for development!
+
 Using homebrew:
 
 ```bash
@@ -573,13 +576,13 @@ brew install fd
 brew install lazygit
 ```
 
-or mise:
+You can also use mise, but at least some of the basic tools are _not_ available. Also, these packages are not that relevant to versioning so it is advised to use a system package manager like homebrew:
+
+> [!WARNING]
+> git, gcc and curl are not available with mise!
 
 ```bash
 mise use -g neovim@latest
-mise use -g git@latest
-mise use -g gcc@latest
-mise use -g curl@latest
 mise use -g tree-sitter@latest
 mise use -g fzf@latest
 mise use -g ripgrep@latest
@@ -588,6 +591,8 @@ mise use -g lazygit@latest
 ```
 
 ### Install all third-party dependencies at once
+
+Other than basic packages, the following might be relevant to versioning, for example formatters, so it is advised to use something like mise to be able to have consistent tooling across projects.
 
 > [!WARNING]
 > Postgrestools and debugpy are not available with homebrew!
