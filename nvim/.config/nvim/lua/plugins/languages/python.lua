@@ -70,8 +70,9 @@ return {
       },
     },
     config = function()
-      -- Use the 'uv' strategy to auto-detect your debugpy interpreter
-      require("dap-python").setup("uv")
+      -- Use the 'python3' so we always use the current environments debugpy interpreter
+      -- be it from the current venv or globally
+      require("dap-python").setup("python3")
     end,
   },
 
