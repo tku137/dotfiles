@@ -538,13 +538,13 @@ return {
      - **fish-lsp** - Fish shell LSP (`brew install fish-lsp` or `mise use -g npm:fish-lsp@latest`)
      - **postgres_lsp** - PostgreSQL LSP (`mise use -g npm:@postgrestools/postgrestools@latest`)
      - **sql-language-server** - SQL LSP (`brew install sql-language-server` or `mise use -g npm:sql-language-server@latest`)
-     - **sqlfluff** - SQLFluff LSP (`brew install sqlfluff` or `mise use -g pipx:sqlfluff@latest`)
    - **Formatters:**
      - **stylua** - Lua formatter (`brew install stylua` or `mise use -g stylua@latest`)
      - **prettierd/prettier** - Markdown formatter (`brew install prettier prettierd` or `mise use -g npm:@fsouza/prettierd@latest`)
      - **typstyle** - Typst formatter (`brew install typstyle` or `mise use -g aqua:Enter-tainer/typstyle@latest`)
      - **fish_indent** - Fish formatter (comes with fish shell)
      - **taplo** - TOML formatter (`brew install taplo` or `mise use -g taplo@latest`)
+     - **sqlfluff** - SQL Formatter (`brew install sqlfluff` or `mise use -g pipx:sqlfluff@latest`)
    - **Linters:**
      - **fish** - Fish shell linter (comes with fish shell)
    - **Debug Adapters:**
