@@ -1,52 +1,100 @@
+# =============================================================================
+# INTERACTIVE SESSION SETUP
+# =============================================================================
+
 if status is-interactive
     # Commands to run in interactive sessions can go here
+
+    # Disable fish greeting message
+    set -g fish_greeting
 end
 
-# init hooks
+# =============================================================================
+# TOOL INITIALIZATION HOOKS
+# =============================================================================
+
+# Initialize zoxide
 if type -q zoxide
     zoxide init fish | source
 end
 
+# Initialize direnv
 if type -q direnv
     direnv hook fish | source
 end
 
+# Initialize starship
 if type -q starship
     starship init fish | source
 end
 
+# Initialize fzf
 if type -q fzf
     fzf --fish | source
 end
 
+# Initialize mise
 if type -q mise
     mise activate fish | source
 end
 
-# Bootstrap fisher if not installed
-if not type -q fisher
+# =============================================================================
+# PACKAGE MANAGER SETUP
+# =============================================================================
+
+# Bootstrap fisher (fish plugin manager) if not installed
+if not type -q fisher; and type -q curl
+    echo "Installing fisher plugin manager..."
     curl -sL https://git.io/fisher | source
     if status is-interactive
+        echo "Updating fisher plugins..."
         fisher update
     end
+else if not type -q fisher
+    echo "Warning: fisher not available and curl not found for installation"
 end
 
-# set default fzf command options
+# =============================================================================
+# FZF CONFIGURATION
+# =============================================================================
 
-# Preview file content using bat (https://github.com/sharkdp/bat)
-export FZF_CTRL_T_OPTS="
-  --walker-skip .git,node_modules,target
-  --preview 'bat -n --color=always {}'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+# Configure file preview with syntax highlighting (CTRL-T)
+if type -q bat
+    export FZF_CTRL_T_OPTS="
+      --walker-skip .git,node_modules,target
+      --preview 'bat -n --color=always {}'
+      --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+else
+    export FZF_CTRL_T_OPTS="
+      --walker-skip .git,node_modules,target
+      --preview 'cat {}'
+      --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+end
 
-# Print tree structure in the preview window
-export FZF_ALT_C_OPTS="
-  --preview 'eza --tree --color --icons --git {}'
-  --bind 'ctrl-/:reload(eza --tree --color --icons --git --all)'
-  --color header:italic
-  --header 'CTRL-/: toggle hidden'"
+# Configure directory preview with tree structure (ALT-C)
+if type -q eza
+    export FZF_ALT_C_OPTS="
+      --preview 'eza --tree --color --icons --git {}'
+      --bind 'ctrl-/:reload(eza --tree --color --icons --git --all)'
+      --color header:italic
+      --header 'CTRL-/: toggle hidden'"
+else if type -q tree
+    export FZF_ALT_C_OPTS="
+      --preview 'tree -C {}'
+      --bind 'ctrl-/:reload(tree -C -a)'
+      --color header:italic
+      --header 'CTRL-/: toggle hidden'"
+else
+    export FZF_ALT_C_OPTS="
+      --preview 'ls -la {}'
+      --color header:italic"
+end
 
-# set homebrew paths
+# =============================================================================
+# PATH CONFIGURATION
+# =============================================================================
+
+# Homebrew paths (Apple Silicon macOS)
 if test -d /opt/homebrew/bin
     fish_add_path /opt/homebrew/bin
 end
@@ -55,29 +103,79 @@ if test -d /opt/homebrew/opt/fzf/bin
     fish_add_path /opt/homebrew/opt/fzf/bin
 end
 
-# fix libgit2 dyld path on intel macs
-set -x DYLD_LIBRARY_PATH /usr/local/opt/libgit2/lib $DYLD_LIBRARY_PATH
+# Homebrew paths (Intel macOS)
+if test -d /usr/local/bin
+    fish_add_path /usr/local/bin
+end
 
-# set XDG home directories
+if test -d /usr/local/opt/fzf/bin
+    fish_add_path /usr/local/opt/fzf/bin
+end
+
+# Linuxbrew paths (system-wide installation)
+if test -d /home/linuxbrew/.linuxbrew/bin
+    fish_add_path /home/linuxbrew/.linuxbrew/bin
+end
+
+if test -d /home/linuxbrew/.linuxbrew/opt/fzf/bin
+    fish_add_path /home/linuxbrew/.linuxbrew/opt/fzf/bin
+end
+
+# Linuxbrew paths (user-specific installation)
+if test -d $HOME/.linuxbrew/bin
+    fish_add_path $HOME/.linuxbrew/bin
+end
+
+if test -d $HOME/.linuxbrew/opt/fzf/bin
+    fish_add_path $HOME/.linuxbrew/opt/fzf/bin
+end
+
+# Local user binaries
+if test -d $HOME/.local/bin
+    fish_add_path $HOME/.local/bin
+end
+
+# =============================================================================
+# ENVIRONMENT VARIABLES
+# =============================================================================
+
+# XDG Base Directory Specification
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 
-# set hatch config path
+# Hatch Python project manager configuration
 set -gx HATCH_CONFIG "$XDG_CONFIG_HOME/hatch/config.toml"
 
-# set pyenv paths
-set -gx PYENV_ROOT $HOME/.pyenv
-set -gx PATH $PYENV_ROOT/bin $PATH
+# =============================================================================
+# PYTHON VERSION MANAGEMENT
+# =============================================================================
 
-status --is-interactive; and . (pyenv init --path | psub)
-status --is-interactive; and . (pyenv init - | psub)
+# pyenv (Python version manager)
+if type -q pyenv
+    set -gx PYENV_ROOT $HOME/.pyenv
+    fish_add_path $PYENV_ROOT/bin
 
-# Created by `pipx` on 2024-06-19 15:38:03
-set PATH $PATH /Users/tku137/.local/bin
+    if status --is-interactive
+        pyenv init --path | source
+        pyenv init - | source
+    end
+end
 
-# Created by `userpath` on 2024-09-19 16:09:46
-set PATH $PATH /Users/tku137/.local/share/hatch/pythons/3.11/python/bin
+# =============================================================================
+# MACOS-SPECIFIC FIXES
+# =============================================================================
 
-# Set theme
+# Fix libgit2 dynamic library loading issues on macOS
+if test -d /usr/local/opt/libgit2/lib
+    set -x DYLD_LIBRARY_PATH /usr/local/opt/libgit2/lib $DYLD_LIBRARY_PATH
+else if test -d /opt/homebrew/opt/libgit2/lib
+    set -x DYLD_LIBRARY_PATH /opt/homebrew/opt/libgit2/lib $DYLD_LIBRARY_PATH
+end
+
+# =============================================================================
+# THEME CONFIGURATION
+# =============================================================================
+
+# Set fish shell theme
 fish_config theme choose "TokyoNight Moon"
