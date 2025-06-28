@@ -165,3 +165,6 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
+# TPM and other runtime clones
+tmux/.config/tmux/plugins/
+alacritty/.config/alacritty/catppuccin/
