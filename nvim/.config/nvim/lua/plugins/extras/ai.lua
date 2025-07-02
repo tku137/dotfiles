@@ -2,6 +2,8 @@
 
 -- Chosen LLM model used for all AI plugins
 local model_for_coding = "claude-sonnet-4"
+local model_max_tokens = 20480
+local model_temperature = 0
 
 -- Where AI plugin keymaps should be put
 local prefix = "<Leader>a"
@@ -101,8 +103,8 @@ return {
         copilot = {
           model = model_for_coding,
           extra_request_body = {
-            temperature = 0,
-            max_tokens = 8192,
+            temperature = model_temperature,
+            max_tokens = model_max_tokens,
           },
         },
       },
