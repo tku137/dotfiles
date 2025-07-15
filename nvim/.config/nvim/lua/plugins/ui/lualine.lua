@@ -25,6 +25,21 @@ local function spell_status()
   return nil
 end
 
+-- Used to show tmux session info only if there is more than one session
+local function more_than_one_tmux_session()
+  -- safeguard: make sure we're inside tmux and focus is in Neovim
+  if not require("tmux-status").show() then
+    return false
+  end
+
+  -- ask tmux for all sessions; each session is a line
+  local ok, lines = pcall(vim.fn.systemlist, { "tmux", "list-sessions", "-F", "#{session_name}" })
+  if not ok then -- tmux may not be in $PATH on Windows, etc.
+    return false
+  end
+  return #lines > 1
+end
+
 -- Type annotation to silence luals
 ---@class NoiceStatus
 ---@field has fun(): boolean
@@ -41,6 +56,27 @@ return {
       event = "VeryLazy",
     },
     "folke/snacks.nvim", -- ensure snacks loads first
+    {
+      "christopher-francisco/tmux-status.nvim",
+      lazy = true,
+      config = function(_, opts)
+        require("tmux-status").setup(opts)
+
+        -- re-emit colorscheme so highlight groups get added
+        vim.api.nvim_exec_autocmds("ColorScheme", { pattern = "*" })
+      end,
+      opts = {
+        window = {
+          text = "name", -- use window title
+        },
+        colors = {
+          window_active = { fg = colors.orange, bg = colors.fg_gutter },
+          window_inactive = { fg = colors.fg_dark, bg = colors.fg_gutter },
+          window_inactive_recent = { fg = colors.fg, bg = colors.fg_gutter },
+          session = { fg = colors.blue, bg = colors.fg_gutter },
+        },
+      },
+    },
   },
   opts = {
     options = {
@@ -181,6 +217,23 @@ return {
       lualine_y = {
         { "progress", separator = " ", padding = { left = 1, right = 0 } },
         { "location", padding = { left = 0, right = 1 } },
+        {
+          -- only show tmux session info if there is more than one session
+          function()
+            return require("tmux-status").tmux_session()
+          end,
+          cond = function()
+            return more_than_one_tmux_session()
+          end,
+        },
+        {
+          function()
+            return require("tmux-status").tmux_windows()
+          end,
+          cond = function()
+            return require("tmux-status").show()
+          end,
+        },
       },
       lualine_z = {
         function()
