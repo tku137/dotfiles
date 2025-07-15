@@ -4,7 +4,7 @@
 ![Last commit](https://img.shields.io/github/last-commit/tku137/dotfiles)
 <a href="https://dotfyle.com/tku137/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/tku137/dotfiles-nvim-config-nvim/badges/plugins?style=flat" /></a>
 <a href="https://dotfyle.com/tku137/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/tku137/dotfiles-nvim-config-nvim/badges/leaderkey?style=flat" /></a>
-![Coffee consumed](https://img.shields.io/badge/coffee%20consumed-%E2%88%9E-B5651d?style=flat-square&logo=buymeacoffee&logoColor=white)
+![Coffee consumed](https://img.shields.io/badge/coffee%20consumed-%E2%88%9E-B5651d?style=flat&logo=buymeacoffee&logoColor=white)
 
 A modern, modular and highly opinionated Neovim configuration.
 
