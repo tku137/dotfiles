@@ -68,6 +68,24 @@ icons = {
     Value         = " ",
     Variable      = "󰀫 ",
   },
+  tests = {
+    running_animated = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
+    passed           = "󰗠 ",
+    running          = "󰐌 ",
+    failed           = "󰅙 ",
+    skipped          = "󰮍 ",
+    unknown          = "󰋗 ",
+    non_collapsible  = "─",
+    collapsed        = "─",
+    expanded         = "╮",
+    child_prefix     = "├",
+    final_child_prefix = "╰",
+    child_indent     = "│",
+    final_child_indent = " ",
+    watching         = "󰮔 ",
+    test             = "󰙨 ",
+    notify           = "󰙨 ",
+  },
 }
 
 return icons

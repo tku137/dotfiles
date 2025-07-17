@@ -34,6 +34,7 @@ return {
           require("trouble").open({ mode = "quickfix", focus = false })
         end,
       },
+      icons = require("config.icons").tests,
     },
     config = function(_, opts)
       -- Process the adapters map into a list of adapter instances
