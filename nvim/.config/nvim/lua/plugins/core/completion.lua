@@ -116,7 +116,7 @@ return {
                   if icons_config and icons_config.kinds and icons_config.kinds[ctx.kind] then
                     return icons_config.kinds[ctx.kind]
                   end
-                  return ctx.kind_icon or " " -- Default fallback icon
+                  return ctx.kind_icon or require("config.icons").misc.comp -- Default fallback icon
                 end,
                 highlight = function(ctx)
                   -- Reuse blink.cmp’s default highlight groups:

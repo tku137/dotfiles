@@ -1,3 +1,5 @@
+local icons = require("config.icons").git.gutter
+
 return {
   -- git signs highlights text that has changed since the last
   -- git commit, provides git blame and also lets you interactively
@@ -7,19 +9,19 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     opts = {
       signs = {
-        add = { text = "▎" },
-        change = { text = "▎" },
-        delete = { text = "" },
-        topdelete = { text = "" },
-        changedelete = { text = "▎" },
-        untracked = { text = "▎" },
+        add = { text = icons.change },
+        change = { text = icons.change },
+        delete = { text = icons.delete },
+        topdelete = { text = icons.delete },
+        changedelete = { text = icons.change },
+        untracked = { text = icons.change },
       },
       signs_staged = {
-        add = { text = "▎" },
-        change = { text = "▎" },
-        delete = { text = "" },
-        topdelete = { text = "" },
-        changedelete = { text = "▎" },
+        add = { text = icons.change },
+        change = { text = icons.change },
+        delete = { text = icons.delete },
+        topdelete = { text = icons.delete },
+        changedelete = { text = icons.change },
       },
     },
     config = function(_, opts)

@@ -64,8 +64,8 @@ return {
     lazy = true,
     opts = {
       file = {
-        [".keep"] = { glyph = "󰊢", hl = "MiniIconsGrey" },
-        ["devcontainer.json"] = { glyph = "", hl = "MiniIconsAzure" },
+        [".keep"] = { glyph = require("config.icons").ft.git, hl = "MiniIconsGrey" },
+        ["devcontainer.json"] = { glyph = require("config.icons").ft.devcontainer, hl = "MiniIconsAzure" },
       },
       filetype = {
         dotenv = { glyph = "", hl = "MiniIconsYellow" },

@@ -1,11 +1,12 @@
 local colors = require("tokyonight.colors").setup()
+local icons = require("config.icons")
 
 local Snacks = require("snacks")
 
 local project_root = {
   require("utils.helpers").project_root,
-  icon = "󱉭",
-  separator = "",
+  icon = icons.statusline.root,
+  separator = icons.statusline.separator,
   color = { fg = colors.blue },
 }
 
@@ -55,9 +56,9 @@ return {
         {
           "diff",
           symbols = {
-            added = require("config.icons").git.added,
-            modified = require("config.icons").git.modified,
-            removed = require("config.icons").git.removed,
+            added = icons.git.added,
+            modified = icons.git.modified,
+            removed = icons.git.removed,
           },
           source = function()
             local gitsigns = vim.b.gitsigns_status_dict
@@ -75,10 +76,10 @@ return {
         {
           "diagnostics",
           symbols = {
-            error = require("config.icons").diagnostics.Error,
-            warn = require("config.icons").diagnostics.Warn,
-            info = require("config.icons").diagnostics.Info,
-            hint = require("config.icons").diagnostics.Hint,
+            error = icons.diagnostics.Error,
+            warn = icons.diagnostics.Warn,
+            info = icons.diagnostics.Info,
+            hint = icons.diagnostics.Hint,
           },
         },
         {
@@ -125,13 +126,7 @@ return {
           "copilot",
           symbols = {
             status = {
-              icons = {
-                enabled = " ",
-                sleep = " ", -- auto-trigger disabled
-                disabled = " ",
-                warning = " ",
-                unknown = " ",
-              },
+              icons = icons.copilot,
               hl = {
                 enabled = colors.fg,
                 sleep = colors.teal,
@@ -166,14 +161,14 @@ return {
         {
           function()
             local langs = spell_status()
-            return " " .. langs
+            return icons.statusline.spell .. langs
           end,
           cond = function() return spell_status() ~= nil end,
           color = function() return { fg = Snacks.util.color("Statement") } end,
         },
         -- stylua: ignore
         {
-          function() return "  " .. require("dap").status() end,
+          function() return icons.statusline.debug .. require("dap").status() end,
           cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
           color = function() return { fg = Snacks.util.color("Debug") } end,
         },
@@ -184,7 +179,7 @@ return {
       },
       lualine_z = {
         function()
-          return " " .. os.date("%R")
+          return icons.statusline.clock .. os.date("%R")
         end,
       },
     },

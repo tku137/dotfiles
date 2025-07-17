@@ -1,3 +1,5 @@
+local icons = require("config.icons").dap
+
 -- Helper function to prompt user for debug arguments and return modified config
 ---@param config {type?:string, args?:string[]|fun():string[]?}
 local function get_args(config)
@@ -128,31 +130,31 @@ return {
       -- Use custom icons and highlights for DAP signs
       local sign = vim.fn.sign_define
       sign("DapStopped", {
-        text = " ",
+        text = icons.Stopped[1],
         texthl = "DiagnosticWarn",
         linehl = "DapStoppedLine",
         numhl = "",
       })
       sign("DapBreakpoint", {
-        text = " ",
+        text = icons.Breakpoint,
         texthl = "DiagnosticInfo",
         linehl = "",
         numhl = "",
       })
       sign("DapBreakpointCondition", {
-        text = " ",
+        text = icons.BreakpointCondition,
         texthl = "DiagnosticSignWarn",
         linehl = "",
         numhl = "",
       })
       sign("DapBreakpointRejected", {
-        text = " ",
+        text = icons.BreakpointRejected[1],
         texthl = "DiagnosticError",
         linehl = "",
         numhl = "",
       })
       sign("DapLogPoint", {
-        text = " ",
+        text = icons.LogPoint,
         texthl = "DiagnosticInfo",
         linehl = "",
         numhl = "",
