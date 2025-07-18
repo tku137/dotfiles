@@ -188,3 +188,13 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     require("utils.spell_utils").apply_spell_language(main_file, typ_pattern, header_lines, desired_lang)
   end,
 })
+
+-- Ensure tmux status is off when starting Neovim to maintain merged statusline
+vim.api.nvim_create_autocmd("VimEnter", {
+  desc = "Turn off tmux status on startup for merged statusline",
+  callback = function()
+    if vim.env.TMUX then
+      vim.system({ "tmux", "set", "status", "off" }, {}, function() end)
+    end
+  end,
+})
