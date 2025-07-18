@@ -189,12 +189,22 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
   end,
 })
 
--- Ensure tmux status is off when starting Neovim to maintain merged statusline
+-- Custom tmux status management for merged statusline
+-- Hide tmux status when in Neovim, show it when in shell
 vim.api.nvim_create_autocmd("VimEnter", {
-  desc = "Turn off tmux status on startup for merged statusline",
+  desc = "Turn off tmux status when entering Neovim",
   callback = function()
     if vim.env.TMUX then
       vim.system({ "tmux", "set", "status", "off" }, {}, function() end)
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  desc = "Turn on tmux status when leaving Neovim",
+  callback = function()
+    if vim.env.TMUX then
+      vim.system({ "tmux", "set", "status", "on" }, {}, function() end)
     end
   end,
 })
