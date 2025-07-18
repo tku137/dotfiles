@@ -65,6 +65,11 @@ return {
 
         -- re-emit colorscheme so highlight groups get added
         vim.api.nvim_exec_autocmds("ColorScheme", { pattern = "*" })
+        
+        -- Ensure tmux status is hidden immediately when plugin loads
+        if vim.env.TMUX then
+          vim.fn.system("tmux set status off")
+        end
       end,
       opts = {
         window = {
