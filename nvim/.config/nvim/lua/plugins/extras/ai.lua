@@ -1,11 +1,7 @@
 -- Everything related to AI plugins, such as Copilot, Avante, etc.
 
--- Chosen LLM model used for all AI plugins
-local model_for_coding = "claude-sonnet-4"
-local model_max_tokens = 20480
-local model_temperature = 0
-
 -- Where AI plugin keymaps should be put
+-- avante.nvim now uses this as default, so we dont need to override default mappings
 local prefix = "<Leader>a"
 
 return {
@@ -75,38 +71,37 @@ return {
     version = false, -- set this if you want to always pull the latest change
     opts = {
       -- add any opts here
-      mappings = {
-        ask = prefix .. "<CR>",
-        edit = prefix .. "e",
-        refresh = prefix .. "r",
-        focus = prefix .. "f",
-        toggle = {
-          default = prefix .. "t",
-          debug = prefix .. "d",
-          hint = prefix .. "h",
-          suggestion = prefix .. "s",
-          repomap = prefix .. "R",
-        },
-        diff = {
-          next = "]c",
-          prev = "[c",
-        },
-        files = {
-          add_current = prefix .. ".",
-        },
-      },
       behaviour = {
         auto_suggestions = false,
       },
       provider = "copilot",
       providers = {
         copilot = {
-          model = model_for_coding,
+          model = "gpt-4.1",
+          timeout = 30000, -- Timeout in milliseconds
+          context_window = 64000, -- Number of tokens to send to the model for context
           extra_request_body = {
-            temperature = model_temperature,
-            max_tokens = model_max_tokens,
+            temperature = 0.75,
+            max_tokens = 20480,
           },
         },
+        claude = {
+          model = "claude-sonnet-4",
+          timeout = 30000, -- Timeout in milliseconds
+          context_window = 200000,
+          extra_request_body = {
+            temperature = 0.75,
+            max_tokens = 64000,
+          },
+        },
+      },
+    },
+    keys = {
+      {
+        prefix .. "P",
+        "<Cmd>AvanteSwitchProvider<CR>",
+        desc = "avante: switch provider",
+        mode = "n",
       },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
