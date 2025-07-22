@@ -122,6 +122,7 @@ return {
         },
       },
       lualine_x = {
+        Snacks.profiler.status(),
         {
           "copilot",
           symbols = {
@@ -140,8 +141,50 @@ return {
           },
           show_colors = true,
           show_loading = true,
+          separator = "",
+          padding = { left = 1, right = 0 },
         },
-        Snacks.profiler.status(),
+        {
+          function()
+            -- Check if MCPHub is loaded
+            if not vim.g.loaded_mcphub then
+              return icons.statusline.mcphub .. "-"
+            end
+
+            local count = vim.g.mcphub_servers_count or 0
+            local status = vim.g.mcphub_status or "stopped"
+            local executing = vim.g.mcphub_executing
+
+            -- Show "-" when stopped
+            if status == "stopped" then
+              return icons.statusline.mcphub .. "-"
+            end
+
+            -- Show spinner when executing, starting, or restarting
+            if executing or status == "starting" or status == "restarting" then
+              local frames = icons.tests.running_animated
+              local frame = math.floor(vim.loop.now() / 100) % #frames + 1
+              return icons.statusline.mcphub .. frames[frame]
+            end
+
+            return icons.statusline.mcphub .. count
+          end,
+          color = function()
+            if not vim.g.loaded_mcphub then
+              return { fg = colors.comment } -- Gray for not loaded
+            end
+
+            local status = vim.g.mcphub_status or "stopped"
+            if status == "ready" or status == "restarted" then
+              return { fg = colors.green } -- Green for connected
+            elseif status == "starting" or status == "restarting" then
+              return { fg = colors.orange } -- Orange for connecting
+            else
+              return { fg = colors.red } -- Red for error/stopped
+            end
+          end,
+          padding = { left = 1, right = 1 },
+        },
         -- Displays showcmd
         -- stylua: ignore
         {
