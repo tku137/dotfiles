@@ -80,6 +80,14 @@ return {
         },
       })
     end,
+    keys = {
+      {
+        prefix .. "m",
+        "<Cmd>MCPHub<CR>",
+        desc = "Open MCPHub",
+        mode = "n",
+      },
+    },
   },
   {
     "yetone/avante.nvim",
