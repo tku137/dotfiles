@@ -29,17 +29,37 @@ return {
         opts = {
           winbar = {
             default_section = "scopes",
-            headers = {
-              breakpoints = "Breakpoints",
-              scopes = "Scopes",
-              exceptions = "Exceptions",
-              watches = "Watches",
-              threads = "Threads",
-              repl = "REPL",
-              console = "Console",
+            base_sections = {
+              breakpoints = {
+                label = "Breakpoints",
+              },
+              scopes = {
+                label = "Scopes",
+              },
+              exceptions = {
+                label = "Exceptions",
+              },
+              watches = {
+                label = "Watches",
+              },
+              threads = {
+                label = "Threads",
+              },
+              repl = {
+                label = "REPL",
+              },
+              console = {
+                label = "Console",
+              },
             },
             controls = {
               enabled = true, -- Enable winbar controls
+            },
+          },
+          windows = {
+            height = 0.35,
+            terminal = {
+              width = 0.35,
             },
           },
         },
