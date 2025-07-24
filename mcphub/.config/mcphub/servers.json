@@ -18,7 +18,7 @@
       "args": [
         "mcp-server-git",
         "--repository",
-        "${workspaceFolder}"
+        "${env:GIT_ROOT}"
       ],
       "disabled": false,
       "command": "uvx"

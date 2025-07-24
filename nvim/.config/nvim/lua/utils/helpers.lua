@@ -40,8 +40,8 @@ end
 --- until it finds a `.git` directory, indicating the root of a git repository.
 --- @return string|nil The absolute path to the git repository root, or nil if not in a git repo
 function M.git_root()
-  local git_dir = vim.fs.find(".git", { upward = true, type = "directory" })[1]
-  return git_dir and vim.fs.dirname(git_dir) or nil
+  local out = vim.fn.systemlist("git rev-parse --show-toplevel")
+  return (#out > 0 and out[1] or vim.fn.getcwd())
 end
 
 return M

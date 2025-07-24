@@ -72,6 +72,9 @@ return {
     build = "npm install -g mcp-hub@latest", -- Installs `mcp-hub` node binary globally
     config = function()
       require("mcphub").setup({
+        global_env = {
+          GIT_ROOT = require("utils.helpers").git_root(),
+        },
         extensions = {
           avante = {
             enabled = true,
