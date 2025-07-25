@@ -1,31 +1,57 @@
 {
   "mcpServers": {
-    "fetch": {
-      "command": "uvx",
-      "args": [
-        "mcp-server-fetch"
-      ]
-    },
-    "filesystem": {
-      "command": "npx",
+    "sequentialthinking": {
       "args": [
         "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "${workspaceFolder}"
-      ]
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "command": "npx"
+    },
+    "memory": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "command": "npx"
     },
     "git": {
+      "command": "uvx",
       "args": [
         "mcp-server-git",
         "--repository",
         "${env:GIT_ROOT}"
       ],
-      "disabled": false,
-      "command": "uvx"
+      "disabled": false
+    },
+    "context7": {
+      "env": {
+        "DEFAULT_MINIMUM_TOKENS": "${env:DEFAULT_MINIMUM_TOKENS}"
+      },
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
     },
     "ddg-search": {
-      "command": "uvx",
-      "args": ["duckduckgo-mcp-server"]
+      "args": [
+        "duckduckgo-mcp-server"
+      ],
+      "command": "uvx"
+    },
+    "filesystem": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ],
+      "command": "npx"
+    },
+    "fetch": {
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "command": "uvx"
     }
   }
 }
