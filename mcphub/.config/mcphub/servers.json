@@ -1,11 +1,46 @@
 {
   "mcpServers": {
-    "sequentialthinking": {
+    "context7": {
       "args": [
         "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
+        "@upstash/context7-mcp"
       ],
-      "command": "npx"
+      "command": "npx",
+      "env": {
+        "DEFAULT_MINIMUM_TOKENS": "${env:DEFAULT_MINIMUM_TOKENS}"
+      }
+    },
+    "duckduckgo-search": {
+      "args": [
+        "duckduckgo-mcp-server"
+      ],
+      "command": "uvx"
+    },
+    "fetch": {
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "command": "uvx",
+      "disabled": true
+    },
+    "filesystem": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ],
+      "command": "npx",
+      "disabled": true,
+      "disabled_tools": []
+    },
+    "git": {
+      "args": [
+        "mcp-server-git",
+        "--repository",
+        "${env:GIT_ROOT}"
+      ],
+      "command": "uvx",
+      "disabled": true
     },
     "memory": {
       "args": [
@@ -14,44 +49,28 @@
       ],
       "command": "npx"
     },
-    "git": {
-      "command": "uvx",
-      "args": [
-        "mcp-server-git",
-        "--repository",
-        "${env:GIT_ROOT}"
-      ],
-      "disabled": false
-    },
-    "context7": {
-      "env": {
-        "DEFAULT_MINIMUM_TOKENS": "${env:DEFAULT_MINIMUM_TOKENS}"
-      },
-      "command": "npx",
+    "sequentialthinking": {
       "args": [
         "-y",
-        "@upstash/context7-mcp"
-      ]
-    },
-    "ddg-search": {
-      "args": [
-        "duckduckgo-mcp-server"
-      ],
-      "command": "uvx"
-    },
-    "filesystem": {
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "${workspaceFolder}"
+        "@modelcontextprotocol/server-sequential-thinking"
       ],
       "command": "npx"
-    },
-    "fetch": {
-      "args": [
-        "mcp-server-fetch"
-      ],
-      "command": "uvx"
+    }
+  },
+  "nativeMCPServers": {
+    "neovim": {
+      "disabled_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "list_directory",
+        "find_files",
+        "move_item",
+        "delete_items",
+        "execute_command",
+        "execute_lua"
+      ]
     }
   }
 }

@@ -138,29 +138,22 @@ return {
       end,
       disabled_tools = {
         -- Provided by default Neovim server
-        "list_files",
-        "search_files",
-        "read_file",
-        "create_file",
-        "rename_file",
-        "delete_file",
-        "create_dir",
-        "rename_dir",
-        "delete_dir",
-        "bash",
-        -- Provided by filesystem server
-        "move_path",
-        "copy_path",
-        "glob",
+        -- INFO: These are kept enabled in favor of the
+        -- MUCH faster avante built-in tools
+        -- "list_files",
+        -- "search_files",
+        -- "read_file",
+        -- "create_file",
+        -- "rename_file",
+        -- "delete_file",
+        -- "create_dir",
+        -- "rename_dir",
+        -- "delete_dir",
+        -- "bash",
+
         -- Provided by fetch and duckduckgo
+        -- Disabling enforces duckduckgo usage
         "web_search",
-        "fetch",
-        -- Provided by git tools
-        "git_diff",
-        "git_commit",
-        -- Provided by context7, although
-        -- no avante RAG service configured for now
-        "rag_search",
       },
     },
     keys = {
