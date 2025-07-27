@@ -29,10 +29,10 @@ config.font_rules = {
 	},
 }
 local platform = wezterm.target_triple
-if platform:find("windows") then
-	config.font_size = 12.0
-else
+if platform:find("apple") then
 	config.font_size = 15.0
+else
+	config.font_size = 12.0
 end
 config.line_height = 1.1
 
