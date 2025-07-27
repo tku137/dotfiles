@@ -137,7 +137,8 @@ return {
         }
       end,
       disabled_tools = {
-        "list_files", -- Built-in file operations
+        -- Provided by default Neovim server
+        "list_files",
         "search_files",
         "read_file",
         "create_file",
@@ -146,7 +147,20 @@ return {
         "create_dir",
         "rename_dir",
         "delete_dir",
-        "bash", -- Built-in terminal access
+        "bash",
+        -- Provided by filesystem server
+        "move_path",
+        "copy_path",
+        "glob",
+        -- Provided by fetch and duckduckgo
+        "web_search",
+        "fetch",
+        -- Provided by git tools
+        "git_diff",
+        "git_commit",
+        -- Provided by context7, although
+        -- no avante RAG service configured for now
+        "rag_search",
       },
     },
     keys = {
