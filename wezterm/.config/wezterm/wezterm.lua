@@ -84,7 +84,23 @@ config.command_palette_bg_color = color_scheme.background
 config.command_palette_fg_color = color_scheme.foreground
 
 -- TAB BAR
+config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 config.use_fancy_tab_bar = true
+config.hide_tab_bar_if_only_one_tab = false
+
+-- Set button style based on platform and desktop environment
+-- This makes Gnome buttons an option, which defaults would
+-- otherwise miss because only MacOS and Windows are defaults
+local xdg_desktop = os.getenv("XDG_CURRENT_DESKTOP") or ""
+if platform:find("apple") then
+	config.integrated_title_button_style = "MacOsNative"
+-- Check explicitly for Gnome Desktop
+elseif xdg_desktop:find("GNOME") then
+	config.integrated_title_button_style = "Gnome"
+-- If neither MacOS nor Gnome, use Windows buttons
+else
+	config.integrated_title_button_style = "Windows"
+end
 
 config.window_frame = {
 	-- The font used in the tab bar.
@@ -115,7 +131,6 @@ config.scrollback_lines = 5000
 
 -- GENERAL SETTINGS
 config.hide_mouse_cursor_when_typing = true
-config.hide_tab_bar_if_only_one_tab = true
 config.use_dead_keys = false
 config.pane_focus_follows_mouse = false
 
@@ -193,7 +208,6 @@ config.keys = {
 }
 
 -- Platform-specific settings
-local platform = wezterm.target_triple
 if platform:find("apple") then
 	config.native_macos_fullscreen_mode = false
 	-- Insert keybinding for macOS fullscreen toggle
