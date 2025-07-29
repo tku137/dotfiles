@@ -142,49 +142,10 @@ config.text_background_opacity = 1.0
 -- Ensure keys table is initialized before inserting keybindings
 config.keys = config.keys or {}
 
--- Leader is the same as the (modified) tmux prefix
-config.leader = { key = "p", mods = "CTRL|SHIFT", timeout_milliseconds = 1000 }
-
 config.keys = {
-	-- splitting
-	{
-		mods = "LEADER",
-		key = "-",
-		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
-	},
-	{
-		mods = "LEADER",
-		key = "=",
-		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
-	},
-	{
-		mods = "LEADER",
-		key = "m",
-		action = wezterm.action.TogglePaneZoomState,
-	},
-	-- rotate panes
-	{
-		mods = "LEADER",
-		key = "Space",
-		action = wezterm.action.RotatePanes("Clockwise"),
-	},
-	-- show the pane selection mode, but have it swap the active and selected panes
-	{
-		mods = "LEADER",
-		key = "0",
-		action = wezterm.action.PaneSelect({
-			mode = "SwapWithActive",
-		}),
-	},
-	-- activate copy mode or vim mode
-	{
-		key = "Enter",
-		mods = "LEADER",
-		action = wezterm.action.ActivateCopyMode,
-	},
 	-- open launcher
 	{
-		mods = "LEADER",
+		mods = "CTRL|SHIFT",
 		key = "p",
 		action = wezterm.action.ActivateCommandPalette,
 	},
@@ -199,11 +160,25 @@ config.keys = {
 		key = "v",
 		action = wezterm.action.PasteFrom("Clipboard"),
 	},
-	-- cycle through tabs
+}
+
+-- MOUSE
+-- Sets how to bypass app mouse reporting (default is SHIFT).
+-- Use CTRL to handle Ctrl+Click by WezTerm even inside tmux/vim.
+config.bypass_mouse_reporting_modifiers = "CTRL"
+
+config.mouse_bindings = {
+	-- Plain click selects; release copies to clipboard (copy-on-select).
 	{
-		mods = "LEADER",
-		key = "Tab",
-		action = wezterm.action.PaneSelect,
+		event = { Up = { streak = 1, button = "Left" } },
+		mods = "NONE",
+		action = wezterm.action.CompleteSelection("Clipboard"),
+	},
+	-- Ctrl+click: open link under cursor (works even with tmux mouse due to bypass modifier)
+	{
+		event = { Up = { streak = 1, button = "Left" } },
+		mods = "CTRL",
+		action = wezterm.action.OpenLinkAtMouseCursor,
 	},
 }
 
@@ -244,8 +219,19 @@ end)
 -- Disable the terminal bell
 config.audible_bell = "Disabled"
 
+-- Smart terminfo detection with fallback
+local function get_best_term()
+	-- Wrap in pcall to handle errors gracefully
+	local ok, success = pcall(function()
+		-- Check if wezterm terminfo is available
+		return wezterm.run_child_process({ "infocmp", "wezterm" })
+	end)
+	-- If wezterm is available, use that, else fallback to widely compatible option
+	return (ok and success) and "wezterm" or "xterm-256color"
+end
+
 -- Terminal tweaks
-config.term = "xterm-kitty"
+config.term = get_best_term()
 config.enable_kitty_graphics = true
 
 -- Return the configuration
