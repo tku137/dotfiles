@@ -58,6 +58,13 @@ fish/.config/fish/conf.d/*
 
 # …except your my functions in myfunctions
 !fish/.config/fish/conf.d/01-init.fish
+!fish/.config/fish/conf.d/10-starship.fish
+!fish/.config/fish/conf.d/15-direnv.fish
+!fish/.config/fish/conf.d/20-zoxide.fish
+!fish/.config/fish/conf.d/25-fzf.fish
+!fish/.config/fish/conf.d/30-mise.fish
+!fish/.config/fish/conf.d/35-pyenv.fish
+!fish/.config/fish/conf.d/40‑fisher-bootstrap.fish
 !fish/.config/fish/conf.d/rustup.fish
 #--------------------------------------------------#
 # The following was generated with gitignore.nvim: #
