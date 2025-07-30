@@ -1,4 +1,10 @@
 # =============================================================================
+# LANGUAGE AND LOCALE SETTINGS
+# =============================================================================
+
+set -gx LANG en_US.UTF-8
+
+# =============================================================================
 # INTERACTIVE SESSION SETUP
 # =============================================================================
 
@@ -25,7 +31,8 @@ end
 
 # Initialize starship
 if type -q starship
-    starship init fish | source
+    starship init fish --print-full-init >~/.cache/starship_init.fish
+    source ~/.cache/starship_init.fish
 end
 
 # Initialize fzf
