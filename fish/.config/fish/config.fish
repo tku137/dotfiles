@@ -81,3 +81,11 @@ end
 
 # Set fish shell theme
 fish_config theme choose "TokyoNight Moon"
+
+# =============================================================================
+# NOTE
+# =============================================================================
+# Heavy startup hooks (starship, direnv, zoxide, fzf, mise, pyenv, etc.) live in
+# ~/.config/fish/conf.d/*.fish
+# where they are auto‑sourced once per shell. Fisher bootstrap is better kept
+# in a separate one‑time install script or run manually (see the Fisher docs).
