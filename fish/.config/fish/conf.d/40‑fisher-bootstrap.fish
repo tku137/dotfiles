@@ -17,8 +17,8 @@ end
 if type -q fisher; and status --is-interactive
     set -l today (date +%Y-%m-%d)
     if not set -q __fisher_last_update; or test $__fisher_last_update != $today
-        echo "Checking for Fisher plugin updates…" &>/dev/null
-        fisher update &>/dev/null &
+        # Run fisher update completely silently to prevent funcsave spam from plugins
+        fisher update >/dev/null 2>&1 &
         set -U __fisher_last_update $today
     end
 end
