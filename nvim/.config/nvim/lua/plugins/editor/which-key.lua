@@ -12,6 +12,7 @@ return {
           mode = { "n", "v" },
           { "<leader><tab>", group = "tabs" },
           { "<leader>c", group = "code" },
+          { "<leader>ct", group = "TypeScript" },
           { "<leader>d", group = "debug" },
           { "<leader>dp", group = "profiler" },
           { "<leader>dv", group = "dap-view" },

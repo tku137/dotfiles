@@ -544,6 +544,7 @@ return {
      - **fish-lsp** - Fish shell LSP (`brew install fish-lsp` or `mise use -g npm:fish-lsp@latest`)
      - **postgres_lsp** - PostgreSQL LSP (`mise use -g npm:@postgrestools/postgrestools@latest`)
      - **sql-language-server** - SQL LSP (`brew install sql-language-server` or `mise use -g npm:sql-language-server@latest`)
+     - **vtsls** - vtsls typescript LSP (`mise use -g npm:@vtsls/language-server@latest`)
    - **Formatters:**
      - **stylua** - Lua formatter (`brew install stylua` or `mise use -g stylua@latest`)
      - **prettierd/prettier** - Markdown formatter (`brew install prettier prettierd` or `mise use -g npm:@fsouza/prettierd@latest`)
@@ -551,17 +552,21 @@ return {
      - **fish_indent** - Fish formatter (comes with fish shell)
      - **taplo** - TOML formatter (`brew install taplo` or `mise use -g taplo@latest`)
      - **sqlfluff** - SQL Formatter (`brew install sqlfluff` or `mise use -g pipx:sqlfluff@latest`)
+     - **typescript** - biome, prettier, prettierd and eslint_d formatters (`brew install biome eslint_d prettier prettierd` or `mise use -g npm:@biomejs/biome@latest npm:prettier@latest npm:@fsouza/prettierd@latest npm:eslint_d@latest`)
    - **Linters:**
      - **fish** - Fish shell linter (comes with fish shell)
    - **Debug Adapters:**
      - **debugpy** - Python debugger (`mise use -g pipx:debugpy@latest`)
      - **lldb-dap** - C/C++ debugger (comes with LLVM or Xcode)
+     - **js-debug-adapter** - Node.js/TypeScript debugger (`mise use -g npm:js-debug-adapter@latest`)
    - **Test runners:**
      - **pytest** - Python testing (used by neotest-python)
+     - **jest** - JavaScript/TypeScript testing (used by neotest-jest)
    - **Additional Tools:**
      - **ipython** - Interactive Python REPL
      - **pplatex** - latex error parsing (optional, for vimtex)
      - **uv** - python package manager (used by dap-python for auto-detection)
+     - **typescript** - TypeScript compiler (`brew install typescript` or `mise use -g npm:typescript@latest`)
 
 ### Install basic prerequisites
 
