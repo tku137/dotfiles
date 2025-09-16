@@ -537,6 +537,9 @@ return {
      - **lua-language-server** - Lua LSP (`brew install lua-language-server` or `mise use -g lua-language-server@latest`)
      - **marksman** - Markdown LSP (`brew install marksman` or `mise use -g marksman@latest`)
      - **vscode-langservers-extracted** - JSON LSP (`brew install vscode-langservers-extracted` or `mise use -g npm:vscode-json-languageserver@latest`)
+     - **emmet-ls** - Emmet LSP for HTML/CSS expansion (`mise use -g npm:emmet-ls@latest`)
+     - **tailwindcss-language-server** - Tailwind CSS LSP (optional) (`mise use -g npm:@tailwindcss/language-server@latest`)
+     - **angular-language-server** - Angular LSP (`mise use -g npm:@angular/language-server@latest`)
      - **jsonlint** - JSON linting (`brew install jsonlin` or `mise use -g npm:jsonlint@latest`)
      - **yaml-language-server** - YAML LSP (`brew install yaml-language-server` or `mise use -g npm:yaml-language-server@latest`)
      - **tinymist** - Typst LSP (`brew install tinymist` or `mise use -g aqua:Myriad-Dreamin/tinymist@latest`)
@@ -552,7 +555,8 @@ return {
      - **fish_indent** - Fish formatter (comes with fish shell)
      - **taplo** - TOML formatter (`brew install taplo` or `mise use -g taplo@latest`)
      - **sqlfluff** - SQL Formatter (`brew install sqlfluff` or `mise use -g pipx:sqlfluff@latest`)
-     - **typescript** - biome, prettier, prettierd and eslint_d formatters (`brew install biome eslint_d prettier prettierd` or `mise use -g npm:@biomejs/biome@latest npm:prettier@latest npm:@fsouza/prettierd@latest npm:eslint_d@latest`)
+     - **biome** - Fast JS/TS/JSON formatter and linter (`brew install biome` or `mise use -g npm:@biomejs/biome@latest`)
+     - **eslint_d** - Fast ESLint daemon (`mise use -g npm:eslint_d@latest`)
    - **Linters:**
      - **fish** - Fish shell linter (comes with fish shell)
    - **Debug Adapters:**
@@ -562,6 +566,8 @@ return {
    - **Test runners:**
      - **pytest** - Python testing (used by neotest-python)
      - **jest** - JavaScript/TypeScript testing (used by neotest-jest)
+   - **Development servers:**
+     - **live-server** - HTML development server (`mise use -g npm:live-server@latest`)
    - **Additional Tools:**
      - **ipython** - Interactive Python REPL
      - **pplatex** - latex error parsing (optional, for vimtex)
