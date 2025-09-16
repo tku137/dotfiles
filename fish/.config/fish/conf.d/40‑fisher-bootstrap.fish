@@ -14,11 +14,11 @@ end
 
 # Lightweight auto‑update once per day (interactive shells only). Use a universal sentinel 
 # variable so every shell agrees on the last update date.
-if type -q fisher; and status --is-interactive
-    set -l today (date +%Y-%m-%d)
-    if not set -q __fisher_last_update; or test $__fisher_last_update != $today
-        # Run fisher update completely silently to prevent funcsave spam from plugins
-        fisher update >/dev/null 2>&1 &
-        set -U __fisher_last_update $today
-    end
-end
+# if type -q fisher; and status --is-interactive
+#     set -l today (date +%Y-%m-%d)
+#     if not set -q __fisher_last_update; or test $__fisher_last_update != $today
+#         # Run fisher update completely silently to prevent funcsave spam from plugins
+#         fisher update >/dev/null 2>&1 &
+#         set -U __fisher_last_update $today
+#     end
+# end
