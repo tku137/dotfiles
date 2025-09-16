@@ -562,7 +562,6 @@ return {
    - **Debug Adapters:**
      - **debugpy** - Python debugger (`mise use -g pipx:debugpy@latest`)
      - **lldb-dap** - C/C++ debugger (comes with LLVM or Xcode)
-     - **js-debug-adapter** - Node.js/TypeScript debugger (`mise use -g npm:js-debug-adapter@latest`)
    - **Test runners:**
      - **pytest** - Python testing (used by neotest-python)
      - **jest** - JavaScript/TypeScript testing (used by neotest-jest)
@@ -619,7 +618,7 @@ brew install ruff basedpyright llvm lua-language-server marksman vscode-langserv
 ```
 
 ```bash
-mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:js-debug-adapter@latest npm:live-server@latest npm:typescript@latest
+mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest
 ```
 
 ## Troubleshooting
