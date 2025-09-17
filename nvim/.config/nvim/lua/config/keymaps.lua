@@ -257,6 +257,10 @@ map("n", "<leader>cA", function() return vim.lsp.buf.code_action({ apply = true,
 map("n", "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end,{ desc = "Next Reference" })
 map("n", "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end,{ desc = "Prev Reference" })
 
+-- DAP
+map("n", "<leader>df", function() require("utils.dap_utils").dap_breakpoints_picker() end, { desc = "Find Breakpoints" })
+map("n", "<leader>so", function() require("utils.dap_utils").dap_breakpoints_picker() end, { desc = "Find Breakpoints" })
+
 -- Scratch buffers
 map("n", "<leader>.", function() Snacks.scratch() end, { desc = "Toggle Scratch Buffer" })
 map("n", "<leader>S", function() Snacks.scratch.select() end, { desc = "Select Scratch Buffer" })
