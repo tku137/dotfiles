@@ -7,7 +7,7 @@ background-blur = 20
 background-opacity = 1.0
 
 # Theme configuration
-theme = light:tokyonight-day,dark:tokyonight_moon
+theme = light:TokyoNight Day,dark:TokyoNight Moon
 
 # Window dimensions
 window-width = 120
@@ -18,8 +18,12 @@ scrollback-limit = 5242880
 mouse-hide-while-typing = true
 
 # MacOS tweaks
-macos-option-as-alt = true
+macos-option-as-alt = left
 macos-titlebar-style = tabs
+
+# Shell Tweaks
+shell-integration = fish
+shell-integration-features = sudo,ssh-terminfo,ssh-env
 
 # Advanced tweaks
 quit-after-last-window-closed = true
