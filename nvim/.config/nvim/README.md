@@ -536,7 +536,10 @@ return {
      - **clangd** - C/C++ LSP (`brew install llvm` or `mise use -g clang@latest`)
      - **lua-language-server** - Lua LSP (`brew install lua-language-server` or `mise use -g lua-language-server@latest`)
      - **marksman** - Markdown LSP (`brew install marksman` or `mise use -g marksman@latest`)
-     - **vscode-langservers-extracted** - JSON LSP (`brew install vscode-langservers-extracted` or `mise use -g npm:vscode-json-languageserver@latest`)
+     - **vscode-langservers-extracted** - JSON LSP (`brew install vscode-langservers-extracted` or `mise use -g npm:vscode-langservers-extracted@latest`)
+     - **emmet-ls** - Emmet LSP for HTML/CSS expansion (`mise use -g npm:emmet-ls@latest`)
+     - **tailwindcss-language-server** - Tailwind CSS LSP (optional) (`mise use -g npm:@tailwindcss/language-server@latest`)
+     - **angular-language-server** - Angular LSP (`mise use -g npm:@angular/language-server@latest`)
      - **jsonlint** - JSON linting (`brew install jsonlin` or `mise use -g npm:jsonlint@latest`)
      - **yaml-language-server** - YAML LSP (`brew install yaml-language-server` or `mise use -g npm:yaml-language-server@latest`)
      - **tinymist** - Typst LSP (`brew install tinymist` or `mise use -g aqua:Myriad-Dreamin/tinymist@latest`)
@@ -544,6 +547,7 @@ return {
      - **fish-lsp** - Fish shell LSP (`brew install fish-lsp` or `mise use -g npm:fish-lsp@latest`)
      - **postgres_lsp** - PostgreSQL LSP (`mise use -g npm:@postgrestools/postgrestools@latest`)
      - **sql-language-server** - SQL LSP (`brew install sql-language-server` or `mise use -g npm:sql-language-server@latest`)
+     - **vtsls** - vtsls typescript LSP (`mise use -g npm:@vtsls/language-server@latest`)
    - **Formatters:**
      - **stylua** - Lua formatter (`brew install stylua` or `mise use -g stylua@latest`)
      - **prettierd/prettier** - Markdown formatter (`brew install prettier prettierd` or `mise use -g npm:@fsouza/prettierd@latest`)
@@ -551,6 +555,8 @@ return {
      - **fish_indent** - Fish formatter (comes with fish shell)
      - **taplo** - TOML formatter (`brew install taplo` or `mise use -g taplo@latest`)
      - **sqlfluff** - SQL Formatter (`brew install sqlfluff` or `mise use -g pipx:sqlfluff@latest`)
+     - **biome** - Fast JS/TS/JSON formatter and linter (`brew install biome` or `mise use -g npm:@biomejs/biome@latest`)
+     - **eslint_d** - Fast ESLint daemon (`mise use -g npm:eslint_d@latest`)
    - **Linters:**
      - **fish** - Fish shell linter (comes with fish shell)
    - **Debug Adapters:**
@@ -558,10 +564,14 @@ return {
      - **lldb-dap** - C/C++ debugger (comes with LLVM or Xcode)
    - **Test runners:**
      - **pytest** - Python testing (used by neotest-python)
+     - **jest** - JavaScript/TypeScript testing (used by neotest-jest)
+   - **Development servers:**
+     - **live-server** - HTML development server (`mise use -g npm:live-server@latest`)
    - **Additional Tools:**
      - **ipython** - Interactive Python REPL
      - **pplatex** - latex error parsing (optional, for vimtex)
      - **uv** - python package manager (used by dap-python for auto-detection)
+     - **typescript** - TypeScript compiler (`brew install typescript` or `mise use -g npm:typescript@latest`)
 
 ### Install basic prerequisites
 
@@ -604,11 +614,11 @@ Other than basic packages, the following might be relevant to versioning, for ex
 > Postgrestools and debugpy are not available with homebrew!
 
 ```bash
-brew install fish-lsp llvm lua-language-server marksman prettier prettierd ruff basedpyright sql-language-server sqlfluff stylua taplo texlab tinymist typstyle vscode-langservers-extracted jsonlint yaml-language-server
+brew install ruff basedpyright llvm lua-language-server marksman vscode-langservers-extracted jsonlint yaml-language-server tinymist texlab fish-lsp sql-language-server stylua prettier prettierd typstyle taplo sqlfluff biome typescript
 ```
 
 ```bash
-mise use -g aqua:Enter-tainer/typstyle@latest aqua:Myriad-Dreamin/tinymist@latest clang@latest lua-language-server@latest marksman@latest npm:@fsouza/prettierd@latest npm:@postgrestools/postgrestools@latest npm:fish-lsp@latest npm:sql-language-server@latest npm:vscode-json-languageserver@latest npm:jsonlint@latest npm:yaml-language-server@latest pipx:basedpyright@latest pipx:debugpy@latest pipx:sqlfluff@latest ruff@latest stylua@latest taplo@latest ubi:latex-lsp/texlab@latest
+mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest
 ```
 
 ## Troubleshooting
