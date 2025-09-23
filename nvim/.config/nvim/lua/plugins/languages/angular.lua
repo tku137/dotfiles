@@ -1,4 +1,5 @@
 local prefix = "<Leader>cn"
+local opts = { noremap = true, silent = true }
 
 return {
   -- Treesitter for Angular templates
@@ -22,24 +23,13 @@ return {
   {
     "joeveiga/ng.nvim",
     ft = { "typescript", "html", "typescriptreact", "scss", "css" },
+    -- stylua: ignore
     keys = {
-      { prefix .. "a", "<cmd>AngularGotoTemplateForComponent<cr>", desc = "Go to Angular template" },
-      { prefix .. "c", "<cmd>AngularGotoComponentWithTemplateFile<cr>", desc = "Go to Angular component" },
-      { prefix .. "T", "<cmd>AngularGotoStylesheetForComponent<cr>", desc = "Go to Angular stylesheet" },
-      { prefix .. "g", "<cmd>AngularGenerateClass<cr>", desc = "Generate Angular class" },
-      { prefix .. "G", "<cmd>AngularGenerateComponent<cr>", desc = "Generate Angular component" },
-      { prefix .. "s", "<cmd>AngularGenerateService<cr>", desc = "Generate Angular service" },
-      { prefix .. "p", "<cmd>AngularGeneratePipe<cr>", desc = "Generate Angular pipe" },
-      { prefix .. "d", "<cmd>AngularGenerateDirective<cr>", desc = "Generate Angular directive" },
-      { prefix .. "m", "<cmd>AngularGenerateModule<cr>", desc = "Generate Angular module" },
-      { prefix .. "i", "<cmd>AngularGenerateInterface<cr>", desc = "Generate Angular interface" },
-      { prefix .. "e", "<cmd>AngularGenerateEnum<cr>", desc = "Generate Angular enum" },
-      { prefix .. "r", "<cmd>AngularGenerateGuard<cr>", desc = "Generate Angular guard" },
+      { prefix .. "t", function() require("ng").goto_template_for_component(opts) end, desc = "Angular: goto template", },
+      { prefix .. "c", function() require("ng").goto_component_with_template_file(opts) end, desc = "Angular: goto component", },
+      -- TCB (optional, handy when templates act weird)
+      { prefix .. "T", function() require("ng").get_template_tcb() end, desc = "Angular: show template TCB", },
     },
-    config = function()
-      -- Optional: Configure ng.nvim if needed
-      -- Most configuration is handled by the Angular Language Server
-    end,
   },
 
   -- Angular CLI integration (optional but useful)
@@ -48,46 +38,72 @@ return {
     optional = true,
     keys = {
       {
-        prefix .. "t",
+        prefix .. "s",
         function()
-          local Terminal = require("toggleterm.terminal").Terminal
-          local ng_terminal = Terminal:new({
-            cmd = "ng serve",
-            direction = "horizontal",
-            close_on_exit = false,
-            display_name = "Angular Dev Server",
-          })
-          ng_terminal:toggle()
+          local T = require("toggleterm.terminal").Terminal
+          _NG_SERVE = _NG_SERVE
+            or T:new({
+              count = 201,
+              name = "ng serve",
+              cmd = "ng serve",
+              dir = "git_dir",
+              direction = "horizontal",
+              close_on_exit = false,
+            })
+          _NG_SERVE:toggle()
         end,
-        desc = "Start Angular dev server",
+        desc = "Angular: ng serve (local)",
+      },
+      {
+        prefix .. "S",
+        function()
+          local T = require("toggleterm.terminal").Terminal
+          _NG_SERVE_LAN = _NG_SERVE_LAN
+            or T:new({
+              count = 202,
+              name = "ng serve (LAN)",
+              cmd = "ng serve --host 0.0.0.0 --port 4200",
+              dir = "git_dir",
+              direction = "horizontal",
+              close_on_exit = false,
+            })
+          _NG_SERVE_LAN:toggle()
+        end,
+        desc = "Angular: ng serve (LAN 0.0.0.0:4200)",
       },
       {
         prefix .. "b",
         function()
-          local Terminal = require("toggleterm.terminal").Terminal
-          local build_terminal = Terminal:new({
-            cmd = "ng build",
-            direction = "horizontal",
-            close_on_exit = false,
-            display_name = "Angular Build",
-          })
-          build_terminal:toggle()
+          local T = require("toggleterm.terminal").Terminal
+          _NG_BUILD = _NG_BUILD
+            or T:new({
+              count = 203,
+              name = "ng build",
+              cmd = "ng build",
+              dir = "git_dir",
+              direction = "horizontal",
+              close_on_exit = false,
+            })
+          _NG_BUILD:toggle()
         end,
-        desc = "Build Angular project",
+        desc = "Angular: ng build",
       },
       {
-        prefix .. "T",
+        prefix .. "t",
         function()
-          local Terminal = require("toggleterm.terminal").Terminal
-          local test_terminal = Terminal:new({
-            cmd = "ng test",
-            direction = "horizontal",
-            close_on_exit = false,
-            display_name = "Angular Tests",
-          })
-          test_terminal:toggle()
+          local T = require("toggleterm.terminal").Terminal
+          _NG_TEST = _NG_TEST
+            or T:new({
+              count = 204,
+              name = "ng test",
+              cmd = "ng test",
+              dir = "git_dir",
+              direction = "horizontal",
+              close_on_exit = false,
+            })
+          _NG_TEST:toggle()
         end,
-        desc = "Run Angular tests",
+        desc = "Angular: ng test",
       },
     },
   },
