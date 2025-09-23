@@ -14,6 +14,7 @@ return {
           { "<leader>c", group = "code" },
           { "<leader>ct", group = "TypeScript" },
           { "<leader>ch", group = "HTML/CSS" },
+          { "<leader>cn", group = "Angular" },
           { "<leader>d", group = "debug" },
           { "<leader>dp", group = "profiler" },
           { "<leader>dv", group = "dap-view" },

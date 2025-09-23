@@ -1,4 +1,4 @@
-local prefix = "<Leader>ca"
+local prefix = "<Leader>cn"
 
 return {
   -- Treesitter for Angular templates
