@@ -249,7 +249,7 @@ window-margin-size: 0
 
 # The max number of windows that may be visible on a screen at one time before
 # additional windows are minimized. A value of 0 disables the feature.
-window-max-count: 4
+window-max-count: 0
 
 # The smallest height that a window can be sized to regardless of its layout frame (in px, default 0).
 window-minimum-height: 0
@@ -266,8 +266,11 @@ floating:
   - com.apple.Music
   - com.apple.ScreenCaptureUI
   - com.1password.1password
-  # - net.whatsapp.WhatsApp
-  # - org.whispersystems.signal-desktop
+  - net.whatsapp.WhatsApp
+  - org.whispersystems.signal-desktop
+  - com.witt-software.PDF-Squeezer
+  - md.obsidian
+  - com.macitbetter.betterzip
 
 # Boolean flag determining behavior of the floating list. true if the applications should be floating and all others tiled. false if the applications should be tiled and all others floating (default true).
 floating-is-blacklist: true
