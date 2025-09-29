@@ -169,7 +169,8 @@ return {
     config = function()
       require("nvim-python-repl").setup({
         execute_on_send = true,
-        vsplit = true,
+        vsplit = false,
+        split_dit = "right",
         spawn_command = {
           python = "ipython",
           scala = "sbt console",
