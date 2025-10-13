@@ -41,13 +41,21 @@ return {
       local processed_adapters = {}
       if opts.adapters then
         for name, adapter_config in pairs(opts.adapters) do
-          if adapter_config ~= false then -- Allow disabling adapters by setting config to false
-            local adapter_module = require(name) -- e.g., require("neotest-python")
-            if type(adapter_config) == "table" and not vim.tbl_isempty(adapter_config) then
-              table.insert(processed_adapters, adapter_module(adapter_config)) -- Call adapter with its config
+          -- Only process string keys (adapter names), skip numeric keys (already instantiated adapters)
+          if type(name) == "string" and adapter_config ~= false then
+            local ok, adapter_module = pcall(require, name)
+            if ok then
+              if type(adapter_config) == "table" and not vim.tbl_isempty(adapter_config) then
+                table.insert(processed_adapters, adapter_module(adapter_config)) -- Call adapter with its config
+              else
+                table.insert(processed_adapters, adapter_module({})) -- Call adapter with empty config or default
+              end
             else
-              table.insert(processed_adapters, adapter_module({})) -- Call adapter with empty config or default
+              vim.notify("Failed to load neotest adapter: " .. name, vim.log.levels.WARN)
             end
+          elseif type(name) == "number" then
+            -- This is an already instantiated adapter, keep it as-is
+            table.insert(processed_adapters, adapter_config)
           end
         end
       end
