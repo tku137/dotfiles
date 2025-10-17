@@ -115,7 +115,7 @@ return {
           },
         },
         claude = {
-          model = "claude-sonnet-4",
+          model = "claude-sonnet-4.5",
           timeout = 30000, -- Timeout in milliseconds
           context_window = 200000,
           extra_request_body = {
