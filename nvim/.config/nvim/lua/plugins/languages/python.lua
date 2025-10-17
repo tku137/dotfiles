@@ -1,5 +1,47 @@
 local prefix = "<Leader>cI"
 
+-- Helper functions
+
+---Find project root by looking upward for common markers.
+---@param bufnr? integer
+---@return string
+local function project_root(bufnr)
+  local path = vim.api.nvim_buf_get_name(bufnr or 0)
+  local markers = { ".git", "pyproject.toml", "setup.cfg", "setup.py" }
+  local hit = vim.fs.find(markers, { upward = true, path = path })[1]
+  return hit and vim.fs.dirname(hit) or vim.loop.cwd()
+end
+
+---Return an env table with PYTHONPATH prefixed by root (and root/src if present).
+---@param root string
+---@param extra_paths? string[]
+---@return table<string,string>
+local function env_with_pythonpath(root, extra_paths)
+  local sep = package.config:sub(1, 1) == "\\" and ";" or ":"
+  local env = vim.fn.environ()
+  local entries = {}
+
+  if root and root ~= "" then
+    table.insert(entries, root)
+  end
+  local src = root and (root .. "/src") or nil
+  if src and vim.uv.fs_stat(src) then
+    table.insert(entries, src)
+  end
+
+  if type(extra_paths) == "table" then
+    for _, p in ipairs(extra_paths) do
+      if p and p ~= "" then
+        table.insert(entries, p)
+      end
+    end
+  end
+
+  local prefix_path = table.concat(entries, sep)
+  env.PYTHONPATH = prefix_path .. (env.PYTHONPATH and (sep .. env.PYTHONPATH) or "")
+  return env
+end
+
 -- Add a keymap for toggling BasedPyright settings
 -- This toggles BasedPyright's typeCheckingMode between "basic" and "recommended"
 -- and additionally enables/disables inlay hints
@@ -73,6 +115,54 @@ return {
       -- Use the 'python3' so we always use the current environments debugpy interpreter
       -- be it from the current venv or globally
       require("dap-python").setup("python3")
+    end,
+  },
+  {
+    "mfussenegger/nvim-dap",
+    lazy = true,
+    opts = function()
+      local dap = require("dap")
+      dap.configurations.python = dap.configurations.python or {}
+
+      local NAME = "Python: Launch file (root PYTHONPATH)"
+
+      -- avoid duplicates on reload
+      local exists = false
+      for _, c in ipairs(dap.configurations.python) do
+        if c.name == NAME then
+          exists = true
+          break
+        end
+      end
+      if exists then
+        return
+      end
+
+      table.insert(dap.configurations.python, 1, {
+        type = "python",
+        request = "launch",
+        name = NAME,
+        program = "${file}",
+
+        -- make relative paths/logging resolve from repo root
+        cwd = function()
+          return project_root(0)
+        end,
+
+        -- ensure top-level packages are importable from any subdir
+        env = function()
+          return env_with_pythonpath(project_root(0))
+        end,
+
+        console = "integratedTerminal",
+        justMyCode = false,
+
+        -- Optional: honor a project .env if present
+        -- envFile = function()
+        --   local f = project_root(0) .. "/.env"
+        --   return vim.uv.fs_stat(f) and f or nil
+        -- end,
+      })
     end,
   },
 
