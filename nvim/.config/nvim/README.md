@@ -18,6 +18,7 @@ A modern, modular and highly opinionated Neovim configuration.
    - a [Nerd Font](https://www.nerdfonts.com/)
    - Treesitter CLI
    - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
+   - [luarocks](https://www.lua.org/start.html#installing)
    - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
    - [fzf](https://github.com/junegunn/fzf)
    - [ripgrep](https://github.com/BurntSushi/ripgrep)
@@ -521,6 +522,7 @@ return {
    - a [Nerd Font](https://www.nerdfonts.com/)
    - Treesitter CLI
    - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
+   - [luarocks](https://www.lua.org/start.html#installing)
    - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
    - [fzf](https://github.com/junegunn/fzf)
    - [ripgrep](https://github.com/BurntSushi/ripgrep)
@@ -583,6 +585,7 @@ Using homebrew:
 ```bash
 brew install neovim
 brew install git
+brew install luarocks
 brew install gcc  # or use xcode-select --install for macOS
 brew install curl
 brew install tree-sitter
