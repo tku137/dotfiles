@@ -5,11 +5,14 @@ icons = {
   misc = {
     dots = "󰇘",
     comp = " ",
+    lan = "󰌗",
+    localhost = "󰌢",
   },
   ft = {
     octo = "",
     git = "󰊢",
     devcontainer = "",
+    angular = "󰚲",
   },
   statusline = {
     root = "󱉭",

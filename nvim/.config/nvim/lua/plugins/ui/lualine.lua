@@ -10,6 +10,15 @@ local project_root = {
   color = { fg = colors.blue },
 }
 
+-- Helper function to check if an ng serve terminal is running
+local function ng_running(term)
+  if not term or not term.job_id or term.job_id <= 0 then
+    return false
+  end
+  local s = vim.fn.jobwait({ term.job_id }, 0)[1]
+  return s == -1 -- still running
+end
+
 -- Filetype-based condition functions for lualine components
 -- Provides helpers to show/hide components based on current buffer's filetype
 local cond = require("utils.ft_helpers")
@@ -123,6 +132,25 @@ return {
       },
       lualine_x = {
         Snacks.profiler.status(),
+        {
+          function()
+            local parts = {}
+            if ng_running(_G._NG_SERVE) then
+              table.insert(parts, icons.misc.localhost)
+            end
+            if ng_running(_G._NG_SERVE_LAN) then
+              table.insert(parts, icons.misc.lan)
+            end
+            if #parts == 0 then
+              return ""
+            end
+            return icons.ft.angular .. " " .. table.concat(parts, " ")
+          end,
+          color = function()
+            return { fg = colors.orange }
+          end,
+          padding = { left = 1, right = 1 },
+        },
         {
           "copilot",
           symbols = {
