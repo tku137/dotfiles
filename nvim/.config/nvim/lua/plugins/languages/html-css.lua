@@ -54,48 +54,6 @@ return {
     ft = { "html", "css", "scss", "less", "postcss", "javascript", "typescript", "javascriptreact", "typescriptreact" },
   },
 
-  -- Enhanced Tailwind CSS support
-  {
-    "luckasRanarison/tailwind-tools.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    ft = {
-      "html",
-      "css",
-      "scss",
-      "less",
-      "postcss",
-      "javascript",
-      "typescript",
-      "javascriptreact",
-      "typescriptreact",
-      "vue",
-      "svelte",
-    },
-    keys = {
-      { prefix .. "t", "<cmd>TailwindConcealToggle<cr>", desc = "Toggle Tailwind concealing" },
-      { prefix .. "s", "<cmd>TailwindSort<cr>", desc = "Sort Tailwind classes", mode = { "n", "v" } },
-      { prefix .. "n", "<cmd>TailwindNextClass<cr>", desc = "Next Tailwind class" },
-      { prefix .. "p", "<cmd>TailwindPrevClass<cr>", desc = "Previous Tailwind class" },
-    },
-    opts = {
-      document_color = {
-        enabled = true, -- can be toggled by commands
-        kind = "inline", -- "inline" | "foreground" | "background"
-        inline_symbol = "󰝤 ", -- only used in inline mode
-        debounce = 200, -- in milliseconds, only applied in insert mode
-      },
-      conceal = {
-        enabled = false, -- can be toggled by commands
-        min_length = nil, -- only conceal classes exceeding the provided length
-        symbol = "󱏿", -- only a single character is allowed
-        highlight = {
-          fg = "#38BDF8", -- text color
-        },
-      },
-      custom_filetypes = {}, -- see the extension section to learn how it works
-    },
-  },
-
   -- Color preview and picker
   {
     "uga-rosa/ccc.nvim",
