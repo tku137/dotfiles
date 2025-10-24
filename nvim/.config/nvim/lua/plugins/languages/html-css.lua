@@ -119,12 +119,19 @@ return {
       "formatters_by_ft.postcss",
     },
     opts = {
+      formatters = {
+        prettier_tailwind = {
+          command = "prettier",
+          args = { "--plugin", "prettier-plugin-tailwindcss", "--stdin-filepath", "$FILENAME" },
+          stdin = true,
+        },
+      },
       formatters_by_ft = {
-        html = { "prettierd", "prettier", stop_after_first = true },
-        css = { "prettierd", "prettier", stop_after_first = true },
-        scss = { "prettierd", "prettier", stop_after_first = true },
-        less = { "prettierd", "prettier", stop_after_first = true },
-        postcss = { "prettierd", "prettier", stop_after_first = true },
+        html = { "prettierd", "prettier_tailwind", stop_after_first = true },
+        css = { "prettierd", "prettier_tailwind", stop_after_first = true },
+        scss = { "prettierd", "prettier_tailwind", stop_after_first = true },
+        less = { "prettierd", "prettier_tailwind", stop_after_first = true },
+        postcss = { "prettierd", "prettier_tailwind", stop_after_first = true },
       },
     },
   },
