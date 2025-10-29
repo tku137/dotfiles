@@ -1,7 +1,6 @@
--- Everything related to AI plugins, such as Copilot, Avante, etc.
+-- Everything related to AI plugins, such as Copilot, CodeCompanion, MCPHub, etc.
 
 -- Where AI plugin keymaps should be put
--- avante.nvim now uses this as default, so we dont need to override default mappings
 local prefix = "<Leader>a"
 
 return {
@@ -36,28 +35,15 @@ return {
     "saghen/blink.cmp",
     dependencies = {
       { "fang2hou/blink-copilot", lazy = true },
-      { "Kaiser-Yang/blink-cmp-avante", lazy = true },
     },
     opts = {
       sources = {
-        default = { "copilot", "avante" },
+        default = { "copilot" },
         providers = {
           copilot = {
             name = "copilot",
             module = "blink-copilot",
             score_offset = 100,
-            async = true,
-          },
-          avante = {
-            module = "blink-cmp-avante",
-            name = "Avante",
-            enabled = function()
-              return vim.tbl_contains({ "AvanteInput" }, vim.bo.filetype)
-            end,
-            opts = {
-              -- options for blink-cmp-avante
-            },
-            score_offset = -40,
             async = true,
           },
         },
@@ -76,12 +62,6 @@ return {
           GIT_ROOT = require("utils.helpers").git_root(),
           DEFAULT_MINIMUM_TOKENS = 6000,
         },
-        extensions = {
-          avante = {
-            enabled = true,
-            make_slash_commands = true, -- make /slash commands from MCP server prompts
-          },
-        },
       })
     end,
     keys = {
@@ -94,102 +74,76 @@ return {
     },
   },
   {
-    "yetone/avante.nvim",
+    "olimorris/codecompanion.nvim",
     event = "VeryLazy",
     lazy = true,
-    version = false, -- set this if you want to always pull the latest change
-    opts = {
-      -- add any opts here
-      behaviour = {
-        auto_suggestions = false,
-      },
-      provider = "copilot",
-      providers = {
-        copilot = {
-          model = "gpt-5",
-          timeout = 30000, -- Timeout in milliseconds
-          context_window = 64000, -- Number of tokens to send to the model for context
-          extra_request_body = {
-            temperature = 0.75,
-            max_tokens = 20480,
-          },
-        },
-        claude = {
-          model = "claude-sonnet-4.5",
-          timeout = 30000, -- Timeout in milliseconds
-          context_window = 200000,
-          extra_request_body = {
-            temperature = 0.75,
-            max_tokens = 64000,
-          },
-        },
-      },
-      -- system_prompt as function ensures LLM always has latest MCP server state
-      -- This is evaluated for every message, even in existing chats
-      system_prompt = function()
-        local hub = require("mcphub").get_hub_instance()
-        return hub and hub:get_active_servers_prompt() or ""
-      end,
-      -- Using function prevents requiring mcphub before it's loaded
-      custom_tools = function()
-        return {
-          require("mcphub.extensions.avante").mcp_tool(),
-        }
-      end,
-      disabled_tools = {
-        -- Provided by default Neovim server
-        -- INFO: These are kept enabled in favor of the
-        -- MUCH faster avante built-in tools
-        -- "list_files",
-        -- "search_files",
-        -- "read_file",
-        -- "create_file",
-        -- "rename_file",
-        -- "delete_file",
-        -- "create_dir",
-        -- "rename_dir",
-        -- "delete_dir",
-        -- "bash",
-
-        -- Provided by fetch and duckduckgo
-        -- Disabling enforces duckduckgo usage
-        "web_search",
-      },
-    },
-    keys = {
-      {
-        prefix .. "P",
-        "<Cmd>AvanteSwitchProvider<CR>",
-        desc = "avante: switch provider",
-        mode = "n",
-      },
-    },
-    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    -- dynamically build it, taken from astronvim
-    build = vim.fn.has("win32") == 1 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
-      or "make",
     dependencies = {
-      "nvim-treesitter/nvim-treesitter",
       "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "ravitemer/mcphub.nvim",
       "folke/snacks.nvim",
-      {
-        -- support for image pasting
-        "HakonHarnes/img-clip.nvim",
-        event = "VeryLazy",
-        opts = {
-          -- recommended settings
-          default = {
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
+    },
+    opts = {
+      -- adapters and models
+      strategies = {
+        chat = {
+          adapter = {
+            name = "copilot",
+            model = "gpt-5",
+          },
+        },
+        inline = {
+          adapter = {
+            name = "copilot",
+            model = "gpt-5",
+          },
+          -- keymaps for inline diff accept/reject
+          keymaps = {
+            accept_change = { modes = { "n" }, keys = "ga", description = "Accept inline change" },
+            reject_change = {
+              modes = { "n" },
+              keys = "gr",
+              opts = { nowait = true },
+              description = "Reject inline change",
             },
-            -- required for Windows users
-            use_absolute_path = true,
           },
         },
       },
+
+      -- register MCP Hub as a CodeCompanion extension (official integration)
+      extensions = {
+        mcphub = {
+          callback = "mcphub.extensions.codecompanion",
+          opts = {
+            -- expose MCP resources as #{mcp:*} variables
+            make_vars = true,
+            -- add MCP prompts as /mcp:* slash commands
+            make_slash_commands = true,
+            -- show MCP tool results directly in chat
+            show_result_in_chat = true,
+            -- convert MCP servers and tools to CodeCompanion tools/groups
+            make_tools = true,
+            -- optionally show each server tool individually in chat UI
+            show_server_tools_in_chat = true,
+            -- add_mcp_prefix_to_tool_names = false,
+          },
+        },
+      },
+
+      -- UI preferences
+      display = {
+        action_palette = { provider = "snacks" },
+      },
+    },
+
+    keys = {
+      { prefix .. "a", "<cmd>CodeCompanionActions<cr>", desc = "codecompanion: actions", mode = { "n", "v" } },
+      { prefix .. "c", "<cmd>CodeCompanionChat Toggle<cr>", desc = "codecompanion: chat toggle", mode = { "n", "v" } },
+      { prefix .. "A", "<cmd>CodeCompanionChat Add<cr>", desc = "codecompanion: add selection to chat", mode = "v" },
+      { prefix .. "i", "<cmd>CodeCompanion<cr>", desc = "codecompanion: inline assistant", mode = { "n", "v" } },
+      { prefix .. "e", ":'<,'>CodeCompanion /explain<cr>", desc = "cc: explain selection", mode = "v" },
+      { prefix .. "f", ":'<,'>CodeCompanion /fix<cr>", desc = "cc: fix selection", mode = "v" },
+      { prefix .. "t", ":'<,'>CodeCompanion /tests<cr>", desc = "cc: gen tests (vis)", mode = "v" },
     },
   },
 }
