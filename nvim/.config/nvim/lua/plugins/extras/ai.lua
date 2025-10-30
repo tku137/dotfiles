@@ -163,6 +163,38 @@ return {
       display = {
         action_palette = { provider = "snacks" },
       },
+
+      prompt_library = {
+        ["Search then answer"] = {
+          strategy = "chat",
+          description = "Search (web/MCP) first, then answer",
+          prompt = [[First, gather information, then answer.
+
+You may use:
+- @{mcp} for project/services/tools
+- @{all_the_tools} to access files
+- search_web / fetch_webpage for external sources
+
+Steps:
+1. Collect sources (tools)
+2. Synthesize
+3. Answer in Markdown with links/titles from sources]],
+        },
+
+        ["Summarize changes"] = {
+          strategy = "chat",
+          description = "Summarize current changes made by LLM for a human",
+          prompt = [[You will get code changes (diffs or edited files).
+
+Summarize them in this format:
+- What changed (bullets)
+- Why it was changed (guess if needed)
+- Risk level (low/med/high)
+- Follow-up tasks
+
+Keep it short.]],
+        },
+      },
     },
 
     keys = {
