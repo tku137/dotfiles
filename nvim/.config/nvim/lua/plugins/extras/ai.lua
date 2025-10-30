@@ -166,13 +166,15 @@ return {
     },
 
     keys = {
-      { prefix .. "a", "<cmd>CodeCompanionActions<cr>", desc = "codecompanion: actions", mode = { "n", "v" } },
-      { prefix .. "c", "<cmd>CodeCompanionChat Toggle<cr>", desc = "codecompanion: chat toggle", mode = { "n", "v" } },
-      { prefix .. "A", "<cmd>CodeCompanionChat Add<cr>", desc = "codecompanion: add selection to chat", mode = "v" },
-      { prefix .. "i", "<cmd>CodeCompanion<cr>", desc = "codecompanion: inline assistant", mode = { "n", "v" } },
-      { prefix .. "e", ":'<,'>CodeCompanion /explain<cr>", desc = "cc: explain selection", mode = "v" },
-      { prefix .. "f", ":'<,'>CodeCompanion /fix<cr>", desc = "cc: fix selection", mode = "v" },
-      { prefix .. "t", ":'<,'>CodeCompanion /tests<cr>", desc = "cc: gen tests (vis)", mode = "v" },
+      { prefix .. "a", "<cmd>CodeCompanionActions<cr>", desc = "actions", mode = { "n", "v" } },
+      { prefix .. "c", "<cmd>CodeCompanionChat Toggle<cr>", desc = "chat toggle", mode = { "n", "v" } },
+      { prefix .. "A", "<cmd>CodeCompanionChat Add<cr>", desc = "add selection to chat", mode = "v" },
+      { prefix .. "B", "<cmd>CodeCompanionChat Add<cr>", desc = "add current buffer to chat", mode = "n" },
+      { prefix .. "i", "<cmd>CodeCompanion<cr>", desc = "inline assistant", mode = { "n", "v" } },
+      { prefix .. "e", ":'<,'>CodeCompanion /explain<cr>", desc = "explain selection", mode = "v" },
+      { prefix .. "f", ":'<,'>CodeCompanion /fix<cr>", desc = "fix selection", mode = "v" },
+      { prefix .. "t", ":'<,'>CodeCompanion /tests<cr>", desc = "gen tests (vis)", mode = "v" },
+      { prefix .. "R", "<cmd>CodeCompanionChat RefreshCache<cr>", desc = "refresh tool cache", mode = "n" },
     },
   },
 }
