@@ -60,7 +60,7 @@ return {
       require("mcphub").setup({
         global_env = {
           GIT_ROOT = require("utils.helpers").git_root(),
-          DEFAULT_MINIMUM_TOKENS = 6000,
+          DEFAULT_MINIMUM_TOKENS = "6000",
         },
       })
     end,
