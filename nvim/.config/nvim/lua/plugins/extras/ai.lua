@@ -130,16 +130,6 @@ return {
             name = "copilot",
             model = "gpt-5",
           },
-          -- keymaps for inline diff accept/reject
-          keymaps = {
-            accept_change = { modes = { "n" }, keys = "ga", description = "Accept inline change" },
-            reject_change = {
-              modes = { "n" },
-              keys = "gr",
-              opts = { nowait = true },
-              description = "Reject inline change",
-            },
-          },
         },
       },
 
@@ -167,7 +157,8 @@ return {
       display = {
         action_palette = { provider = "snacks" },
         chat = {
-          show_settings = true,
+          -- needs to be false, otherwise cant switch adapters :rolleyes:
+          show_settings = false,
           show_context = true,
         },
       },
