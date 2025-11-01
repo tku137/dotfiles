@@ -92,22 +92,26 @@ return {
             model = "gpt-5",
           },
           tools = {
-            -- core bundle with most of CCs tools
-            "full_stack_dev",
+            opts = {
+              default_tools = {
+                -- core bundle with most of CCs tools
+                "full_stack_dev",
 
-            -- MCP tools (auto-generated, see below)
-            "mcp",
+                -- MCP tools (auto-generated, see below)
+                "mcp",
 
-            -- web stuff
-            "search_web",
-            "fetch_webpage",
+                -- web stuff
+                "search_web",
+                "fetch_webpage",
 
-            -- nice to have, maybe
-            "next_edit_suggestion",
+                -- nice to have, maybe
+                "next_edit_suggestion",
+              },
+            },
 
             groups = {
               -- one group to rule them all :)
-              all_the_tools = {
+              ["all_the_tools"] = {
                 description = "All CC tools + MCP + web",
                 tools = {
                   "full_stack_dev",
