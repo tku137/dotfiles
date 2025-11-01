@@ -166,6 +166,10 @@ return {
       -- UI preferences
       display = {
         action_palette = { provider = "snacks" },
+        chat = {
+          show_settings = true,
+          show_context = true,
+        },
       },
 
       prompt_library = {
