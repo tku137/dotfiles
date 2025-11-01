@@ -105,7 +105,7 @@ return {
                 "fetch_webpage",
 
                 -- nice to have, maybe
-                "next_edit_suggestion",
+                -- "next_edit_suggestion",
               },
             },
 
