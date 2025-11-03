@@ -613,7 +613,7 @@ mise use -g lazygit@latest
 Other than basic packages, the following might be relevant to versioning, for example formatters, so it is advised to use something like mise to be able to have consistent tooling across projects.
 
 > [!WARNING]
-> Postgrestools and debugpy are not available with homebrew!
+> Postgrestools and debugpy are not available with homebrew! Recommended install method for vectorcode is uv!
 
 ```bash
 brew install ruff basedpyright llvm lua-language-server marksman vscode-langservers-extracted jsonlint yaml-language-server tinymist texlab fish-lsp sql-language-server stylua prettier prettierd typstyle taplo sqlfluff biome typescript ipython
