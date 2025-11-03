@@ -110,7 +110,7 @@ Language-specific configurations:
 
 Optional plugins for extended functionality:
 
-- **`ai.lua`** - AI integration (Copilot, Avante)
+- **`ai.lua`** - AI integration (Copilot, CodeCompanion)
 - **`git.lua`** - Advanced Git tools like Neogit, DiffView, `.gitignore` generation
 - **`surround.lua`** - Text object surrounding
 - **`yank.lua`** - Enhanced clipboard functionality
@@ -569,6 +569,8 @@ return {
      - **live-server** - HTML development server (`mise use -g npm:live-server@latest`)
    - **Additional Tools:**
      - **ipython** - Interactive Python REPL (`brew install ipython` or `mise use -g pipx:ipython@latest`)
+     - **mcp-hub** - used by CodeCompanion, provides MCP server management (`mise use -g npm:mcp-hub@latest`)
+     - **vectorcode** - used by CodeCompanion, provides efficient codebase indexing (`uv tool install "vectorcode<1.0.0"` or `mise use -g pipx:vectorcode@latest`)
      - **pplatex** - latex error parsing (optional, for vimtex)
      - **uv** - python package manager (used by dap-python for auto-detection)
      - **typescript** - TypeScript compiler (`brew install typescript` or `mise use -g npm:typescript@latest`)
@@ -615,10 +617,11 @@ Other than basic packages, the following might be relevant to versioning, for ex
 
 ```bash
 brew install ruff basedpyright llvm lua-language-server marksman vscode-langservers-extracted jsonlint yaml-language-server tinymist texlab fish-lsp sql-language-server stylua prettier prettierd typstyle taplo sqlfluff biome typescript ipython
+uv tool install "vectorcode<1.0.0"
 ```
 
 ```bash
-mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest
+mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest pipx:vectorcode@latest
 ```
 
 ## Troubleshooting

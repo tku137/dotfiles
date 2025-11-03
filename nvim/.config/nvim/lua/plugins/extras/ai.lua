@@ -55,7 +55,6 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
-    build = "npm install -g mcp-hub@latest", -- Installs `mcp-hub` node binary globally
     config = function()
       require("mcphub").setup({
         global_env = {
@@ -72,6 +71,11 @@ return {
         mode = "n",
       },
     },
+  },
+  {
+    "Davidyz/VectorCode",
+    version = "*", -- optional, depending on whether you're on nightly or release
+    dependencies = { "nvim-lua/plenary.nvim" },
   },
   {
     "olimorris/codecompanion.nvim",
