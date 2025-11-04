@@ -140,6 +140,13 @@ return {
   {
     "mfussenegger/nvim-lint",
     optional = true,
+    opts_extend = {
+      "linters_by_ft.html",
+      "linters_by_ft.css",
+      "linters_by_ft.scss",
+      "linters_by_ft.less",
+      "linters_by_ft.postcss",
+    }, -- important to convince lazy.nvim to merge this!
     opts = {
       linters_by_ft = {
         html = { "htmlhint" },
