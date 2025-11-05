@@ -259,21 +259,14 @@ window-minimum-width: 0
 
 # List of bundle identifiers for applications to either be automatically floating or automatically tiled based on floating-is-blacklist (default []).
 floating:
-  - com.apple.Preview
-  - com.apple.QuickTimePlayerX
-  - com.apple.systempreferences
-  - com.apple.SystemSettings
-  - com.apple.Music
-  - com.apple.ScreenCaptureUI
-  - com.1password.1password
-  - net.whatsapp.WhatsApp
-  - org.whispersystems.signal-desktop
-  - com.witt-software.PDF-Squeezer
-  - md.obsidian
-  - com.macitbetter.betterzip
+  - com.apple.finder
+  - com.vivaldi.Vivaldi
+  - com.mitchellh.ghostty
+  - com.coteditor.CotEditor
+  - com.apple.TextEdit
 
 # Boolean flag determining behavior of the floating list. true if the applications should be floating and all others tiled. false if the applications should be tiled and all others floating (default true).
-floating-is-blacklist: true
+floating-is-blacklist: false
 
 # true if screen frames should exclude the status bar. false if the screen frames should include the status bar (default false).
 ignore-menu-bar: false

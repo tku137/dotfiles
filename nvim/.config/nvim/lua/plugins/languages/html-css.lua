@@ -54,48 +54,6 @@ return {
     ft = { "html", "css", "scss", "less", "postcss", "javascript", "typescript", "javascriptreact", "typescriptreact" },
   },
 
-  -- Enhanced Tailwind CSS support
-  {
-    "luckasRanarison/tailwind-tools.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    ft = {
-      "html",
-      "css",
-      "scss",
-      "less",
-      "postcss",
-      "javascript",
-      "typescript",
-      "javascriptreact",
-      "typescriptreact",
-      "vue",
-      "svelte",
-    },
-    keys = {
-      { prefix .. "t", "<cmd>TailwindConcealToggle<cr>", desc = "Toggle Tailwind concealing" },
-      { prefix .. "s", "<cmd>TailwindSort<cr>", desc = "Sort Tailwind classes", mode = { "n", "v" } },
-      { prefix .. "n", "<cmd>TailwindNextClass<cr>", desc = "Next Tailwind class" },
-      { prefix .. "p", "<cmd>TailwindPrevClass<cr>", desc = "Previous Tailwind class" },
-    },
-    opts = {
-      document_color = {
-        enabled = true, -- can be toggled by commands
-        kind = "inline", -- "inline" | "foreground" | "background"
-        inline_symbol = "󰝤 ", -- only used in inline mode
-        debounce = 200, -- in milliseconds, only applied in insert mode
-      },
-      conceal = {
-        enabled = false, -- can be toggled by commands
-        min_length = nil, -- only conceal classes exceeding the provided length
-        symbol = "󱏿", -- only a single character is allowed
-        highlight = {
-          fg = "#38BDF8", -- text color
-        },
-      },
-      custom_filetypes = {}, -- see the extension section to learn how it works
-    },
-  },
-
   -- Color preview and picker
   {
     "uga-rosa/ccc.nvim",
@@ -161,12 +119,19 @@ return {
       "formatters_by_ft.postcss",
     },
     opts = {
+      formatters = {
+        prettier_tailwind = {
+          command = "prettier",
+          args = { "--plugin", "prettier-plugin-tailwindcss", "--stdin-filepath", "$FILENAME" },
+          stdin = true,
+        },
+      },
       formatters_by_ft = {
-        html = { "prettierd", "prettier", stop_after_first = true },
-        css = { "prettierd", "prettier", stop_after_first = true },
-        scss = { "prettierd", "prettier", stop_after_first = true },
-        less = { "prettierd", "prettier", stop_after_first = true },
-        postcss = { "prettierd", "prettier", stop_after_first = true },
+        html = { "prettierd", "prettier_tailwind", stop_after_first = true },
+        css = { "prettierd", "prettier_tailwind", stop_after_first = true },
+        scss = { "prettierd", "prettier_tailwind", stop_after_first = true },
+        less = { "prettierd", "prettier_tailwind", stop_after_first = true },
+        postcss = { "prettierd", "prettier_tailwind", stop_after_first = true },
       },
     },
   },
@@ -175,6 +140,13 @@ return {
   {
     "mfussenegger/nvim-lint",
     optional = true,
+    opts_extend = {
+      "linters_by_ft.html",
+      "linters_by_ft.css",
+      "linters_by_ft.scss",
+      "linters_by_ft.less",
+      "linters_by_ft.postcss",
+    }, -- important to convince lazy.nvim to merge this!
     opts = {
       linters_by_ft = {
         html = { "htmlhint" },

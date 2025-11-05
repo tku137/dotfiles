@@ -18,6 +18,7 @@ A modern, modular and highly opinionated Neovim configuration.
    - a [Nerd Font](https://www.nerdfonts.com/)
    - Treesitter CLI
    - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
+   - [luarocks](https://www.lua.org/start.html#installing)
    - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
    - [fzf](https://github.com/junegunn/fzf)
    - [ripgrep](https://github.com/BurntSushi/ripgrep)
@@ -521,6 +522,7 @@ return {
    - a [Nerd Font](https://www.nerdfonts.com/)
    - Treesitter CLI
    - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
+   - [luarocks](https://www.lua.org/start.html#installing)
    - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
    - [fzf](https://github.com/junegunn/fzf)
    - [ripgrep](https://github.com/BurntSushi/ripgrep)
@@ -569,7 +571,7 @@ return {
      - **live-server** - HTML development server (`mise use -g npm:live-server@latest`)
    - **Additional Tools:**
      - **ipython** - Interactive Python REPL (`brew install ipython` or `mise use -g pipx:ipython@latest`)
-     - **mcp-hub** - used by CodeCompanion, provides MCP server management (`mise use -g npm:mcp-hub@latest`)
+     - **mcp-hub** - MCP Hub management and server interface (`mise use -g npm:mcp-hub@latest`)
      - **vectorcode** - used by CodeCompanion, provides efficient codebase indexing (`uv tool install "vectorcode<1.0.0"` or `mise use -g pipx:vectorcode@latest`)
      - **pplatex** - latex error parsing (optional, for vimtex)
      - **uv** - python package manager (used by dap-python for auto-detection)
@@ -585,6 +587,7 @@ Using homebrew:
 ```bash
 brew install neovim
 brew install git
+brew install luarocks
 brew install gcc  # or use xcode-select --install for macOS
 brew install curl
 brew install tree-sitter
@@ -621,7 +624,7 @@ uv tool install "vectorcode<1.0.0"
 ```
 
 ```bash
-mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest pipx:vectorcode@latest
+mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest
 ```
 
 ## Troubleshooting
