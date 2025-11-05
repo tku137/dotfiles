@@ -514,6 +514,35 @@ return {
 - **Project Root Detection**: Smart project and git root discovery functions for consistent workspace navigation (`helpers.project_root()`, `helpers.git_root()`)
 - **Filetype-Aware UI Components**: Conditional lualine components with filetype-based visibility logic for cleaner status line management (`ft_helpers.is_ft()`, `ft_helpers.is_not_ft()`)
 
+## Notes
+
+### Using vectorcode for CodeCompanion
+
+> [!INFO]
+> It is recommended to use vectorcode for larger codebases. It will have a negligible impact on small projects and imo is not worth the maintenance hassle.
+
+See the vectorcode [CLI](https://github.com/Davidyz/VectorCode/blob/main/docs/cli.md) and [plugin](https://github.com/Davidyz/VectorCode/blob/main/docs/neovim/README.md) docs. Quick reference:
+
+```bash
+vectorcode init
+vectorcode vectorise "src/**/*.{py,toml,md}" "lua/**/*.lua" "pyproject.toml"
+```
+
+Use this git hook to automatically index your codebase with vectorcode:
+
+```bash
+# .pre-commit-config.yaml
+repos:
+  - repo: local
+    hooks:
+      - id: vectorcode-vectorise
+        name: vectorcode: index staged changes
+        entry: vectorcode vectorise
+        language: system
+        pass_filenames: true
+        stages: [pre-commit]
+```
+
 ## Prerequisites
 
 1. **Prerequisites**:
@@ -625,6 +654,7 @@ uv tool install "vectorcode<1.0.0"
 
 ```bash
 mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest
+uv tool install "vectorcode<1.0.0"
 ```
 
 ## Troubleshooting
