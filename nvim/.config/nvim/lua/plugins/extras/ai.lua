@@ -137,8 +137,8 @@ return {
         },
       },
 
-      -- register MCP Hub as a CodeCompanion extension (official integration)
       extensions = {
+        -- register MCP Hub as a CodeCompanion extension (official integration)
         mcphub = {
           callback = "mcphub.extensions.codecompanion",
           opts = {
@@ -153,6 +153,26 @@ return {
             -- optionally show each server tool individually in chat UI
             show_server_tools_in_chat = true,
             -- add_mcp_prefix_to_tool_names = false,
+          },
+        },
+        -- register VectorCode as a CodeCompanion extension
+        vectorcode = {
+          opts = {
+            add_tool = true,
+            add_slash_command = true,
+          },
+          tool_opts = {
+            -- configure all tools with common settings
+            ["*"] = {
+              requires_approval = false,
+              include_in_toolbox = true,
+            },
+            -- specific config for querying vectorcode DB
+            query = {
+              chunk_mode = false,
+              max_num = 10, -- max files to retrieve
+              default_num = 5, -- default files to retrieve
+            },
           },
         },
       },
