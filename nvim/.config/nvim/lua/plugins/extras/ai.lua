@@ -102,7 +102,8 @@ return {
                 "full_stack_dev",
 
                 -- MCP tools (auto-generated, see below)
-                "mcp",
+                -- WARN: incompatible with GPT5
+                -- "mcp",
 
                 -- web stuff
                 "search_web",
@@ -119,7 +120,8 @@ return {
                 description = "All CC tools + MCP + web",
                 tools = {
                   "full_stack_dev",
-                  "mcp",
+                  -- WARN: incompatible with GPT5
+                  -- "mcp",
                   "search_web",
                   "fetch_webpage",
                   "next_edit_suggestion",
