@@ -106,7 +106,7 @@ return {
                 -- "mcp",
 
                 -- web stuff
-                "search_web",
+                "web_search",
                 "fetch_webpage",
 
                 -- nice to have, maybe
