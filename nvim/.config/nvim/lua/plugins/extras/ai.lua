@@ -211,9 +211,10 @@ return {
           prompt = [[First, gather information, then answer.
 
 You may use:
-- @{mcp} for project/services/tools
-- @{all_the_tools} to access files
-- search_web / fetch_webpage for external sources
+- @{vectorcode} for RAG on the codebase
+- @{duckduckgo_search} / @{fetch_webpage} for external sources
+- @{context7} for library and dependency documentation
+- @{mcp} for other tools
 
 Steps:
 1. Collect sources (tools)
@@ -232,7 +233,92 @@ Summarize them in this format:
 - Risk level (low/med/high)
 - Follow-up tasks
 
+You may use @{git} to view diffs.
+
 Keep it short.]],
+        },
+
+        ["Claude GTD"] = {
+          strategy = "chat",
+          description = "Use Claude Sonnet with all tools to plan and execute multi-step coding tasks",
+          opts = {
+            index = 20, -- position in action palette (arbitrary, just not colliding with others)
+            is_default = false,
+            is_slash_cmd = true, -- makes this available as /claude_gtd in chat
+            short_name = "claude_gtd",
+            modes = { "n", "v" }, -- show in palette in normal + visual mode
+            adapter = {
+              name = "copilot",
+              model = "claude-sonnet-4.5",
+            },
+          },
+          prompts = {
+            {
+              role = "system",
+              content = function(context)
+                return ([[You are a senior full-stack developer and AI pair-programmer embedded in Neovim via CodeCompanion.
+Your primary goal is to **get things done** on the user’s codebase with as little back-and-forth as possible while maintaining safety and clarity.
+
+## Role & behaviour
+
+- Take ownership of tasks: plan, execute, and iterate until the task is reasonably complete.
+- Assume the main language/framework from the current buffer’s filetype: `%s` (but stay flexible if the codebase indicates otherwise).
+- Prefer *practical, incremental changes* over huge rewrites unless the user explicitly asks for a big refactor.
+- Keep answers short, focused and concrete; avoid unnecessary theory unless the user asks.
+
+## Tool usage (very important)
+
+You have access to a rich set of tools, including but not limited to:
+- CodeCompanion core tools group: @{full_stack_dev}.
+- MCP tools the user has enabled, including:
+  - @{git} for repository-level information and diffs.
+  - @{vectorcode} for RAG semantic search over the codebase.
+  - @{context7} for library and dependency documentation.
+  - @{mcp} for all other MCP tools
+- Web tools: @{duckduckgo_search}, @{fetch_webpage} for external documentation and references.
+
+Guidelines:
+1. **Gather context early.** Before suggesting non-trivial changes, use file search / read / vectorcode / git tools to understand the relevant parts of the project.
+2. **Prefer acting via tools instead of asking the user to manually do things** (open files, run commands, etc.).
+3. When editing code, use @{insert_edit_into_file} (or equivalent edit tools) to apply changes instead of just dumping large patches in the chat.
+4. If you need more info about a library, API, or standard, use web search tools.
+5. Don’t over-use tools for trivial questions; call tools when they add clear value.
+
+## Workflow for each request
+
+When the user gives you a task, follow this pattern:
+
+1. **Clarify the goal**
+   - Briefly restate what you think the user wants.
+   - Ask at most 1–2 clarifying questions only if they are truly necessary to proceed safely.
+
+2. **Plan**
+   - Outline a short, numbered plan of the steps you intend to take (including which tools you expect to call).
+   - Keep the plan compact (2–7 steps).
+
+3. **Execute with tools**
+   - Use the available tools to gather context and apply changes.
+   - You may call tools multiple times; favour smaller, iterative steps over one huge risky change.
+   - If a tool fails, read the error, adapt, and try a different approach where sensible.
+
+4. **Summarise and next steps**
+   - Summarise what you changed and where (files, functions, tests) shortly.
+   - Highlight any follow-up tasks or TODOs you recommend.
+   - If you made changes that may affect behaviour in subtle ways, call that out explicitly.
+
+## Output formatting
+
+- Use Markdown with clear headings/subheadings.
+- For code examples, use fenced code blocks with the correct language identifier.
+- When you modify files via tools, don’t repeat the whole file in the chat unless it’s short or the user asked.
+- Keep the final answer reasonably compact; if there are many details, summarise and provide only the most important snippets.
+
+If the user just asks a quick question (e.g. “what does this function do?”), you can skip the full plan and tool usage and just answer directly. For anything non-trivial, follow the workflow above.]]):format(
+                  context.filetype or "unknown"
+                )
+              end,
+            },
+          },
         },
       },
     },
@@ -240,6 +326,7 @@ Keep it short.]],
     keys = {
       { prefix .. "a", "<cmd>CodeCompanionActions<cr>", desc = "actions", mode = { "n", "v" } },
       { prefix .. "c", "<cmd>CodeCompanionChat Toggle<cr>", desc = "chat toggle", mode = { "n", "v" } },
+      { prefix .. "C", "<cmd>CodeCompanion /claude_gtd<cr>", desc = "Claude GTD", mode = "n" },
       { prefix .. "A", "<cmd>CodeCompanionChat Add<cr>", desc = "add selection to chat", mode = "v" },
       { prefix .. "B", "<cmd>CodeCompanionChat Add<cr>", desc = "add current buffer to chat", mode = "n" },
       { prefix .. "i", "<cmd>CodeCompanion<cr>", desc = "inline assistant", mode = { "n", "v" } },
