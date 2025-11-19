@@ -525,7 +525,19 @@ See the vectorcode [CLI](https://github.com/Davidyz/VectorCode/blob/main/docs/cl
 
 ```bash
 vectorcode init
-vectorcode vectorise "src/**/*.{py,toml,md}" "lua/**/*.lua" "pyproject.toml"
+vectorcode vectorise **/*.py
+```
+
+or multiple filetypes at once:
+
+```bash
+vectorcode vectorise **/*.{py,rs,ts,md}
+```
+
+or just vectorise _everything_ in the project:
+
+```bash
+vectorcode vectorise . -r
 ```
 
 Use this git hook to automatically index your codebase with vectorcode:
