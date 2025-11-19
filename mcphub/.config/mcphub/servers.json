@@ -40,7 +40,7 @@
         "${env:GIT_ROOT}"
       ],
       "command": "uvx",
-      "disabled": true
+      "disabled": false
     },
     "memory": {
       "args": [

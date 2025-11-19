@@ -93,7 +93,8 @@ return {
         chat = {
           adapter = {
             name = "copilot",
-            model = "gpt-5",
+            -- GPT-4.1 uses no copilot premium requests
+            model = "gpt-4.1",
           },
           tools = {
             opts = {
@@ -101,16 +102,14 @@ return {
                 -- core bundle with most of CCs tools
                 "full_stack_dev",
 
-                -- MCP tools (auto-generated, see below)
-                -- WARN: incompatible with GPT5
-                -- "mcp",
+                -- useful MCP servers
+                "git",
+                "vectorcode",
+                "context7",
 
                 -- web stuff
-                "web_search",
+                "duckduckgo_search",
                 "fetch_webpage",
-
-                -- nice to have, maybe
-                -- "next_edit_suggestion",
               },
             },
 
@@ -119,11 +118,26 @@ return {
               ["all_the_tools"] = {
                 description = "All CC tools + MCP + web",
                 tools = {
+                  -- core bundle with most of CCs tools
                   "full_stack_dev",
-                  -- WARN: incompatible with GPT5
-                  -- "mcp",
-                  "search_web",
+
+                  -- useful MCP servers
+                  -- NOTE: these are available in the mcp group,
+                  -- but we make them explicitly available here so
+                  -- the chat does not need to go through the @{mcp} tool
+                  -- to get to these very important ones
+                  "git",
+                  "vectorcode",
+                  "context7",
+
+                  -- meta-group containing all MCP server tools
+                  "mcp",
+
+                  -- web stuff
+                  "duckduckgo_search",
                   "fetch_webpage",
+
+                  -- probably nice to have?
                   "next_edit_suggestion",
                 },
                 opts = { collapse_tools = true },
@@ -134,7 +148,8 @@ return {
         inline = {
           adapter = {
             name = "copilot",
-            model = "gpt-5",
+            -- GPT-4.1 uses no copilot premium requests
+            model = "gpt-4.1",
           },
         },
       },
