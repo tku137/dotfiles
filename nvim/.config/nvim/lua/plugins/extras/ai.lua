@@ -208,7 +208,16 @@ return {
             -- Picker interface (auto resolved to a valid picker)
             picker = "snacks", --- ("telescope", "snacks", "fzf-lua", or "default")
             ---Optional filter function to control which chats are shown when browsing
-            chat_filter = nil, -- function(chat_data) return boolean end
+            chat_filter = function(chat_data)
+              -- only use chats from cwd
+              local same_cwd = (chat_data.cwd == vim.fn.getcwd())
+
+              -- only keep chats from last 14 days
+              local last_seven_days = os.time() - (14 * 24 * 60 * 60)
+              local is_recent = chat_data.updated_at ~= nil and chat_data.updated_at >= last_seven_days
+
+              return same_cwd and is_recent
+            end,
             -- Customize picker keymaps (optional)
             picker_keymaps = {
               rename = { n = "r", i = "<M-r>" },
@@ -219,11 +228,11 @@ return {
             auto_generate_title = true,
             title_generation_opts = {
               ---Adapter for generating titles (defaults to current chat adapter)
-              adapter = nil, -- "copilot"
+              adapter = "copilot", -- "copilot"
               ---Model for generating titles (defaults to current chat model)
-              model = nil, -- "gpt-4o"
+              model = "gpt-4.1", -- "gpt-4o"
               ---Number of user prompts after which to refresh the title (0 to disable)
-              refresh_every_n_prompts = 0, -- e.g., 3 to refresh after every 3rd user prompt
+              refresh_every_n_prompts = 3, -- e.g., 3 to refresh after every 3rd user prompt
               ---Maximum number of times to refresh the title (default: 3)
               max_refreshes = 3,
               format_title = function(original_title)
@@ -249,8 +258,8 @@ return {
               browse_summaries_keymap = "gbs",
 
               generation_opts = {
-                adapter = nil, -- defaults to current chat adapter
-                model = nil, -- defaults to current chat model
+                adapter = "copilot", -- defaults to current chat adapter
+                model = "gpt-4.1", -- defaults to current chat model
                 context_size = 90000, -- max tokens that the model supports
                 include_references = true, -- include slash command content
                 include_tool_outputs = true, -- include tool execution results
@@ -274,7 +283,7 @@ return {
               notify = true,
               -- Index all existing memories on startup
               -- (requires VectorCode 0.6.12+ for efficient incremental indexing)
-              index_on_startup = false,
+              index_on_startup = true,
             },
           },
         },
