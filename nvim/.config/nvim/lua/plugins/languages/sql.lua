@@ -1,3 +1,6 @@
+local prefix = "<localLeader>"
+local sql_ft = { "sql", "mysql", "plsql" }
+
 -- Add a keymap for toggling postgres_lsp
 -- This toggles postgres_lsp on/off to reduce clutter
 -- in projects where we do not use postgres sql files.
@@ -58,7 +61,82 @@ return {
       require("dbee").install()
     end,
     config = function()
-      require("dbee").setup(--[[optional config]])
+      require("dbee").setup({
+        result = {
+          mappings = {
+            -- next/previous page
+            { key = "L", mode = "", action = "page_next" },
+            { key = "H", mode = "", action = "page_prev" },
+            { key = "E", mode = "", action = "page_last" },
+            { key = "F", mode = "", action = "page_first" },
+
+            -- yank rows as csv/json
+            { key = prefix .. "j", mode = "n", action = "yank_current_json", opts = { desc = "copy row as JSON" } },
+            {
+              key = prefix .. "j",
+              mode = "v",
+              action = "yank_selection_json",
+              opts = { desc = "copy selection as JSON" },
+            },
+            { key = prefix .. "J", mode = "", action = "yank_all_json", opts = { desc = "copy all as JSON" } },
+            { key = prefix .. "c", mode = "n", action = "yank_current_csv", opts = { desc = "copy row as CSV" } },
+            {
+              key = prefix .. "c",
+              mode = "v",
+              action = "yank_selection_csv",
+              opts = { desc = "copy selection as CSV" },
+            },
+            { key = prefix .. "C", mode = "", action = "yank_all_csv", opts = { desc = "copy all as CSV" } },
+
+            -- cancel current call execution
+            { key = "<C-c>", mode = "", action = "cancel_call" },
+          },
+        },
+      })
     end,
+    keys = {
+      {
+        "<leader>D",
+        function()
+          require("dbee").toggle()
+        end,
+        desc = "DBee UI",
+      },
+    },
+  },
+  -- using blink.compat to get suggestions of this nvim-cmp source
+  {
+    "MattiasMTS/cmp-dbee",
+    dependencies = { "kndndrj/nvim-dbee" },
+    ft = sql_ft,
+    opts = {}, -- needed
+  },
+  {
+    "saghen/blink.cmp",
+    dependencies = {
+      {
+        "saghen/blink.compat",
+        version = "2.*",
+        lazy = true,
+        opts = {}, -- needed
+      },
+      { "MattiasMTS/cmp-dbee" },
+    },
+    opts = {
+      sources = {
+        default = { "dbee" },
+
+        providers = {
+          dbee = {
+            name = "cmp-dbee",
+            module = "blink.compat.source",
+            enabled = function()
+              return vim.tbl_contains(sql_ft, vim.bo.filetype)
+            end,
+            opts = {},
+          },
+        },
+      },
+    },
   },
 }
