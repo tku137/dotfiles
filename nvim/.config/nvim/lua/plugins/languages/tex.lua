@@ -128,13 +128,4 @@ return {
       -- { "dzd", "<Plug>(vimtex-delim-delete)", desc = "Delete Surrounding Delimiter", mode = { "n", "v" }, ft = "tex", },
     },
   },
-  {
-    "folke/which-key.nvim",
-    opts = {
-      spec = {
-        { mode = { "n", "v" }, { prefix, group = "VimTex" } },
-        -- INFO: TeX textobjects are defined in after/ftplugin/tex.lua
-      },
-    },
-  },
 }

@@ -49,6 +49,14 @@ return {
         hooks = {
           diff_buf_read = function(bufnr)
             vim.b[bufnr].view_activated = false
+            -- Register the group name for ALL DiffView file buffers
+            -- since they do not have a dedicated ft set
+            -- waiting 0ms ensures the buffer is fully loaded before we attach
+            vim.schedule(function()
+              require("which-key").add({
+                { "<localleader>", group = "DiffView", buffer = bufnr },
+              })
+            end)
           end,
         },
 

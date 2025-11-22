@@ -56,3 +56,9 @@ if pcall(require, "which-key") then
     { "aM", desc = "around item", mode = { "o", "x" }, buffer = true },
   })
 end
+
+local wk = require("which-key")
+
+wk.add({
+  { "<localleader>", group = "VimTex", buffer = 0 },
+})
