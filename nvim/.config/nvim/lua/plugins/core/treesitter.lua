@@ -1,9 +1,9 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    main = "nvim-treesitter.configs",
+    branch = "main",
     dependencies = {
-      { "nvim-treesitter/nvim-treesitter-textobjects", lazy = true },
+      { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main", lazy = true },
     },
     lazy = vim.fn.argc(-1) == 0, -- load treesitter immediately when opening a file from the cmdline
     event = { "BufReadPre", "BufNewFile" },
