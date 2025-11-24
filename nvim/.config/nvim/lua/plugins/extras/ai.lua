@@ -200,7 +200,7 @@ return {
             -- Keymap to open history from chat buffer (default: gh)
             keymap = "gh",
             -- Keymap to save the current chat manually (when auto_save is disabled)
-            save_chat_keymap = "sc",
+            save_chat_keymap = "gH",
             -- Save all chats by default (disable to save only manually using 'sc')
             auto_save = true,
             -- Number of days after which chats are automatically deleted (0 to disable)
@@ -253,9 +253,9 @@ return {
             -- Summary system
             summary = {
               -- Keymap to generate summary for current chat (default: "gcs")
-              create_summary_keymap = "gcs",
+              create_summary_keymap = "gZ",
               -- Keymap to browse summaries (default: "gbs")
-              browse_summaries_keymap = "gbs",
+              browse_summaries_keymap = "gz",
 
               generation_opts = {
                 adapter = "copilot", -- defaults to current chat adapter
