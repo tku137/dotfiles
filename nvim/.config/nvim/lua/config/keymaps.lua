@@ -207,7 +207,6 @@ map("n", "<leader>fg", function() Snacks.picker.git_files() end, { desc = "Find 
 map("n", "<leader>fp", function() Snacks.picker.projects() end, { desc = "Projects" })
 map("n", "<leader>fr", function() Snacks.picker.recent() end, { desc = "Recent" })
 map("n", "<leader>fz", function() Snacks.picker.zoxide() end, { desc = "Zoxide" })
----@diagnostic disable-next-line: missing-fields
 map("n", "<leader>fe", function() Snacks.explorer() end, { desc = "Snacks Explorer", })
 
 -- Search (grep related)
@@ -267,21 +266,24 @@ map("n", "<leader>S", function() Snacks.scratch.select() end, { desc = "Select S
 map("n", "<leader>dps", function() Snacks.profiler.scratch() end, { desc = "Profiler Scratch Buffer" })
 
 -- Git
-map("n", "<leader>gL", function() Snacks.picker.git_log() end, { desc = "Git Log (cwd)" })
 map("n", "<leader>gl", function() Snacks.picker.git_log({ cwd = require("utils.helpers").git_root() }) end, { desc = "Git Log" })
+map("n", "<leader>gL", function() Snacks.picker.git_log() end, { desc = "Git Log (cwd)" })
 map("n", "<leader>gb", function() Snacks.picker.git_log_line() end, { desc = "Git Blame Line" })
 map("n", "<leader>gf", function() Snacks.picker.git_log_file() end, { desc = "Git Current File History" })
 map("n", "<leader>gB", function() Snacks.picker.git_branches() end, { desc = "Git Branches" })
 map("n", "<leader>gs", function() Snacks.picker.git_status() end, { desc = "Git Status" })
 map("n", "<leader>gS", function() Snacks.picker.git_stash() end, { desc = "Git Stash" })
 map("n", "<leader>gd", function() Snacks.picker.git_diff() end, { desc = "Git Diff (Hunks)" })
+map("n", "<leader>gf", function() Snacks.picker.git_grep() end, { desc = "Grep in git files" })
+map("n", "<leader>gi", function() Snacks.picker.gh_issue() end, { desc = "GitHub Issues (open)" })
+map("n", "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, { desc = "GitHub Issues (all)" })
+map("n", "<leader>gp", function() Snacks.picker.gh_pr() end, { desc = "GitHub Pull Requests (open)" })
+map("n", "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, { desc = "GitHub Pull Requests (all)" })
 map({ "n", "x" }, "<leader>gO", function() Snacks.gitbrowse() end, { desc = "Git Browse (open)" })
----@diagnostic disable-next-line: missing-fields
 map({"n", "x" }, "<leader>gY", function() Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false }) end, { desc = "Git Browse (copy)" })
 
 -- Lazygit
 if vim.fn.executable("lazygit") == 1 then
----@diagnostic disable-next-line: missing-fields
   map("n", "<leader>gg", function() Snacks.lazygit( { cwd = require("utils.helpers").git_root() }) end, { desc = "Lazygit (Root Dir)" })
   map("n", "<leader>gG", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
 end
