@@ -7,6 +7,7 @@ icons = {
     comp = " ",
     lan = "󰌗",
     localhost = "󰌢",
+    running_animated   = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
   },
   ft = {
     octo = "",
@@ -21,6 +22,7 @@ icons = {
     debug = "  ",
     clock = " ",
     mcphub = " ",
+    lsp = " ",
   },
   dap = {
     Stopped             = { " ", "DiagnosticWarn", "DapStoppedLine" },
@@ -111,7 +113,6 @@ icons = {
     ["template argument"] = " ",
   },
   tests = {
-    running_animated   = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
     passed             = "󰗠 ",
     running            = "󰐌 ",
     failed             = "󰅙 ",

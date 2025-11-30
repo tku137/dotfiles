@@ -1,39 +1,12 @@
 local colors = require("tokyonight.colors").setup()
 local icons = require("config.icons")
-
 local Snacks = require("snacks")
 
-local project_root = {
-  require("utils.helpers").project_root,
-  icon = icons.statusline.root,
-  separator = icons.statusline.separator,
-  color = { fg = colors.blue },
-}
-
--- Helper function to check if an ng serve terminal is running
-local function ng_running(term)
-  if not term or not term.job_id or term.job_id <= 0 then
-    return false
-  end
-  local s = vim.fn.jobwait({ term.job_id }, 0)[1]
-  return s == -1 -- still running
-end
-
--- Filetype-based condition functions for lualine components
 -- Provides helpers to show/hide components based on current buffer's filetype
 local cond = require("utils.ft_helpers")
 
--- Returns formatted list of spell languages if spell checking is enabled.
-local function spell_status()
-  if vim.wo.spell then
-    local langs = vim.bo.spelllang or ""
-    langs = vim.trim(langs)
-    if langs ~= "" then
-      return langs
-    end
-  end
-  return nil
-end
+-- Provides helper functions for custom statusline components
+local sl = require("utils.statusline_helpers")
 
 -- Type annotation to silence luals
 ---@class NoiceStatus
@@ -59,9 +32,24 @@ return {
       disabled_filetypes = { statusline = { "snacks_dashboard" } },
     },
     sections = {
+
+      -- MODE
       lualine_a = { "mode" },
+
+      -- Name of project root directory
       lualine_b = {
+        {
+          require("utils.helpers").project_root,
+          icon = icons.statusline.root,
+          separator = icons.statusline.separator,
+          color = { fg = colors.blue },
+          cond = cond.is_not_picker_filetype(),
+        },
+
+        -- Git branch the project is on
         "branch",
+
+        -- Git status of the project
         {
           "diff",
           symbols = {
@@ -81,7 +69,24 @@ return {
           end,
         },
       },
+
+      -- PATH INDICATORS
+      -- guiding inside the project root up until the currently
+      -- open file and the current breadcrumb symbols
       lualine_c = {
+        -- mimicks LazyVims pretty path, deafult directory depths is 2
+        {
+          "pretty_path",
+          cond = cond.is_not_picker_filetype(),
+        },
+        -- shows file type
+        {
+          "filetype",
+          cond = cond.is_picker_filetype(),
+          icon_only = true,
+          colored = true,
+        },
+        -- Diagnostics indicators for current file
         {
           "diagnostics",
           symbols = {
@@ -90,24 +95,9 @@ return {
             info = icons.diagnostics.Info,
             hint = icons.diagnostics.Hint,
           },
-        },
-        {
-          "filetype",
-          cond = cond.is_picker_filetype(),
-          icon_only = true,
-          colored = true,
-        },
-        {
-          project_root[1],
-          icon = project_root.icon,
-          separator = project_root.separator,
-          color = project_root.color,
           cond = cond.is_not_picker_filetype(),
         },
-        {
-          "pretty_path",
-          cond = cond.is_not_picker_filetype(),
-        },
+        -- Symbols displayed as breadcrumbs
         {
           "aerial",
           sep = " ", -- separator between symbols
@@ -130,27 +120,33 @@ return {
           colored = true,
         },
       },
+
+      -- SPACE
+
       lualine_x = {
+
+        -- Show captured events when the profiler is running
         Snacks.profiler.status(),
+
+        -- TOOLING INDICATORS
+        -- These are tightly packed to save space
+        -- Show if ng serve is running for the current angular project:
         {
-          function()
-            local parts = {}
-            if ng_running(_G._NG_SERVE) then
-              table.insert(parts, icons.misc.localhost)
-            end
-            if ng_running(_G._NG_SERVE_LAN) then
-              table.insert(parts, icons.misc.lan)
-            end
-            if #parts == 0 then
-              return ""
-            end
-            return icons.ft.angular .. " " .. table.concat(parts, " ")
-          end,
-          color = function()
-            return { fg = colors.orange }
-          end,
+          sl.ng_status,
+          -- stylua: ignore
+          color = function() return { fg = colors.orange } end,
+          separator = "",
           padding = { left = 1, right = 1 },
         },
+        -- Show LSP status, spinner while loading, gear icon when connected:
+        {
+          sl.simple_lsp_status,
+          -- stylua: ignore
+          color = function() return { fg = colors.fg } end,
+          separator = "",
+          padding = { left = 1, right = 0 },
+        },
+        -- Show Copilot status:
         {
           "copilot",
           symbols = {
@@ -170,56 +166,15 @@ return {
           show_colors = true,
           show_loading = true,
           separator = "",
-          padding = { left = 1, right = 0 },
+          padding = { left = 0, right = 0 },
         },
+        -- Show MCPHub status:
         {
-          function()
-            -- Check if MCPHub is loaded
-            if not vim.g.loaded_mcphub then
-              return icons.statusline.mcphub .. "-"
-            end
-
-            local count = vim.g.mcphub_servers_count or 0
-            local status = vim.g.mcphub_status or "stopped"
-            local executing = vim.g.mcphub_executing
-
-            -- Show "-" when stopped
-            if status == "stopped" then
-              return icons.statusline.mcphub .. "-"
-            end
-
-            -- Show spinner when executing, starting, or restarting
-            if executing or status == "starting" or status == "restarting" then
-              local frames = icons.tests.running_animated
-              local frame = math.floor(vim.loop.now() / 100) % #frames + 1
-              return icons.statusline.mcphub .. frames[frame]
-            end
-
-            return icons.statusline.mcphub .. count
-          end,
-          color = function()
-            if not vim.g.loaded_mcphub then
-              return { fg = colors.comment } -- Gray for not loaded
-            end
-
-            local status = vim.g.mcphub_status or "stopped"
-            if status == "ready" or status == "restarted" then
-              return { fg = colors.green } -- Green for connected
-            elseif status == "starting" or status == "restarting" then
-              return { fg = colors.orange } -- Orange for connecting
-            else
-              return { fg = colors.red } -- Red for error/stopped
-            end
-          end,
-          padding = { left = 1, right = 1 },
+          sl.mcphub_status,
+          color = sl.mcphub_color,
+          padding = { left = 0, right = 1 },
         },
-        -- Displays showcmd
-        -- stylua: ignore
-        {
-          function() return require("noice").api.status.command.get() end,
-          cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-          color = function() return { fg = Snacks.util.color("Statement") } end,
-        },
+
         -- Displays showmode, for example macro recording
         -- stylua: ignore
         {
@@ -227,16 +182,17 @@ return {
           cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
           color = function() return { fg = Snacks.util.color("Constant") } end,
         },
+
         -- Spell status indicator
+        -- shows what languages are set for spellcheck
         -- stylua: ignore
         {
-          function()
-            local langs = spell_status()
-            return icons.statusline.spell .. langs
-          end,
-          cond = function() return spell_status() ~= nil end,
+          function() return icons.statusline.spell .. (sl.spell_status() or "") end,
+          cond = function() return sl.spell_status() ~= nil end,
           color = function() return { fg = Snacks.util.color("Statement") } end,
         },
+
+        -- Show DAP status
         -- stylua: ignore
         {
           function() return icons.statusline.debug .. require("dap").status() end,
@@ -244,10 +200,14 @@ return {
           color = function() return { fg = Snacks.util.color("Debug") } end,
         },
       },
+
+      -- Positional indicators
       lualine_y = {
         { "progress", separator = " ", padding = { left = 1, right = 0 } },
         { "location", padding = { left = 0, right = 1 } },
       },
+
+      -- Clock
       lualine_z = {
         function()
           return icons.statusline.clock .. os.date("%R")
