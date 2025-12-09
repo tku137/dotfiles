@@ -19,12 +19,26 @@
 ---     cond = function() return sl.spell_status() ~= nil end,
 ---   }
 ---
---- @module 'statusline_helpers'
+--- @module 'utils.statusline_helpers'
 
-local M = {}
+---@class NgTerm
+---@field job_id? integer
 
+---@class StatuslineHelpers
+---@field spell_status fun(): string|nil
+---@field simple_lsp_status fun(): string
+---@field mcphub_status fun(): string
+---@field mcphub_color fun(): { fg: string }
+---@field ng_status fun(): string
+local M = {} ---@type StatuslineHelpers
+
+---@type table<string, string>
 local colors = require("tokyonight.colors").setup()
+
+---@type table
 local icons = require("config.icons")
+
+local uv = vim.uv or vim.loop
 
 --------------------------------------------------------------------------------
 -- Internal helpers
@@ -32,7 +46,7 @@ local icons = require("config.icons")
 
 --- Helper to check if an `ng serve` terminal is running.
 --- Expects a terminal-like object with a `job_id` field.
---- @param term table|nil
+--- @param term NgTerm|nil
 --- @return boolean
 local function ng_running(term)
   if not term or not term.job_id or term.job_id <= 0 then
@@ -77,11 +91,12 @@ function M.simple_lsp_status()
     return ""
   end
 
-  -- Ignore some clients (e.g. copilot has its own component).
+  ---@type table<string, boolean>
   local ignore = {
     copilot = true,
   }
 
+  ---@type table[]
   local active_clients = {}
   for _, client in ipairs(clients) do
     if not ignore[client.name] then
@@ -107,9 +122,10 @@ function M.simple_lsp_status()
   end
 
   if has_progress then
+    ---@type string[]
     local frames = icons.misc.running_animated or { "⠋", "⠙", "⠹", "⠸" }
     ---@diagnostic disable-next-line: undefined-field
-    local idx = (math.floor(vim.loop.now() / 120) % #frames) + 1
+    local idx = (math.floor(uv.now() / 120) % #frames) + 1
     return frames[idx]
   end
 
@@ -133,6 +149,7 @@ function M.mcphub_status()
     return icons.statusline.mcphub .. "-"
   end
 
+  ---@type string
   local status = vim.g.mcphub_status or "stopped"
   local executing = vim.g.mcphub_executing
 
@@ -141,9 +158,10 @@ function M.mcphub_status()
   end
 
   if executing or status == "starting" or status == "restarting" then
+    ---@type string[]
     local frames = icons.misc.running_animated or { "⠋", "⠙", "⠹", "⠸" }
     ---@diagnostic disable-next-line: undefined-field
-    local frame = math.floor(vim.loop.now() / 100) % #frames + 1
+    local frame = math.floor(uv.now() / 100) % #frames + 1
     return icons.statusline.mcphub .. frames[frame]
   end
 
@@ -162,6 +180,7 @@ function M.mcphub_color()
     return { fg = colors.comment }
   end
 
+  ---@type string
   local status = vim.g.mcphub_status or "stopped"
   if status == "ready" or status == "restarted" then
     return { fg = colors.fg }
@@ -184,10 +203,16 @@ end
 --- @return string
 function M.ng_status()
   local parts = {}
-  if ng_running(_G._NG_SERVE) then
+
+  ---@type NgTerm|nil
+  local ng_local = _G._NG_SERVE
+  ---@type NgTerm|nil
+  local ng_lan = _G._NG_SERVE_LAN
+
+  if ng_running(ng_local) then
     table.insert(parts, icons.misc.localhost)
   end
-  if ng_running(_G._NG_SERVE_LAN) then
+  if ng_running(ng_lan) then
     table.insert(parts, icons.misc.lan)
   end
   if #parts == 0 then

@@ -41,24 +41,25 @@
 ---     "de_de",                        -- Language to set if pattern found
 ---     "en_us"                         -- Default fallback language
 ---   )
----
---- @module 'spell_utils'
+--- @module 'utils.spell_utils'
 
---- @class SpellUtils
---- @field toggle fun(): nil Toggle automatic spell language switching on/off
---- @field is_enabled fun(): boolean Check if automatic spell language switching is enabled
---- @field get_tinymist_main_file fun(): string|nil Get the main file for Typst projects via tinymist LSP
---- @field get_vimtex_main_file fun(): string|nil Get the main file for LaTeX projects via VimTeX
---- @field apply_spell_language fun(main_file: string|nil, pattern: string, header_lines: integer, desired_lang: string, default_lang?: string): nil Apply spell language based on pattern detection
-local M = {}
+---@class SpellUtils
+---@field toggle fun(): nil Toggle automatic spell language switching on/off
+---@field is_enabled fun(): boolean Check if automatic spell language switching is enabled
+---@field get_tinymist_main_file fun(): string|nil Get the main file for Typst projects via tinymist LSP
+---@field get_vimtex_main_file fun(): string|nil Get the main file for LaTeX projects via VimTeX
+---@field apply_spell_language fun(main_file: string|nil, pattern: string, header_lines: integer, desired_lang: string, default_lang?: string): nil Apply spell language based on pattern detection
+local M = {} ---@type SpellUtils
 
 -- Global flag for auto spell language switching (default is enabled)
---- @type boolean
+---@type boolean
 local auto_spell_switch_enabled = true
 
 --- Toggle the spell language auto switching on/off
+--- @return nil
 function M.toggle()
   auto_spell_switch_enabled = not auto_spell_switch_enabled
+  return nil
 end
 
 --- Return the current state of auto spell language switching
@@ -68,6 +69,8 @@ function M.is_enabled()
 end
 
 -- Caching setup
+
+---@type table<integer, string>
 local main_file_cache = setmetatable({}, { __mode = "kv" })
 
 -- Automatic cache invalidation when a buffer is deleted or wiped out.
@@ -79,23 +82,10 @@ vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
 
 -- Helper functions
 
---- Search for a given pattern in the first 'max_lines' of the current buffer (performance consideration).
---- This can be used for an import pattern in a markup file type, but potentially also for other patterns in any file type.
---- @param max_lines integer Maximum number of lines to search from the beginning of the buffer
---- @param pattern string The pattern to search for (Lua pattern syntax)
---- @return boolean True if the pattern is found, false otherwise
---- @diagnostic disable-next-line: unused-local
-local function find_pattern_in_buffer(max_lines, pattern)
-  local lines = vim.api.nvim_buf_get_lines(0, 0, max_lines, false)
-  for _, line in ipairs(lines) do
-    if line:match(pattern) then
-      return true
-    end
-  end
-  return false
-end
-
--- Read the first n lines from a file at 'filepath'
+--- Read the first n lines from a file at 'filepath'.
+--- @param filepath string
+--- @param n integer
+--- @return string[]
 local function read_lines_from_file(filepath, n)
   -- Sanity check: return an empty table if the file does not exist
   if vim.fn.filereadable(filepath) ~= 1 then
@@ -105,6 +95,8 @@ local function read_lines_from_file(filepath, n)
   if not ok or not lines then
     return {}
   end
+
+  ---@type string[]
   local result = {}
   for i = 1, math.min(n, #lines) do
     table.insert(result, lines[i])
@@ -112,7 +104,10 @@ local function read_lines_from_file(filepath, n)
   return result
 end
 
--- Search for a given pattern in a table of lines.
+--- Search for a given pattern in a table of lines.
+--- @param lines string[]
+--- @param pattern string
+--- @return boolean
 local function find_pattern_in_lines(lines, pattern)
   for _, line in ipairs(lines) do
     if line:match(pattern) then
@@ -122,7 +117,9 @@ local function find_pattern_in_lines(lines, pattern)
   return false
 end
 
--- Check if a filepath is already the current buffer
+--- Check if a filepath is already the current buffer.
+--- @param filepath string
+--- @return boolean
 local function is_current_buffer(filepath)
   return vim.api.nvim_buf_get_name(0) == filepath
 end
@@ -136,10 +133,12 @@ function M.get_tinymist_main_file()
   local current_buf = vim.api.nvim_get_current_buf()
 
   -- Check if the main file is already cached
-  if main_file_cache[current_buf] then
-    return main_file_cache[current_buf]
+  local cached = main_file_cache[current_buf]
+  if cached then
+    return cached
   end
 
+  ---@type string|nil
   local tinymist_main = nil
 
   -- Send a synchronous LSP request to get the pinned main file.
@@ -147,6 +146,7 @@ function M.get_tinymist_main_file()
     command = "tinymist.getMain",
     arguments = {},
   }, 1000)
+
   if response then
     for _, res in pairs(response) do
       if res.result and type(res.result) == "string" and res.result ~= "" then
@@ -177,12 +177,14 @@ function M.get_vimtex_main_file()
   local current_buf = vim.api.nvim_get_current_buf()
 
   -- Check if the main file is already cached
-  if main_file_cache[current_buf] then
-    return main_file_cache[current_buf]
+  local cached = main_file_cache[current_buf]
+  if cached then
+    return cached
   end
 
-  local vimtex_main = nil
-  -- Check if VimTeX has a main file defined
+  ---@type string|nil
+  local vimtex_main
+
   if vim.g.vimtex and vim.g.vimtex.main and vim.fn.filereadable(vim.g.vimtex.main) == 1 then
     vimtex_main = vim.g.vimtex.main
   else
@@ -203,15 +205,18 @@ end
 --- @param header_lines integer Number of lines from the beginning to search
 --- @param desired_lang string The spell language to set if pattern is found
 --- @param default_lang? string The default spell language to use if pattern is not found (defaults to "en")
+--- @return nil
 function M.apply_spell_language(main_file, pattern, header_lines, desired_lang, default_lang)
   if not auto_spell_switch_enabled then
-    return
+    return nil
   end
+
   default_lang = default_lang or "en"
 
   -- Since we distinguish between file types in the autocmds, we can assume that the file type is correct here.
   -- However, it could still be that main_file is nil, so we need to handle that case.
-  local lines = {}
+  ---@type string[]
+  local lines
   if main_file and not is_current_buffer(main_file) then
     lines = read_lines_from_file(main_file, header_lines)
   else
@@ -221,9 +226,8 @@ function M.apply_spell_language(main_file, pattern, header_lines, desired_lang, 
   if find_pattern_in_lines(lines, pattern) then
     -- If the desired language is already active, do nothing
     if vim.bo.spelllang == desired_lang then
-      return
+      return nil
     end
-
     -- Otherwise, set the spell language
     vim.cmd("setlocal spell spelllang=" .. desired_lang)
     vim.notify("Activated " .. desired_lang .. " language for spell checking.")
@@ -231,6 +235,8 @@ function M.apply_spell_language(main_file, pattern, header_lines, desired_lang, 
     vim.cmd("setlocal spell spelllang=" .. default_lang)
     vim.notify("Activated " .. default_lang .. " language for spell checking.")
   end
+
+  return nil
 end
 
 return M

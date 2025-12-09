@@ -30,43 +30,61 @@
 ---   -- Toggle PostgreSQL LSP
 ---   lsp_utils.toggle_postgres()
 ---
---- @module 'lsp_utils'
+--- @module 'utils.lsp_utils'
+
+---@class LspToggleOpts
+---@field silent? boolean
+
+---@class YamlSchema
+---@field name? string
+---@field description? string
+---@field url? string
+---@field fileMatch? string[]
+---@field [string] any
 
 --- @class LspUtils
---- @field toggle_basedpyright_settings fun(opts?: { silent?: boolean }): nil Toggle BasedPyright type checking and inlay hints
---- @field toggle_yaml_schema_store fun(opts?: { silent?: boolean }): nil Toggle YAML schema store setting
---- @field load_schema_files fun(files: string[], default_base?: string): table[] Load and merge schema files
---- @field toggle_postgres fun(opts?: { silent?: boolean }): nil Toggle PostgreSQL LSP client
-local M = {}
+--- @field toggle_basedpyright_settings fun(opts?: LspToggleOpts): nil Toggle BasedPyright type checking and inlay hints
+--- @field toggle_yaml_schema_store fun(opts?: LspToggleOpts): nil Toggle YAML schema store setting
+--- @field load_schema_files fun(files: string[], default_base?: string): YamlSchema[] Load and merge schema files
+--- @field toggle_postgres fun(opts?: LspToggleOpts): nil Toggle PostgreSQL LSP client
+local M = {} ---@type LspUtils
 
----Toggle typeCheckingMode and inlay-hints for **basedpyright** without restart
----@param opts? { silent?: boolean } Optional configuration table
+local uv = vim.uv or vim.loop
+
+--- Toggle typeCheckingMode and inlay-hints for **basedpyright** without restart
+--- @param opts? LspToggleOpts Optional configuration table
+--- @return nil
 function M.toggle_basedpyright_settings(opts)
   opts = opts or {}
+
   local client = vim.lsp.get_clients({ name = "basedpyright" })[1]
   if not client then
     vim.notify("BasedPyright LSP is not active", vim.log.levels.WARN)
-    return
+    return nil
   end
 
-  local analysis = client.config.settings.basedpyright.analysis
+  -- Guard settings shape a bit for luals
+  ---@type table<string, any>
+  local settings = client.config.settings or {}
+  settings.basedpyright = settings.basedpyright or {}
+  settings.basedpyright.analysis = settings.basedpyright.analysis or {}
+
+  local analysis = settings.basedpyright.analysis
+
   -- flip the mode
   analysis.typeCheckingMode = (analysis.typeCheckingMode == "basic") and "recommended" or "basic"
 
   -- flip the three inlay-hint booleans
-  local hints = analysis.inlayHints or {}
+  analysis.inlayHints = analysis.inlayHints or {}
+  local hints = analysis.inlayHints
   hints.variableTypes = not hints.variableTypes
   hints.functionReturnTypes = not hints.functionReturnTypes
-  hints.parameterNames = not hints.parameterNames --  ← renamed
-  analysis.inlayHints = hints
+  hints.parameterNames = not hints.parameterNames
 
   -- push the change to the running server
-  ---@diagnostic disable-next-line: inject-field
-  client.config.settings.basedpyright.analysis = analysis
+  client.config.settings = settings
   ---@diagnostic disable-next-line: param-type-mismatch
-  client.notify("workspace/didChangeConfiguration", {
-    settings = client.config.settings,
-  })
+  client.notify("workspace/didChangeConfiguration", { settings = settings })
 
   if not opts.silent then
     vim.notify(
@@ -74,29 +92,31 @@ function M.toggle_basedpyright_settings(opts)
       vim.log.levels.INFO
     )
   end
+
+  return nil
 end
 
 --- Toggle yamlls schemaStore.enable setting without restart
----@param opts? { silent?: boolean } Optional configuration table
+--- @param opts? LspToggleOpts Optional configuration table
+--- @return nil
 function M.toggle_yaml_schema_store(opts)
   opts = opts or {}
 
-  -- grab the first attached yamlls client
   local client = vim.lsp.get_clients({ name = "yamlls" })[1]
   if not client then
     vim.notify("YAML LSP is not active", vim.log.levels.WARN)
-    return
+    return nil
   end
 
-  -- flip the setting in the client-side copy
-  local cfg = client.config.settings
-  ---@diagnostic disable-next-line: need-check-nil
-  local store = cfg.yaml.schemaStore or {}
-  store.enable = not store.enable
-  ---@diagnostic disable-next-line: need-check-nil, inject-field
-  cfg.yaml.schemaStore = store
+  ---@type table<string, any>
+  local cfg = client.config.settings or {}
+  cfg.yaml = cfg.yaml or {}
+  cfg.yaml.schemaStore = cfg.yaml.schemaStore or {}
 
-  -- notify the server
+  local store = cfg.yaml.schemaStore
+  store.enable = not store.enable
+
+  client.config.settings = cfg
   ---@diagnostic disable-next-line: param-type-mismatch
   client.notify("workspace/didChangeConfiguration", { settings = cfg })
 
@@ -106,39 +126,49 @@ function M.toggle_yaml_schema_store(opts)
       vim.log.levels.INFO
     )
   end
+
+  return nil
 end
 
 --- Loads and merges extra schema files from a list.
 --- This function loads schema files and converts relative URLs to absolute file URIs.
 --- @param files string[] List of absolute file paths to load schemas from
 --- @param default_base? string Fallback base directory for relative URLs (defaults to current working directory)
---- @return table[] Array of schema objects loaded from the files
+--- @return YamlSchema[] Array of schema objects loaded from the files
 function M.load_schema_files(files, default_base)
   default_base = default_base or vim.fn.getcwd()
+
+  ---@type YamlSchema[]
   local schemas = {}
+
   for _, file in ipairs(files) do
-    ---@diagnostic disable: undefined-field
-    if vim.loop.fs_stat(file) then
+    if uv.fs_stat(file) then
       local ok, result = pcall(dofile, file)
       if ok and type(result) == "table" then
         for _, schema in ipairs(result) do
+          ---@cast schema YamlSchema
+
           -- Convert relative URLs to absolute file URIs.
           if schema.url and schema.url:sub(1, 1) == "." then
             local relative_path = schema.url:sub(3) -- remove "./"
             schema.url = "file://" .. default_base .. "/" .. relative_path
           end
+
           table.insert(schemas, schema)
         end
       end
     end
   end
+
   return schemas
 end
 
 --- Toggle PostgreSQL LSP client enable/disable state
---- @param opts? { silent?: boolean } Optional configuration table
+--- @param opts? LspToggleOpts Optional configuration table
+--- @return nil
 function M.toggle_postgres(opts)
   opts = opts or {}
+
   local name = "postgres_lsp"
   local active = vim.lsp.is_enabled(name)
 
@@ -147,17 +177,22 @@ function M.toggle_postgres(opts)
     if not opts.silent then
       vim.notify("Postgres LSP disabled")
     end
-  else
-    vim.lsp.enable(name)
-    -- start immediately for the current buffer if the ft matches
-    if vim.bo.filetype == "sql" or vim.bo.filetype == "psql" then
-      ---@diagnostic disable-next-line: missing-fields
-      vim.lsp.start({ name = name })
-    end
-    if not opts.silent then
-      vim.notify("Postgres LSP enabled")
-    end
+    return nil
   end
+
+  vim.lsp.enable(name)
+
+  -- start immediately for the current buffer if the ft matches
+  if vim.bo.filetype == "sql" or vim.bo.filetype == "psql" then
+    ---@diagnostic disable-next-line: missing-fields
+    vim.lsp.start({ name = name })
+  end
+
+  if not opts.silent then
+    vim.notify("Postgres LSP enabled")
+  end
+
+  return nil
 end
 
 return M

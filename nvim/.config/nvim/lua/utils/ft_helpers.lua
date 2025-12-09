@@ -23,22 +23,25 @@
 ---     cond = ft_helpers.is_not_ft({"help", "man"})  -- Hide for help/man pages
 ---   }
 ---
---- @module 'ft_helpers'
+--- @module 'utils.ft_helpers'
+
+---@alias FiletypeTarget string|string[]
+---@alias LualineCond fun(): boolean
 
 --- Creates a lualine condition function.
---- @param target_filetypes string | string[] A single filetype string or a table of filetype strings.
+--- @param target_filetypes FiletypeTarget A single filetype string or a table of filetype strings.
 --- @param should_match_one_of_them boolean If true, cond is true if current filetype is one of target_filetypes.
 ---                                         If false, cond is true if current filetype is NOT one of target_filetypes.
---- @return fun(): boolean The condition function for lualine that returns true/false.
+--- @return LualineCond The condition function for lualine that returns true/false.
 local function create_filetype_condition(target_filetypes, should_match_one_of_them)
-  -- Make sure target_filetypes is a table of strings
+  ---@type string[]
   local types_to_check = {}
+
   if type(target_filetypes) == "string" then
     types_to_check = { target_filetypes }
   elseif type(target_filetypes) == "table" then
     types_to_check = target_filetypes
   else
-    -- Error out here and return a function that always yields false
     vim.notify("create_filetype_condition: target_filetypes must be a string or table", vim.log.levels.WARN)
     return function()
       return false
@@ -48,6 +51,7 @@ local function create_filetype_condition(target_filetypes, should_match_one_of_t
   return function()
     local current_ft = vim.bo.filetype
     local match_found = false
+
     for _, ft_to_check in ipairs(types_to_check) do
       if current_ft == ft_to_check then
         match_found = true
@@ -55,53 +59,50 @@ local function create_filetype_condition(target_filetypes, should_match_one_of_t
       end
     end
 
-    if should_match_one_of_them then
-      return match_found
-    else
-      return not match_found
-    end
+    return should_match_one_of_them and match_found or not match_found
   end
 end
 
 -- Define the specific filetypes to handle
---- @type string[]
+---@type string[]
 local picker_filetypes = { "snacks_picker_list" }
 
 -- Create the specific condition functions using the generator
---- @type fun(): boolean
+---@type LualineCond
 local is_picker_filetype = create_filetype_condition(picker_filetypes, true)
---- @type fun(): boolean
+---@type LualineCond
 local is_not_picker_filetype = create_filetype_condition(picker_filetypes, false)
 
 --- @class FtHelpers
---- @field is_ft fun(ft: string | string[]): fun(): boolean Creates a condition that matches specific filetypes
---- @field is_not_ft fun(ft: string | string[]): fun(): boolean Creates a condition that excludes specific filetypes
---- @field is_picker_filetype fun(): fun(): boolean Returns condition for snacks_picker_list filetype
---- @field is_not_picker_filetype fun(): fun(): boolean Returns condition excluding snacks_picker_list filetype
-local M = {
-  -- Condition function resembling == ft
-  --- @param ft string | string[] A single filetype string or table of filetype strings
-  --- @return fun(): boolean The condition function for lualine
-  is_ft = function(ft)
-    return create_filetype_condition(ft, true)
-  end,
+--- @field is_ft fun(ft: FiletypeTarget): LualineCond Creates a condition that matches specific filetypes
+--- @field is_not_ft fun(ft: FiletypeTarget): LualineCond Creates a condition that excludes specific filetypes
+--- @field is_picker_filetype fun(): LualineCond Returns condition for snacks_picker_list filetype
+--- @field is_not_picker_filetype fun(): LualineCond Returns condition excluding snacks_picker_list filetype
+local M = {} ---@type FtHelpers
 
-  -- Condition function resembling ~= ft
-  --- @param ft string | string[] A single filetype string or table of filetype strings
-  --- @return fun(): boolean The condition function for lualine
-  is_not_ft = function(ft)
-    return create_filetype_condition(ft, false)
-  end,
+-- Condition function resembling == ft
+--- @param ft FiletypeTarget A single filetype string or table of filetype strings
+--- @return LualineCond The condition function for lualine
+function M.is_ft(ft)
+  return create_filetype_condition(ft, true)
+end
 
-  -- Specific condition functions for snacks_picker_list
-  --- @return fun(): boolean The condition function for snacks_picker_list filetype
-  is_picker_filetype = function()
-    return is_picker_filetype
-  end,
-  --- @return fun(): boolean The condition function excluding snacks_picker_list filetype
-  is_not_picker_filetype = function()
-    return is_not_picker_filetype
-  end,
-}
+-- Condition function resembling ~= ft
+--- @param ft FiletypeTarget A single filetype string or table of filetype strings
+--- @return LualineCond The condition function for lualine
+function M.is_not_ft(ft)
+  return create_filetype_condition(ft, false)
+end
+
+-- Specific condition functions for snacks_picker_list
+--- @return LualineCond The condition function for snacks_picker_list filetype
+function M.is_picker_filetype()
+  return is_picker_filetype
+end
+
+--- @return LualineCond The condition function excluding snacks_picker_list filetype
+function M.is_not_picker_filetype()
+  return is_not_picker_filetype
+end
 
 return M

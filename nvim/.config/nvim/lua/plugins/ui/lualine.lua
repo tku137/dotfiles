@@ -39,7 +39,7 @@ return {
       -- Name of project root directory
       lualine_b = {
         {
-          require("utils.helpers").project_root,
+          require("utils.helpers").project_root_name,
           icon = icons.statusline.root,
           separator = icons.statusline.separator,
           color = { fg = colors.blue },
