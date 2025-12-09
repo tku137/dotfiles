@@ -61,6 +61,12 @@ return {
       require("dbee").install()
     end,
     config = function()
+      -- Project-local connections file and scratchpad directory
+      local project_root = require("utils.helpers").project_root_path()
+      local project_file = vim.fs.joinpath(project_root, ".dbee-connections.json")
+      local scratch_dir = vim.fs.joinpath(project_root, ".dbee-scratchpad")
+      vim.fn.mkdir(scratch_dir, "p") -- ensure dir exists
+
       require("dbee").setup({
         result = {
           mappings = {
@@ -91,6 +97,23 @@ return {
             -- cancel current call execution
             { key = "<C-c>", mode = "", action = "cancel_call" },
           },
+        },
+        editor = {
+          -- store scratchpad files to persistent directory defined above
+          directory = scratch_dir,
+        },
+        sources = {
+          -- load project specific connections, reads a `.dbee-connections.json` file
+          -- from the project root path with following content:
+          -- [
+          --   {
+          --     "id": "dev_db",
+          --     "name": "Dev DB",
+          --     "type": "postgres",
+          --     "url": "postgres://user:pass@host:5432/mydb?sslmode=disable"
+          --   }
+          -- ]
+          require("dbee.sources").FileSource:new(project_file),
         },
       })
     end,
