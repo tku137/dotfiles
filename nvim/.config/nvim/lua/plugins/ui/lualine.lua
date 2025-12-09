@@ -44,10 +44,21 @@ return {
           separator = icons.statusline.separator,
           color = { fg = colors.blue },
           cond = cond.is_not_picker_filetype(),
+          on_click = function()
+            if Snacks and Snacks.explorer then
+              Snacks.explorer()
+              return
+            end
+          end,
         },
 
         -- Git branch the project is on
-        "branch",
+        {
+          "branch",
+          on_click = function()
+            vim.cmd("Neogit")
+          end,
+        },
 
         -- Git status of the project
         {
@@ -142,9 +153,15 @@ return {
         {
           sl.simple_lsp_status,
           -- stylua: ignore
-          color = function() return { fg = colors.fg } end,
+          color = sl.lsp_status_color,
           separator = "",
           padding = { left = 1, right = 0 },
+          on_click = function()
+            if Snacks and Snacks.picker and Snacks.picker.lsp_config then
+              Snacks.picker.lsp_config()
+              return
+            end
+          end,
         },
         -- Show Copilot status:
         {
@@ -167,12 +184,18 @@ return {
           show_loading = true,
           separator = "",
           padding = { left = 0, right = 0 },
+          on_click = function()
+            vim.cmd("Copilot status")
+          end,
         },
         -- Show MCPHub status:
         {
           sl.mcphub_status,
           color = sl.mcphub_color,
           padding = { left = 0, right = 1 },
+          on_click = function()
+            vim.cmd("MCPHub")
+          end,
         },
 
         -- Displays showmode, for example macro recording

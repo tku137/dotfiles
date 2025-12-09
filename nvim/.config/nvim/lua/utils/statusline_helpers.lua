@@ -74,105 +74,126 @@ function M.spell_status()
   return nil
 end
 
---- Minimal LSP indicator:
---- - returns "" if no non-ignored LSP clients are attached
---- - returns a spinner if there are active LSP progress messages
---- - otherwise returns the default LSP icon
----
---- This is a workaround for the default lualine `lsp_status` component,
---- which does not reliably show an icon when multiple LSPs are attached.
----
---- @return string
-function M.simple_lsp_status()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+---@type table<string, boolean>
+local LSP_IGNORE = {
+  copilot = true,
+}
 
-  if not clients or vim.tbl_isempty(clients) then
-    return ""
+--- Returns filtered LSP clients for the current buffer.
+--- @param bufnr integer
+--- @return table[]
+local function active_lsp_clients(bufnr)
+  local clients = vim.lsp.get_clients({ bufnr = bufnr }) or {}
+  if vim.tbl_isempty(clients) then
+    return {}
   end
 
-  ---@type table<string, boolean>
-  local ignore = {
-    copilot = true,
-  }
-
-  ---@type table[]
-  local active_clients = {}
+  local active = {}
   for _, client in ipairs(clients) do
-    if not ignore[client.name] then
-      table.insert(active_clients, client)
+    if not LSP_IGNORE[client.name] then
+      active[#active + 1] = client
     end
   end
+  return active
+end
 
-  if #active_clients == 0 then
-    return ""
+--- Determines the current LSP “state” for statusline purposes.
+--- @param bufnr integer
+--- @return '"none"'|'"progress"'|'"ready"'
+local function lsp_state(bufnr)
+  local active = active_lsp_clients(bufnr)
+  if #active == 0 then
+    return "none"
   end
 
   -- Check for LSP progress messages (if supported).
-  local has_progress = false
   local ok, util = pcall(require, "vim.lsp.util")
   if ok and util.get_progress_messages then
     local msgs = util.get_progress_messages()
     for _, msg in ipairs(msgs) do
-      if msg.name and not ignore[msg.name] then
-        has_progress = true
-        break
+      if msg.name and not LSP_IGNORE[msg.name] then
+        return "progress"
       end
     end
   end
 
-  if has_progress then
-    ---@type string[]
-    local frames = icons.misc.running_animated or { "⠋", "⠙", "⠹", "⠸" }
+  return "ready"
+end
+
+--- Minimal LSP indicator:
+--- - returns disabled icon if no non-ignored LSP clients are attached
+--- - returns a spinner if there are active LSP progress messages
+--- - otherwise returns the default LSP icon
+---
+--- @return string
+function M.simple_lsp_status()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local state = lsp_state(bufnr)
+
+  local disabled_icon = icons.statusline.lsp_disabled
+  if state == "none" then
+    return disabled_icon
+  end
+
+  if state == "progress" then
+    local frames = icons.misc.running_animated
     ---@diagnostic disable-next-line: undefined-field
     local idx = (math.floor(uv.now() / 120) % #frames) + 1
     return frames[idx]
   end
 
-  -- Default: at least one LSP attached, no active progress.
   return icons.statusline.lsp
 end
 
+--- LSP Color helper.
+--- @return { fg: string }
+function M.lsp_status_color()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local state = lsp_state(bufnr)
+
+  if state == "none" then
+    return { fg = colors.comment }
+  end
+
+  return { fg = colors.fg }
+end
+
 --- MCPHub status helper.
---- - shows `<icon>-` when not fully loaded / stopped
---- - shows `<icon><spinner>` when executing / (re)starting
---- - shows `<icon>` when connected and idle
----
---- Relies on global variables set by your MCPHub integration:
+--- Uses global variables maintained by mcphub.nvim:
 ---   - vim.g.loaded_mcphub
 ---   - vim.g.mcphub_status
+---   - vim.g.mcphub_servers_count
 ---   - vim.g.mcphub_executing
 ---
+--- Documented states commonly used:
+---   "starting", "ready", "stopped", "restarting", "restarted"
 --- @return string
 function M.mcphub_status()
+  local icon = icons.statusline.mcphub
+
   if not vim.g.loaded_mcphub then
-    return icons.statusline.mcphub .. "-"
+    return icon .. " -"
   end
 
   ---@type string
   local status = vim.g.mcphub_status or "stopped"
   local executing = vim.g.mcphub_executing
 
-  if status == "stopped" then
-    return icons.statusline.mcphub .. "-"
-  end
-
   if executing or status == "starting" or status == "restarting" then
-    ---@type string[]
-    local frames = icons.misc.running_animated or { "⠋", "⠙", "⠹", "⠸" }
+    local frames = icons.misc.running_animated
     ---@diagnostic disable-next-line: undefined-field
-    local frame = math.floor(uv.now() / 100) % #frames + 1
-    return icons.statusline.mcphub .. frames[frame]
+    local idx = (math.floor(uv.now() / 100) % #frames) + 1
+    return icon .. " " .. frames[idx]
   end
 
-  return icons.statusline.mcphub
+  return icon
 end
 
 --- Color helper for MCPHub status component.
 --- - gray when not loaded
 --- - fg when ready / restarted
 --- - orange when starting / restarting
---- - red when error / stopped
+--- - red when error / stopped / unknown
 ---
 --- @return { fg: string }
 function M.mcphub_color()
@@ -182,6 +203,7 @@ function M.mcphub_color()
 
   ---@type string
   local status = vim.g.mcphub_status or "stopped"
+
   if status == "ready" or status == "restarted" then
     return { fg = colors.fg }
   elseif status == "starting" or status == "restarting" then

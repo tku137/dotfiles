@@ -23,6 +23,7 @@ icons = {
     clock = " ",
     mcphub = " ",
     lsp = " ",
+    lsp_disabled = "󱏎 ",
   },
   dap = {
     Stopped             = { " ", "DiagnosticWarn", "DapStoppedLine" },
@@ -36,7 +37,7 @@ icons = {
     sleep    = " ", -- auto-trigger disabled
     disabled = " ",
     warning  = " ",
-    unknown  = " ",
+    unknown  = " ",
   },
   diagnostics = {
     Error  = " ",
