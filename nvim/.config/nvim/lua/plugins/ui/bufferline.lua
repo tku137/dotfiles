@@ -2,6 +2,7 @@ return {
   "akinsho/bufferline.nvim",
   event = "VeryLazy",
   dependencies = "nvim-tree/nvim-web-devicons",
+  -- stylua: ignore
   keys = {
     -- TODO: use proper snacks toggle
     { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
@@ -14,6 +15,12 @@ return {
     { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
     { "[B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
     { "]B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
+    { "<leader>bs", "", desc = "Sort Buffers" },
+    { "<leader>bsd", function() require("bufferline").sort_by("directory") end, desc = "By Directory" },
+    { "<leader>bse", function() require("bufferline").sort_by("extension") end, desc = "By Extension" },
+    { "<leader>bsr", function() require("bufferline").sort_by("relative_directory") end, desc = "By Relative Directory" },
+    { "<leader>bsi", function() require("bufferline").sort_by("id") end, desc = "By ID (default)", },
+    { "<leader>bsR", function() require("bufferline").sort_by(function(a, b) return a.id < b.id end) end, desc = "Reset by ID", },
   },
   opts = {
     options = {
@@ -34,6 +41,13 @@ return {
           filetype = "snacks_layout_box",
         },
       },
+
+      -- Possible orders: "insert_after_current", "insert_at_end", "extension", "directory", "relative_directory"
+      -- directory groups like in the file explorer
+      sort_by = "directory",
+
+      -- Prevent weird ordering between sessions
+      persist_buffer_sort = false,
     },
   },
   config = function(_, opts)
@@ -42,7 +56,9 @@ return {
     vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
       callback = function()
         vim.schedule(function()
-          pcall(nvim_bufferline)
+          pcall(function()
+            require("bufferline").setup(opts)
+          end)
         end)
       end,
     })
