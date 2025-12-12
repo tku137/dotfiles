@@ -80,7 +80,7 @@ end
 # =============================================================================
 
 # Set fish shell theme
-fish_config theme choose "TokyoNight Moon"
+fish_config theme choose tokyonight_moon
 
 # =============================================================================
 # NOTE
