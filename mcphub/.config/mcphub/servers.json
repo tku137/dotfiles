@@ -49,6 +49,15 @@
       ],
       "command": "npx"
     },
+    "postgres": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "${POSTGRESQL_URL}"
+      ],
+      "command": "npx",
+      "disabled": true
+    },
     "sequentialthinking": {
       "args": [
         "-y",

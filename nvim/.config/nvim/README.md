@@ -555,6 +555,16 @@ repos:
         stages: [pre-commit]
 ```
 
+### Using the postgres MCP server
+
+The `postgres` MCP server has read-only access to a PostgreSQL databases. It is disabled by default. To enable it, call `<Leader>am` and toggle `postgres`.
+
+It needs a connection string set via the environment variable `POSTGRESQL_URL`, which should contain a full connection string like this:
+
+```bash
+postgres://user:pass@database.url:port/db_name
+```
+
 ## Prerequisites
 
 1. **Prerequisites**:
