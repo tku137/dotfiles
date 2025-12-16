@@ -3,6 +3,9 @@
 -- Where AI plugin keymaps should be put
 local prefix = "<Leader>a"
 
+-- Define a 0x default model for copilot to preserve premium requests
+local free_model_copilot = "gpt-5-mini"
+
 return {
   {
     "folke/which-key.nvim",
@@ -90,12 +93,11 @@ return {
     },
     opts = {
       -- adapters and models
-      strategies = {
+      interactions = {
         chat = {
           adapter = {
             name = "copilot",
-            -- GPT-4.1 uses no copilot premium requests
-            model = "gpt-4.1",
+            model = free_model_copilot,
           },
           tools = {
             opts = {
@@ -149,8 +151,7 @@ return {
         inline = {
           adapter = {
             name = "copilot",
-            -- GPT-4.1 uses no copilot premium requests
-            model = "gpt-4.1",
+            model = free_model_copilot,
           },
         },
       },
@@ -182,7 +183,7 @@ return {
           tool_opts = {
             -- configure all tools with common settings
             ["*"] = {
-              requires_approval = false,
+              require_approval_before = false,
               include_in_toolbox = true,
             },
             -- specific config for querying vectorcode DB
@@ -230,7 +231,7 @@ return {
               ---Adapter for generating titles (defaults to current chat adapter)
               adapter = "copilot", -- "copilot"
               ---Model for generating titles (defaults to current chat model)
-              model = "gpt-4.1", -- "gpt-4o"
+              model = free_model_copilot, -- "gpt-4o"
               ---Number of user prompts after which to refresh the title (0 to disable)
               refresh_every_n_prompts = 3, -- e.g., 3 to refresh after every 3rd user prompt
               ---Maximum number of times to refresh the title (default: 3)
@@ -259,7 +260,7 @@ return {
 
               generation_opts = {
                 adapter = "copilot", -- defaults to current chat adapter
-                model = "gpt-4.1", -- defaults to current chat model
+                model = free_model_copilot, -- defaults to current chat model
                 context_size = 90000, -- max tokens that the model supports
                 include_references = true, -- include slash command content
                 include_tool_outputs = true, -- include tool execution results
@@ -300,119 +301,12 @@ return {
       },
 
       prompt_library = {
-        ["Search then answer"] = {
-          strategy = "chat",
-          description = "Search (web/MCP) first, then answer",
-          prompt = [[First, gather information, then answer.
-
-You may use:
-- @{vectorcode} for RAG on the codebase
-- @{duckduckgo_search} / @{fetch_webpage} for external sources
-- @{context7} for library and dependency documentation
-- @{mcp} for other tools
-
-Steps:
-1. Collect sources (tools)
-2. Synthesize
-3. Answer in Markdown with links/titles from sources]],
-        },
-
-        ["Summarize changes"] = {
-          strategy = "chat",
-          description = "Summarize current changes made by LLM for a human",
-          prompt = [[You will get code changes (diffs or edited files).
-
-Summarize them in this format:
-- What changed (bullets)
-- Why it was changed (guess if needed)
-- Risk level (low/med/high)
-- Follow-up tasks
-
-You may use @{git} to view diffs.
-
-Keep it short.]],
-        },
-
-        ["Claude GTD"] = {
-          strategy = "chat",
-          description = "Use Claude Sonnet with all tools to plan and execute multi-step coding tasks",
-          opts = {
-            index = 20, -- position in action palette (arbitrary, just not colliding with others)
-            is_default = false,
-            is_slash_cmd = true, -- makes this available as /claude_gtd in chat
-            short_name = "claude_gtd",
-            modes = { "n", "v" }, -- show in palette in normal + visual mode
-            adapter = {
-              name = "copilot",
-              model = "claude-sonnet-4.5",
-            },
-          },
-          prompts = {
-            {
-              role = "system",
-              content = function(context)
-                return ([[You are a senior full-stack developer and AI pair-programmer embedded in Neovim via CodeCompanion.
-Your primary goal is to **get things done** on the user’s codebase with as little back-and-forth as possible while maintaining safety and clarity.
-
-## Role & behaviour
-
-- Take ownership of tasks: plan, execute, and iterate until the task is reasonably complete.
-- Assume the main language/framework from the current buffer’s filetype: `%s` (but stay flexible if the codebase indicates otherwise).
-- Prefer *practical, incremental changes* over huge rewrites unless the user explicitly asks for a big refactor.
-- Keep answers short, focused and concrete; avoid unnecessary theory unless the user asks.
-
-## Tool usage (very important)
-
-You have access to a rich set of tools, including but not limited to:
-- CodeCompanion core tools group: @{full_stack_dev}.
-- MCP tools the user has enabled, including:
-  - @{git} for repository-level information and diffs.
-  - @{vectorcode} for RAG semantic search over the codebase.
-  - @{context7} for library and dependency documentation.
-  - @{mcp} for all other MCP tools
-- Web tools: @{duckduckgo_search}, @{fetch_webpage} for external documentation and references.
-
-Guidelines:
-1. **Gather context early.** Before suggesting non-trivial changes, use file search / read / vectorcode / git tools to understand the relevant parts of the project.
-2. **Prefer acting via tools instead of asking the user to manually do things** (open files, run commands, etc.).
-3. When editing code, use @{insert_edit_into_file} (or equivalent edit tools) to apply changes instead of just dumping large patches in the chat.
-4. If you need more info about a library, API, or standard, use web search tools.
-5. Don’t over-use tools for trivial questions; call tools when they add clear value.
-
-## Workflow for each request
-
-When the user gives you a task, follow this pattern:
-
-1. **Clarify the goal**
-   - Briefly restate what you think the user wants.
-   - Ask at most 1–2 clarifying questions only if they are truly necessary to proceed safely.
-
-2. **Plan**
-   - Outline a short, numbered plan of the steps you intend to take (including which tools you expect to call).
-   - Keep the plan compact (2–7 steps).
-
-3. **Execute with tools**
-   - Use the available tools to gather context and apply changes.
-   - You may call tools multiple times; favour smaller, iterative steps over one huge risky change.
-   - If a tool fails, read the error, adapt, and try a different approach where sensible.
-
-4. **Summarise and next steps**
-   - Summarise what you changed and where (files, functions, tests) shortly.
-   - Highlight any follow-up tasks or TODOs you recommend.
-   - If you made changes that may affect behaviour in subtle ways, call that out explicitly.
-
-## Output formatting
-
-- Use Markdown with clear headings/subheadings.
-- For code examples, use fenced code blocks with the correct language identifier.
-- When you modify files via tools, don’t repeat the whole file in the chat unless it’s short or the user asked.
-- Keep the final answer reasonably compact; if there are many details, summarise and provide only the most important snippets.
-
-If the user just asks a quick question (e.g. “what does this function do?”), you can skip the full plan and tool usage and just answer directly. For anything non-trivial, follow the workflow above.]]):format(
-                  context.filetype or "unknown"
-                )
-              end,
-            },
+        markdown = {
+          dirs = {
+            -- Global prompts in this config
+            vim.fn.stdpath("config") .. "/prompts/codecompanion",
+            -- Project specific prompts
+            vim.fn.getcwd() .. "/.prompts",
           },
         },
       },
