@@ -96,25 +96,36 @@ vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "
 -- }
 
 -- Correctly set up clipboard especially for remote sessions
+-- Cache OSC52 so yanky works
 vim.opt.clipboard = "unnamedplus"
+
 if vim.env.SSH_TTY then
-  local function paste()
-    return {
-      vim.fn.split(vim.fn.getreg(""), "\n"),
-      vim.fn.getregtype(""),
-    }
+  local osc52 = require("vim.ui.clipboard.osc52")
+
+  local cache = {
+    ["+"] = { lines = {}, regtype = "v" },
+    ["*"] = { lines = {}, regtype = "v" },
+  }
+
+  local function copy(reg)
+    local osc = osc52.copy(reg)
+    return function(lines, regtype)
+      cache[reg] = { lines = lines, regtype = regtype }
+      osc(lines)
+    end
+  end
+
+  local function paste(reg)
+    return function()
+      local c = cache[reg]
+      return { c.lines, c.regtype }
+    end
   end
 
   vim.g.clipboard = {
-    name = "OSC52",
-    copy = {
-      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-    },
-    paste = {
-      ["+"] = paste,
-      ["*"] = paste,
-    },
+    name = "OSC52 (cached)",
+    copy = { ["+"] = copy("+"), ["*"] = copy("*") },
+    paste = { ["+"] = paste("+"), ["*"] = paste("*") },
   }
 end
 

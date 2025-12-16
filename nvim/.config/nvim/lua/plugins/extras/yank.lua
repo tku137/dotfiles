@@ -3,6 +3,7 @@ return {
   {
     "gbprod/yanky.nvim",
     event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+    dependencies = { "folke/snacks.nvim" },
     opts = {
       highlight = { timer = 150 },
     },
@@ -10,7 +11,20 @@ return {
       {
         "<leader>y",
         function()
-          vim.cmd([[YankyRingHistory]])
+          ---@diagnostic disable-next-line: undefined-field
+          Snacks.picker.yanky({
+            confirm = function(picker, item)
+              -- yank to unnamed register (so you can paste manually wherever you want)
+              ---@diagnostic disable-next-line: missing-fields
+              Snacks.picker.actions.yank(picker, item, { reg = '"', notify = false })
+
+              -- optional: also yank to system clipboard (+)
+              ---@diagnostic disable-next-line: missing-fields
+              Snacks.picker.actions.yank(picker, item, { reg = "+", notify = false })
+
+              picker:close()
+            end,
+          })
         end,
         mode = { "n", "x" },
         desc = "Open Yank History",
