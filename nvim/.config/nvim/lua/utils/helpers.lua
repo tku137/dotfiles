@@ -92,4 +92,30 @@ function M.git_root()
   return out[1]
 end
 
+---Run a command and return stdout (trimmed). On error, return a readable message.
+---@param cmd string[]
+---@param opts? table
+---@return string|nil
+function M.run(cmd, opts)
+  opts = opts or {}
+  opts.text = true
+
+  local res = vim.system(cmd, opts):wait()
+  if res.code ~= 0 then
+    return nil
+  end
+  return ((res.stdout or ""):gsub("%s+$", ""))
+end
+
+---Return `fallback` if `s` is nil/empty, otherwise return `s`.
+---@param fallback string
+---@param s string|nil
+---@return string
+function M.empty_as(fallback, s)
+  if not s or s == "" then
+    return fallback
+  end
+  return s
+end
+
 return M

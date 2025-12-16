@@ -1,22 +1,39 @@
 ---
 name: Summarize changes
 interaction: chat
-description: Summarize current changes made by LLM for a human
+description: Summarize current git changes for a human
 opts:
-  alias: summarize_changes
+  alias: sumchanges
+  is_slash_cmd: true
+  auto_submit: true
+  stop_context_insertion: true
 ---
 
 ## user
 
-You will get code changes (diffs or edited files).
+You will get local git information.
 
-Summarize them in this format:
+Summarize in this format:
 
 - What changed (bullets)
-- Why it was changed (guess if needed)
+- Why it was changed (best guess)
 - Risk level (low/med/high)
 - Follow-up tasks
 
-You may use @{git} to view diffs.
+### Status
 
-Keep it short.
+```text
+${git.status}
+```
+
+### Staged diff
+
+```diff
+${git.diff_staged}
+```
+
+### Unstaged diff
+
+```diff
+${git.diff_unstaged}
+```
