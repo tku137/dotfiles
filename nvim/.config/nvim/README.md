@@ -555,6 +555,28 @@ repos:
         stages: [pre-commit]
 ```
 
+### Project-specific CodeCompanion rules
+
+Allow CodeCompanion to load repo-scoped rules by adding `.codecompanion/rules.md` like below (see the [official docs](https://codecompanion.olimorris.dev/configuration/rules)).
+
+```markdown
+---
+description: Project rules for CodeCompanion
+---
+
+## System Prompt
+
+You are working in this repository. Follow these repo-specific rules:
+
+- Prefer existing patterns and conventions in this codebase.
+- Keep changes minimal and incremental unless asked otherwise.
+- If you touch public APIs, update docs/tests where appropriate.
+
+## Context
+
+(Optional) Add links to key docs, architecture notes, conventions, etc.
+```
+
 ### Using the postgres MCP server
 
 The `postgres` MCP server has read-only access to a PostgreSQL databases. It is disabled by default. To enable it, call `<Leader>am` and toggle `postgres`.
