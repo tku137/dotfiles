@@ -310,7 +310,7 @@ return {
             cc_base .. "/prompts",
 
             -- project local prompts
-            require("utils.helpers").project_root_path() .. "/.codecompanion/prompts",
+            "/.codecompanion/prompts",
           },
         },
       },
@@ -357,6 +357,7 @@ return {
             { path = "CLAUDE.md", parser = "claude" },
             { path = "CLAUDE.local.md", parser = "claude" },
             { path = "~/.claude/CLAUDE.md", parser = "claude" },
+            ".codecompanion/rules/**/*.md",
           },
           is_preset = true,
         },
