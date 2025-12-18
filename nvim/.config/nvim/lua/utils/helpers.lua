@@ -7,19 +7,13 @@
 --- The module exports functions that can be used to:
 --- - Get project root directory information
 --- - Find git repository root directories
---- - Perform common path and directory operations
+--- - Perform common operations
 ---
 --- Usage examples:
 ---   local helpers = require("utils.helpers")
----
----   -- Get the current project's root directory name
----   local project_name = helpers.project_root()
----
----   -- Get the git repository root path
+---   local project_name = helpers.project_root_name()
+---   local project_path = helpers.project_root_path()
 ---   local git_root = helpers.git_root()
----   if git_root then
----     print("Git repo found at: " .. git_root)
----   end
 ---
 --- @module 'utils.helpers'
 
@@ -27,6 +21,9 @@
 --- @field project_root_name fun(): string Returns the current project's root directory name
 --- @field project_root_path fun(bufnr?: integer): string Returns the current project's root directory path
 --- @field git_root fun(): string|nil Returns the git repository root path or nil if not in a git repo
+--- @field run fun(cmd: string[], opts?: table): string|nil Run a command and return stdout (trimmed), or nil on failure
+--- @field empty_as fun(fallback: string, s: string|nil): string Return fallback if s is nil/empty
+--- @field truncate fun(s: string|nil, max_chars?: integer, suffix?: string): string|nil Truncate s to max_chars
 local M = {} ---@type Helpers
 
 --- Returns the current project's root directory name.
@@ -90,6 +87,53 @@ function M.git_root()
     return nil
   end
   return out[1]
+end
+
+local function trim(s)
+  return (s:gsub("%s+$", ""))
+end
+
+---Run a command and return stdout (trimmed). Returns nil on non-zero exit.
+---@param cmd string[]
+---@param opts? table
+---@return string|nil
+function M.run(cmd, opts)
+  opts = opts or {}
+  opts.text = true
+
+  local res = vim.system(cmd, opts):wait()
+  if res.code ~= 0 then
+    return nil
+  end
+  return trim(res.stdout or "")
+end
+
+---Return `fallback` if `s` is nil/empty, otherwise return `s`.
+---@param fallback string
+---@param s string|nil
+---@return string
+function M.empty_as(fallback, s)
+  if not s or s == "" then
+    return fallback
+  end
+  return s
+end
+
+---Truncate a string to avoid huge prompt payloads.
+---@param s string|nil
+---@param max_chars? integer
+---@param suffix? string
+---@return string|nil
+function M.truncate(s, max_chars, suffix)
+  if not s or s == "" then
+    return s
+  end
+  max_chars = max_chars or 12000
+  suffix = suffix or "\n…(truncated)…"
+  if #s <= max_chars then
+    return s
+  end
+  return s:sub(1, max_chars) .. suffix
 end
 
 return M

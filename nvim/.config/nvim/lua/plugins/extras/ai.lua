@@ -6,6 +6,9 @@ local prefix = "<Leader>a"
 -- Define a 0x default model for copilot to preserve premium requests
 local free_model_copilot = "gpt-5-mini"
 
+-- Used in codecompanion config
+local cc_base = vim.fn.stdpath("config") .. "/ai/codecompanion"
+
 return {
   {
     "folke/which-key.nvim",
@@ -303,26 +306,119 @@ return {
       prompt_library = {
         markdown = {
           dirs = {
-            -- Global prompts in this config
-            vim.fn.stdpath("config") .. "/prompts/codecompanion",
-            -- Project specific prompts
-            vim.fn.getcwd() .. "/.prompts",
+            -- globel prompts in this config
+            cc_base .. "/prompts",
+
+            -- project local prompts
+            ".codecompanion/prompts",
+          },
+        },
+      },
+
+      rules = {
+        -- Personal defaults (live nvim config)
+        personal = {
+          description = "Personal defaults (always loaded)",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/personal.md",
+          },
+        },
+
+        -- task rules (loaded per-prompt via opts.rules)
+        task_research = {
+          description = "Task: Search then answer",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/task/research.md",
+            cc_base .. "/rules/output/research.md",
+          },
+        },
+        task_gtd = {
+          description = "Task: GTD (plan + execute)",
+          parser = "CodeCompanion",
+          files = { cc_base .. "/rules/task/gtd.md" },
+        },
+        task_change_summary = {
+          description = "Task: Summarize git changes",
+          parser = "CodeCompanion",
+          files = { cc_base .. "/rules/task/change-summary.md" },
+        },
+        task_write_docs = {
+          description = "Task: Write documentation",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/task/research.md",
+            cc_base .. "/rules/task/write-docs.md",
+            cc_base .. "/rules/output/docs.md",
+          },
+        },
+        task_review_changes = {
+          description = "Task: Review staged/unstaged diffs",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/task/review-changes.md",
+            cc_base .. "/rules/output/review-changes.md",
+          },
+        },
+        task_write_tests = {
+          description = "Task: Write tests",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/task/write-tests.md",
+            cc_base .. "/rules/output/write-tests.md",
+          },
+        },
+        task_explain_arch = {
+          description = "Task: Explain architecture",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/task/explain-architecture.md",
+            cc_base .. "/rules/output/explain-architecture.md",
+          },
+        },
+
+        -- project rules (autoloaded when present in the repo)
+        project = {
+          description = "Collection of common files for all projects",
+          files = {
+            ".clinerules",
+            ".cursorrules",
+            ".goosehints",
+            ".rules",
+            ".windsurfrules",
+            ".github/copilot-instructions.md",
+            "AGENT.md",
+            "AGENTS.md",
+            { path = "CLAUDE.md", parser = "claude" },
+            { path = "CLAUDE.local.md", parser = "claude" },
+            { path = "~/.claude/CLAUDE.md", parser = "claude" },
+            ".codecompanion/rules/**/*.md",
+          },
+          is_preset = true,
+        },
+
+        opts = {
+          chat = {
+            enabled = true,
+            autoload = { "personal", "project" },
           },
         },
       },
     },
 
     keys = {
-      { prefix .. "a", "<cmd>CodeCompanionActions<cr>", desc = "actions", mode = { "n", "v" } },
-      { prefix .. "c", "<cmd>CodeCompanionChat Toggle<cr>", desc = "chat toggle", mode = { "n", "v" } },
-      { prefix .. "C", "<cmd>CodeCompanion /claude_gtd<cr>", desc = "Claude GTD", mode = "n" },
-      { prefix .. "A", "<cmd>CodeCompanionChat Add<cr>", desc = "add selection to chat", mode = "v" },
-      { prefix .. "B", "<cmd>CodeCompanionChat Add<cr>", desc = "add current buffer to chat", mode = "n" },
-      { prefix .. "i", "<cmd>CodeCompanion<cr>", desc = "inline assistant", mode = { "n", "v" } },
-      { prefix .. "e", ":'<,'>CodeCompanion /explain<cr>", desc = "explain selection", mode = "v" },
-      { prefix .. "f", ":'<,'>CodeCompanion /fix<cr>", desc = "fix selection", mode = "v" },
-      { prefix .. "t", ":'<,'>CodeCompanion /tests<cr>", desc = "gen tests (vis)", mode = "v" },
-      { prefix .. "R", "<cmd>CodeCompanionChat RefreshCache<cr>", desc = "refresh tool cache", mode = "n" },
+      { prefix .. "a", "<cmd>CodeCompanionActions<cr>", desc = "Actions palette", mode = { "n", "v" } },
+      { prefix .. "c", "<cmd>CodeCompanionChat Toggle<cr>", desc = "Chat toggle", mode = { "n", "v" } },
+      -- stylua: ignore
+      { prefix .. "C", function() require("codecompanion.adapters.http.copilot.stats").show() end, desc = "Copilot stats", mode = "n" },
+      { prefix .. "A", "<cmd>CodeCompanionChat Add<cr>", desc = "Add selection to chat", mode = "v" },
+      { prefix .. "B", "<cmd>CodeCompanionChat Add<cr>", desc = "Add current buffer to chat", mode = "n" },
+      { prefix .. "i", "<cmd>CodeCompanion<cr>", desc = "Inline assistant", mode = { "n", "v" } },
+      { prefix .. "e", ":'<,'>CodeCompanion /explain<cr>", desc = "Explain selection", mode = "v" },
+      { prefix .. "f", ":'<,'>CodeCompanion /fix<cr>", desc = "Fix selection", mode = "v" },
+      { prefix .. "t", ":'<,'>CodeCompanion /tests<cr>", desc = "Generate tests", mode = "v" },
+      { prefix .. "R", "<cmd>CodeCompanionChat RefreshCache<cr>", desc = "Refresh tool cache", mode = "n" },
     },
   },
 }
