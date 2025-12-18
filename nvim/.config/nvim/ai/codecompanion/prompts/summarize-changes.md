@@ -7,18 +7,12 @@ opts:
   is_slash_cmd: true
   auto_submit: true
   stop_context_insertion: true
+  rules: task_change_summary
 ---
 
 ## user
 
-You will get local git information.
-
-Summarize in this format:
-
-- What changed (bullets)
-- Why it was changed (best guess)
-- Risk level (low/med/high)
-- Follow-up tasks
+Summarize the local git changes below.
 
 ### Status
 

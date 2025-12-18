@@ -6,6 +6,10 @@ local prefix = "<Leader>a"
 -- Define a 0x default model for copilot to preserve premium requests
 local free_model_copilot = "gpt-5-mini"
 
+-- Used in codecompanion config
+local cc_base = vim.fn.stdpath("config") .. "/ai/codecompanion"
+local helpers = require("utils.helpers")
+
 return {
   {
     "folke/which-key.nvim",
@@ -303,10 +307,61 @@ return {
       prompt_library = {
         markdown = {
           dirs = {
-            -- Global prompts in this config
-            vim.fn.stdpath("config") .. "/prompts/codecompanion",
-            -- Project specific prompts
-            vim.fn.getcwd() .. "/.prompts",
+            cc_base .. "/prompts",
+          },
+        },
+      },
+
+      rules = {
+        -- Personal defaults (live nvim config)
+        personal = {
+          description = "Personal defaults (always loaded)",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/personal.md",
+          },
+        },
+
+        -- task rules (loaded per-prompt via opts.rules)
+        task_research = {
+          description = "Task: Search then answer",
+          parser = "CodeCompanion",
+          files = { cc_base .. "/rules/task/research.md" },
+        },
+        task_gtd = {
+          description = "Task: GTD (plan + execute)",
+          parser = "CodeCompanion",
+          files = { cc_base .. "/rules/task/gtd.md" },
+        },
+        task_change_summary = {
+          description = "Task: Summarize git changes",
+          parser = "CodeCompanion",
+          files = { cc_base .. "/rules/task/change-summary.md" },
+        },
+
+        -- project rules (autoloaded when present in the repo)
+        project = {
+          description = "Collection of common files for all projects",
+          files = {
+            ".clinerules",
+            ".cursorrules",
+            ".goosehints",
+            ".rules",
+            ".windsurfrules",
+            ".github/copilot-instructions.md",
+            "AGENT.md",
+            "AGENTS.md",
+            { path = "CLAUDE.md", parser = "claude" },
+            { path = "CLAUDE.local.md", parser = "claude" },
+            { path = "~/.claude/CLAUDE.md", parser = "claude" },
+          },
+          is_preset = true,
+        },
+
+        opts = {
+          chat = {
+            enabled = true,
+            autoload = { "personal", "project" },
           },
         },
       },
