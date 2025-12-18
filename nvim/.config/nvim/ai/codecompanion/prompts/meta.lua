@@ -1,8 +1,8 @@
 local helpers = require("utils.helpers")
 
 return {
-  ---Returns the user text passed to :CodeCompanion /{alias} ...
-  ---Falls back to a friendly placeholder if none was provided.
+  ---Returns the user text passed after a slash-command prompt:
+  ---  :CodeCompanion /write_docs <text here>
   ---@param args table
   ---@return string
   user_prompt = function(args)

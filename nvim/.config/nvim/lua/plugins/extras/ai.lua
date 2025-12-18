@@ -341,6 +341,11 @@ return {
           parser = "CodeCompanion",
           files = { cc_base .. "/rules/task/change-summary.md" },
         },
+        task_write_docs = {
+          description = "Task: Write documentation",
+          parser = "CodeCompanion",
+          files = { cc_base .. "/rules/task/write-docs.md" },
+        },
 
         -- project rules (autoloaded when present in the repo)
         project = {
