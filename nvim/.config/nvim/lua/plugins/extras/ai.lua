@@ -8,7 +8,6 @@ local free_model_copilot = "gpt-5-mini"
 
 -- Used in codecompanion config
 local cc_base = vim.fn.stdpath("config") .. "/ai/codecompanion"
-local helpers = require("utils.helpers")
 
 return {
   {
@@ -307,7 +306,11 @@ return {
       prompt_library = {
         markdown = {
           dirs = {
+            -- globel prompts in this config
             cc_base .. "/prompts",
+
+            -- project local prompts
+            require("utils.helpers").project_root_path() .. "/.codecompanion/prompts",
           },
         },
       },
