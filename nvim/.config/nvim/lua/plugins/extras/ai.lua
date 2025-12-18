@@ -353,6 +353,30 @@ return {
             cc_base .. "/rules/output/docs.md",
           },
         },
+        task_review_changes = {
+          description = "Task: Review staged/unstaged diffs",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/task/review-changes.md",
+            cc_base .. "/rules/output/review-changes.md",
+          },
+        },
+        task_write_tests = {
+          description = "Task: Write tests",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/task/write-tests.md",
+            cc_base .. "/rules/output/write-tests.md",
+          },
+        },
+        task_explain_arch = {
+          description = "Task: Explain architecture",
+          parser = "CodeCompanion",
+          files = {
+            cc_base .. "/rules/task/explain-architecture.md",
+            cc_base .. "/rules/output/explain-architecture.md",
+          },
+        },
 
         -- project rules (autoloaded when present in the repo)
         project = {
