@@ -185,7 +185,7 @@ return {
           separator = "",
           padding = { left = 0, right = 0 },
           on_click = function()
-            vim.cmd("Copilot status")
+            require("codecompanion.adapters.http.copilot.stats").show()
           end,
         },
         -- Show MCPHub status:
