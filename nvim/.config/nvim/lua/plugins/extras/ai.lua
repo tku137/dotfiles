@@ -310,7 +310,7 @@ return {
             cc_base .. "/prompts",
 
             -- project local prompts
-            "/.codecompanion/prompts",
+            ".codecompanion/prompts",
           },
         },
       },
