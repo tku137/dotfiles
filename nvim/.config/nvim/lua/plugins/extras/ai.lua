@@ -329,7 +329,10 @@ return {
         task_research = {
           description = "Task: Search then answer",
           parser = "CodeCompanion",
-          files = { cc_base .. "/rules/task/research.md" },
+          files = {
+            cc_base .. "/rules/task/research.md",
+            cc_base .. "/rules/output/research.md",
+          },
         },
         task_gtd = {
           description = "Task: GTD (plan + execute)",
@@ -344,7 +347,11 @@ return {
         task_write_docs = {
           description = "Task: Write documentation",
           parser = "CodeCompanion",
-          files = { cc_base .. "/rules/task/write-docs.md" },
+          files = {
+            cc_base .. "/rules/task/research.md",
+            cc_base .. "/rules/task/write-docs.md",
+            cc_base .. "/rules/output/docs.md",
+          },
         },
 
         -- project rules (autoloaded when present in the repo)

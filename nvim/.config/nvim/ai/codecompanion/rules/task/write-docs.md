@@ -24,9 +24,3 @@ You are writing or updating developer documentation for a codebase.
    - Ensure the doc matches the actual code behavior.
    - Call out assumptions explicitly.
    - End with a short “Next steps / TODOs” section if relevant.
-
-## Output rules
-
-- Keep tone impersonal and concise.
-- Use headings that fit the content (no excessive verbosity).
-- If the user asked for file creation/update, clearly state the intended file path(s) in your final response.
