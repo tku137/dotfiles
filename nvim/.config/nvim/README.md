@@ -587,6 +587,25 @@ It needs a connection string set via the environment variable `POSTGRESQL_URL`, 
 postgres://user:pass@database.url:port/db_name
 ```
 
+### Using databases with nvim-dbee
+
+To use nvim-dbee to connect to databases, it is advised to first create a connections file `.dbee-connections.json` in the project directory:
+
+```json
+[
+  {
+    "id": "dev_db",
+    "name": "Dev DB",
+    "type": "postgres",
+    "url": "postgres://user:pass@host:5432/mydb?sslmode=disable"
+  }
+]
+```
+
+If a project-local connections file exists, the nvim-dbee scratchpad directory is set to the project-local `.dbee-scratchpad`, otherwise use the default directory in `~/.local/state/nvim`. If the project-local scratchpad directory exists, it is used even without a connections file present.
+
+This ensures that you can have project-specific database connections and scratchpad files at the project level, and minimize risk of loss or "loosing" precious project-specific scratch files.
+
 ## Prerequisites
 
 1. **Prerequisites**:

@@ -54,6 +54,7 @@ return {
     dependencies = {
       "MunifTanjim/nui.nvim",
     },
+    cmd = { "Dbee" },
     build = function()
       -- Install tries to automatically detect the install method.
       -- if it fails, try calling it with one of these parameters:
@@ -61,11 +62,26 @@ return {
       require("dbee").install()
     end,
     config = function()
-      -- Project-local connections file and scratchpad directory
+      local uv = vim.uv or vim.loop
       local project_root = require("utils.helpers").project_root_path()
+
+      -- Project-local connections file and scratchpad directory
       local project_file = vim.fs.joinpath(project_root, ".dbee-connections.json")
-      local scratch_dir = vim.fs.joinpath(project_root, ".dbee-scratchpad")
-      vim.fn.mkdir(scratch_dir, "p") -- ensure dir exists
+      local local_scratch = vim.fs.joinpath(project_root, ".dbee-scratchpad")
+
+      -- Global scratchpad directory
+      local global_scratch = vim.fs.joinpath(vim.fn.stdpath("state"), "dbee", "scratch")
+
+      -- Prefer local scratch if it already exists OR if there is a connections file
+      local scratch_dir
+      if uv.fs_stat(local_scratch) or uv.fs_stat(project_file) then
+        scratch_dir = local_scratch
+      else
+        scratch_dir = global_scratch
+      end
+
+      -- Make sure scratch dir exists
+      vim.fn.mkdir(scratch_dir, "p")
 
       require("dbee").setup({
         result = {
@@ -116,13 +132,16 @@ return {
           require("dbee.sources").FileSource:new(project_file),
         },
       })
+
+      -- Only load cmp-dbee when nvim-dbee is loaded
+      pcall(function()
+        require("lazy").load({ plugins = { "cmp-dbee" } })
+      end)
     end,
     keys = {
       {
         "<leader>D",
-        function()
-          require("dbee").toggle()
-        end,
+        "<cmd>Dbee toggle<cr>",
         desc = "DBee UI",
       },
     },
@@ -130,8 +149,8 @@ return {
   -- using blink.compat to get suggestions of this nvim-cmp source
   {
     "MattiasMTS/cmp-dbee",
+    lazy = true,
     dependencies = { "kndndrj/nvim-dbee" },
-    ft = sql_ft,
     opts = {}, -- needed
   },
   {
@@ -143,23 +162,25 @@ return {
         lazy = true,
         opts = {}, -- needed
       },
-      { "MattiasMTS/cmp-dbee" },
     },
-    opts = {
-      sources = {
-        default = { "dbee" },
+    opts = function(_, opts)
+      local function is_loaded(name)
+        local ok, cfg = pcall(require, "lazy.core.config")
+        return ok and cfg.plugins[name] and cfg.plugins[name]._.loaded
+      end
 
-        providers = {
-          dbee = {
-            name = "cmp-dbee",
-            module = "blink.compat.source",
-            enabled = function()
-              return vim.tbl_contains(sql_ft, vim.bo.filetype)
-            end,
-            opts = {},
-          },
-        },
-      },
-    },
+      opts.sources = opts.sources or {}
+      opts.sources.default = opts.sources.default or { "dbee" }
+      opts.sources.providers = opts.sources.providers or {}
+
+      opts.sources.providers.dbee = {
+        name = "cmp-dbee",
+        module = "blink.compat.source",
+        enabled = function()
+          return vim.tbl_contains(sql_ft, vim.bo.filetype) and is_loaded("cmp-dbee")
+        end,
+        opts = {},
+      }
+    end,
   },
 }
