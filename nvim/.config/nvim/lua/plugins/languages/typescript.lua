@@ -66,13 +66,14 @@ return {
       "formatters_by_ft.jsonc",
     },
     opts = {
+      -- stylua: ignore
       formatters_by_ft = {
-        javascript = { "biome", "prettierd", "prettier", "eslint_d", stop_after_first = true },
-        typescript = { "biome", "prettierd", "prettier", "eslint_d", stop_after_first = true },
-        javascriptreact = { "biome", "prettierd", "prettier", "eslint_d", stop_after_first = true },
-        typescriptreact = { "biome", "prettierd", "prettier", "eslint_d", stop_after_first = true },
-        json = { "biome", "prettierd", "prettier", stop_after_first = true },
-        jsonc = { "biome", "prettierd", "prettier", stop_after_first = true },
+        javascript = { "prettierd", "prettier", "biome", "eslint_d", stop_after_first = true, lsp_format = "never" },
+        typescript = { "prettierd", "prettier", "biome", "eslint_d", stop_after_first = true, lsp_format = "never" },
+        javascriptreact = { "prettierd", "prettier", "biome", "eslint_d", stop_after_first = true, lsp_format = "never" },
+        typescriptreact = { "prettierd", "prettier", "biome", "eslint_d", stop_after_first = true, lsp_format = "never" },
+        json = { "prettierd", "prettier", "biome", stop_after_first = true, lsp_format = "never" },
+        jsonc = { "prettierd", "prettier", "biome", stop_after_first = true, lsp_format = "never" },
       },
     },
   },
