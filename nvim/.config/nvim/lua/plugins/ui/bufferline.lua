@@ -35,6 +35,7 @@ return {
           .. (diag.warning and icons.Warn .. diag.warning or "")
         return vim.trim(ret)
       end,
+      diagnostics_update_in_insert = false, -- silence deprecation warning
       always_show_bufferline = false,
       offsets = {
         {
