@@ -18,7 +18,17 @@ return {
     opts = {
       bigfile = { enabled = true },
       quickfile = { enabled = true },
-      picker = { enabled = true },
+      picker = {
+        enabled = true,
+        win = {
+          input = {
+            keys = {
+              ["<a-s>"] = { "edit_split", mode = { "i", "n" } },
+              ["<a-v>"] = { "edit_vsplit", mode = { "i", "n" } },
+            },
+          },
+        },
+      },
       input = { enabled = true },
       terminal = {
         win = {

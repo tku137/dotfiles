@@ -27,7 +27,7 @@ return {
     },
     keys = {
       {
-        prefix .. "n",
+        prefix .. "g",
         "<Cmd>Neogit<CR>",
         desc = "Open Neogit Tab Page",
         mode = "n",

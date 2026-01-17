@@ -57,9 +57,9 @@ return {
             },
           },
           windows = {
-            height = 0.35,
+            size = 0.35,
             terminal = {
-              width = 0.35,
+              size = 0.35,
             },
           },
         },

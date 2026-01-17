@@ -319,7 +319,7 @@ return {
         -- Personal defaults (live nvim config)
         personal = {
           description = "Personal defaults (always loaded)",
-          parser = "CodeCompanion",
+          parser = "codecompanion",
           files = {
             cc_base .. "/rules/personal.md",
           },
@@ -328,7 +328,7 @@ return {
         -- task rules (loaded per-prompt via opts.rules)
         task_research = {
           description = "Task: Search then answer",
-          parser = "CodeCompanion",
+          parser = "codecompanion",
           files = {
             cc_base .. "/rules/task/research.md",
             cc_base .. "/rules/output/research.md",
@@ -336,17 +336,17 @@ return {
         },
         task_gtd = {
           description = "Task: GTD (plan + execute)",
-          parser = "CodeCompanion",
+          parser = "codecompanion",
           files = { cc_base .. "/rules/task/gtd.md" },
         },
         task_change_summary = {
           description = "Task: Summarize git changes",
-          parser = "CodeCompanion",
+          parser = "codecompanion",
           files = { cc_base .. "/rules/task/change-summary.md" },
         },
         task_write_docs = {
           description = "Task: Write documentation",
-          parser = "CodeCompanion",
+          parser = "codecompanion",
           files = {
             cc_base .. "/rules/task/research.md",
             cc_base .. "/rules/task/write-docs.md",
@@ -355,7 +355,7 @@ return {
         },
         task_review_changes = {
           description = "Task: Review staged/unstaged diffs",
-          parser = "CodeCompanion",
+          parser = "codecompanion",
           files = {
             cc_base .. "/rules/task/review-changes.md",
             cc_base .. "/rules/output/review-changes.md",
@@ -363,7 +363,7 @@ return {
         },
         task_write_tests = {
           description = "Task: Write tests",
-          parser = "CodeCompanion",
+          parser = "codecompanion",
           files = {
             cc_base .. "/rules/task/write-tests.md",
             cc_base .. "/rules/output/write-tests.md",
@@ -371,7 +371,7 @@ return {
         },
         task_explain_arch = {
           description = "Task: Explain architecture",
-          parser = "CodeCompanion",
+          parser = "codecompanion",
           files = {
             cc_base .. "/rules/task/explain-architecture.md",
             cc_base .. "/rules/output/explain-architecture.md",
@@ -393,9 +393,17 @@ return {
             { path = "CLAUDE.md", parser = "claude" },
             { path = "CLAUDE.local.md", parser = "claude" },
             { path = "~/.claude/CLAUDE.md", parser = "claude" },
-            ".codecompanion/rules/**/*.md",
+            ".codecompanion/rules/project.md",
           },
           is_preset = true,
+        },
+
+        -- additional project rules (load on demand)
+        project_extra = {
+          description = "Additional project rules (load on demand)",
+          files = {
+            ".codecompanion/rules/**/*.md",
+          },
         },
 
         opts = {
