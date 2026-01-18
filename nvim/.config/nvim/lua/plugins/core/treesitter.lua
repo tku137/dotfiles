@@ -74,8 +74,8 @@ return {
           end
 
           if opts.fold and opts.fold.enable then
-            vim.wo[0].foldmethod = "expr"
-            vim.wo[0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            vim.wo[0][0].foldmethod = "expr"
+            vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
           end
         end,
       })
