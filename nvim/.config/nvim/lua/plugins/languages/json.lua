@@ -6,7 +6,6 @@ return {
     opts = {
       ensure_installed = {
         "json",
-        "jsonc", -- json with comments
         "hjson", -- json with comments and trailing commas
         "json5", -- json with comments and trailing commas
       },

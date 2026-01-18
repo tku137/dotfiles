@@ -12,8 +12,7 @@ return {
         "styled", -- for styled-components
       },
     },
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+    init = function(_, opts)
       -- Register additional parsers
       vim.treesitter.language.register("scss", "less")
       vim.treesitter.language.register("scss", "postcss")
