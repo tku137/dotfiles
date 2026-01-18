@@ -52,33 +52,27 @@ return {
         install_dir = opts.install_dir,
       })
 
-      -- Install parsers you collected from all language modules
-      local wanted = uniq(opts.ensure_installed)
-      if #wanted > 0 then
-        local handle = ts.install(wanted)
-        if opts.sync_install and handle and handle.wait then
-          pcall(function()
-            handle:wait(300000)
-          end) -- 5 min max
-        end
+      if opts.ensure_installed and #opts.ensure_installed > 0 then
+        ts.install(opts.ensure_installed, { force = false })
       end
 
-      -- Enable features (main rewrite expects you to do this yourself) :contentReference[oaicite:4]{index=4}
-      local group = vim.api.nvim_create_augroup("UserTreesitterMain", { clear = true })
+      local group = vim.api.nvim_create_augroup("UserTreesitterConfig", { clear = true })
+
       vim.api.nvim_create_autocmd("FileType", {
         group = group,
-        callback = function(ev)
+        callback = function(args)
           if opts.highlight and opts.highlight.enable then
-            pcall(vim.treesitter.start, ev.buf)
+            local ok, _ = pcall(vim.treesitter.start, args.buf)
+            if not ok then
+              return
+            end
           end
-
+          if opts.indent and opts.indent.enable then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
           if opts.fold and opts.fold.enable then
             vim.wo.foldmethod = "expr"
             vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-          end
-
-          if opts.indent and opts.indent.enable then
-            vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
           end
         end,
       })
