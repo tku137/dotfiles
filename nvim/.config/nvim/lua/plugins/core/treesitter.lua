@@ -1,11 +1,12 @@
-local function uniq(list)
+local function uniq_sorted(list)
   local seen, out = {}, {}
   for _, v in ipairs(list or {}) do
     if type(v) == "string" and not seen[v] then
       seen[v] = true
-      table.insert(out, v)
+      out[#out + 1] = v
     end
   end
+  table.sort(out)
   return out
 end
 
@@ -14,47 +15,50 @@ return {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
     lazy = false,
-    build = function()
-      -- silently update all treesitter parsers on fresh install
-      -- otherwise installation can "hang" when a bunch of parsers are installed
-      vim.cmd("silent! TSUpdate")
-    end,
+    build = ":TSUpdate",
+
     opts_extend = { "ensure_installed" },
     opts = {
-
-      -- A list of parser names, or "all" (the listed parsers MUST always be installed)
-      -- INFO: To add language specific parsers in their own config file, use this snippet:
-      -- {
-      --   "nvim-treesitter/nvim-treesitter",
-      --   opts = { ensure_installed = { "python", "requirements" } },
-      -- },
-      -- INFO: basic and misc parsers are defined in languages/misc.lua
       ensure_installed = {},
-
-      -- recommended install dir for the rewrite (and added to rtp by setup)
       install_dir = vim.fn.stdpath("data") .. "/site",
-
-      -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
 
-      -- Modules
-      -- Consistent syntax highlighting.
       highlight = { enable = true },
-
-      -- Indentation based on treesitter for the = operator.
       indent = { enable = true },
+      fold = { enable = false },
     },
+
     config = function(_, opts)
       local ts = require("nvim-treesitter")
 
-      ---@diagnostic disable-next-line: redundant-parameter
-      ts.setup({
-        install_dir = opts.install_dir,
-      })
+      ts.setup({ install_dir = opts.install_dir })
 
-      if opts.ensure_installed and #opts.ensure_installed > 0 then
-        ts.install(opts.ensure_installed, { force = false })
-      end
+      -- Install AFTER Lazy has finished loading/merging everything
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "VeryLazy",
+        once = true,
+        callback = function()
+          local wanted = uniq_sorted(opts.ensure_installed)
+          if #wanted == 0 then
+            return
+          end
+
+          local ok, handle = pcall(ts.install, wanted, { force = false })
+          if not ok then
+            -- dont brick startup if install fails, just report
+            vim.schedule(function()
+              vim.notify("treesitter: failed to install parsers: " .. vim.inspect(wanted), vim.log.levels.WARN)
+            end)
+            return
+          end
+
+          if opts.sync_install and handle and type(handle.wait) == "function" then
+            pcall(function()
+              handle:wait(300000)
+            end)
+          end
+        end,
+      })
 
       local group = vim.api.nvim_create_augroup("UserTreesitterConfig", { clear = true })
 
@@ -62,14 +66,13 @@ return {
         group = group,
         callback = function(args)
           if opts.highlight and opts.highlight.enable then
-            local ok, _ = pcall(vim.treesitter.start, args.buf)
-            if not ok then
-              return
-            end
+            pcall(vim.treesitter.start, args.buf)
           end
+
           if opts.indent and opts.indent.enable then
             vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
           end
+
           if opts.fold and opts.fold.enable then
             vim.wo.foldmethod = "expr"
             vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
@@ -78,6 +81,7 @@ return {
       })
     end,
   },
+
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     branch = "main",
