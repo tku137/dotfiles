@@ -1,4 +1,4 @@
-local function uniq_sorted(list)
+local function unique_sorted(list)
   local seen, out = {}, {}
   for _, v in ipairs(list or {}) do
     if type(v) == "string" and not seen[v] then
@@ -38,7 +38,7 @@ return {
         pattern = "VeryLazy",
         once = true,
         callback = function()
-          local wanted = uniq_sorted(opts.ensure_installed)
+          local wanted = unique_sorted(opts.ensure_installed)
           if #wanted == 0 then
             return
           end
@@ -74,8 +74,8 @@ return {
           end
 
           if opts.fold and opts.fold.enable then
-            vim.wo.foldmethod = "expr"
-            vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            vim.wo[0].foldmethod = "expr"
+            vim.wo[0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
           end
         end,
       })
