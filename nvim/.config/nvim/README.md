@@ -23,6 +23,8 @@ A modern, modular and highly opinionated Neovim configuration.
    - [fzf](https://github.com/junegunn/fzf)
    - [ripgrep](https://github.com/BurntSushi/ripgrep)
    - [fd](https://github.com/sharkdp/fd)
+   - [delta](https://github.com/dandavison/delta)
+
 2. **Installation**: Clone this repository to your Neovim config directory
 3. **First Run**: Open Neovim and let Lazy.nvim automatically install all plugins
 
@@ -112,7 +114,7 @@ Language-specific configurations:
 Optional plugins for extended functionality:
 
 - **`ai.lua`** - AI integration (Copilot, CodeCompanion)
-- **`git.lua`** - Advanced Git tools like Neogit, DiffView, `.gitignore` generation
+- **`git.lua`** - Advanced Git tools like Neogit, resolve.nvim (conflict visuals), `.gitignore` generation
 - **`surround.lua`** - Text object surrounding
 - **`yank.lua`** - Enhanced clipboard functionality
 - **`aerial.lua`** - Code outline and navigation
@@ -620,6 +622,7 @@ This ensures that you can have project-specific database connections and scratch
    - [ripgrep](https://github.com/BurntSushi/ripgrep)
    - [fd](https://github.com/sharkdp/fd)
    - [lazygit](https://github.com/jesseduffield/lazygit) (optional)
+   - [delta](https://github.com/dandavison/delta) (optional)
 2. **Third-party tools for preconfigured languages**:
    - **Package Manangers:**
      - npm

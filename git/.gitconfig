@@ -12,3 +12,5 @@
 [rerere]
 	enabled = true
 	autoupdate = true
+[merge]
+	conflictStyle = zdiff3
