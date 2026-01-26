@@ -54,6 +54,39 @@ return {
         end
       end,
     },
+    config = function(_, opts)
+      -- setup with opts defined above
+      require("resolve").setup(opts)
+
+      -- load tokyonight colors and utils for blending colors
+      -- (otherwise its too mich highlighting)
+      local colors = require("tokyonight.colors").setup()
+      local util = require("tokyonight.util")
+
+      -- set colors for highlights
+      local OursBaseColor = colors.green
+      local TheirsBaseColor = colors.blue
+      local AncestorBaseColor = colors.magenta
+      local SeparatorBaseColor = colors.orange
+
+      -- apply based on above colors
+      local highlights = {
+        ResolveOursMarker = { bg = util.blend_bg(OursBaseColor, 0.4), bold = true },
+        ResolveOursSection = { bg = util.blend_bg(OursBaseColor, 0.15) },
+
+        ResolveTheirsMarker = { bg = util.blend_bg(TheirsBaseColor, 0.4), bold = true },
+        ResolveTheirsSection = { bg = util.blend_bg(TheirsBaseColor, 0.15) },
+
+        ResolveAncestorMarker = { bg = util.blend_bg(AncestorBaseColor, 0.4), bold = true },
+        ResolveAncestorSection = { bg = util.blend_bg(AncestorBaseColor, 0.15) },
+
+        ResolveSeparatorMarker = { bg = util.blend_bg(SeparatorBaseColor, 0.3), bold = true },
+      }
+
+      for group, settings in pairs(highlights) do
+        vim.api.nvim_set_hl(0, group, settings)
+      end
+    end,
   },
   {
     "wintermute-cell/gitignore.nvim",
