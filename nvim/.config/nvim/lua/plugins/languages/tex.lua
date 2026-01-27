@@ -1,5 +1,38 @@
 local prefix = "<localLeader>"
 
+-- Toggle Snacks.image inline rendering
+local function snacks_image_refresh(buf)
+  buf = buf or vim.api.nvim_get_current_buf()
+
+  -- close any open hover preview
+  pcall(function()
+    if Snacks.image.doc and Snacks.image.doc.hover_close then
+      Snacks.image.doc.hover_close()
+    end
+  end)
+
+  -- remove existing inline/float placements for this buffer
+  pcall(function()
+    if Snacks.image.placement and Snacks.image.placement.clean then
+      Snacks.image.placement.clean(buf)
+    end
+  end)
+
+  -- remove per-buffer augroups
+  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.doc." .. buf)
+  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.inline." .. buf)
+
+  -- allow re-attach
+  vim.b[buf].snacks_image_attached = nil
+
+  -- reattach doc renderer so it picks up the new config
+  pcall(function()
+    if Snacks.image.doc and Snacks.image.doc.attach then
+      Snacks.image.doc.attach(buf)
+    end
+  end)
+end
+
 return {
 
   -- Treesitter
@@ -41,6 +74,29 @@ return {
           "-file-line-error",
         },
       }
+
+      Snacks.toggle
+        .new({
+          name = "Inline Render (Math/Images)",
+          get = function()
+            local wants = Snacks.image.config.doc.inline == true
+            local ok_env, env = pcall(function()
+              return Snacks.image.terminal.env()
+            end)
+            local supports = ok_env and env and env.placeholders == true
+            return wants and supports
+          end,
+          set = function(state)
+            -- update config
+            Snacks.image.config.doc.inline = state
+            -- make sure float is stil enabled, supported by wezterm
+            Snacks.image.config.doc.float = true
+
+            -- refresh only the current buffer
+            snacks_image_refresh()
+          end,
+        })
+        :map("<leader>uR")
     end,
     -- stylua: ignore
     keys = {
