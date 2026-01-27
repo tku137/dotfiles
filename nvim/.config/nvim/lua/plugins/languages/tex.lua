@@ -29,15 +29,18 @@ return {
       vim.g.vimtex_quickfix_method = vim.fn.executable("pplatex") == 1 and "pplatex" or "latexlog"
 
       -- Set PDF viewer
-      -- vim.g.vimtex_view_method = "zathura"
+      vim.g.vimtex_view_method = "zathura"
 
       -- Configure compiler settings
-      -- vim.g.vimtex_compiler_latexmk = {
-      --   options = {
-      --     '-shell-escape',
-      --     '-verbose',
-      --   },
-      -- }
+      vim.g.vimtex_compiler_latexmk = {
+        options = {
+          "-pdf",
+          "-shell-escape",
+          "-synctex=1",
+          "-interaction=nonstopmode",
+          "-file-line-error",
+        },
+      }
     end,
     -- stylua: ignore
     keys = {

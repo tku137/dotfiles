@@ -40,6 +40,15 @@ return {
           },
         },
       },
+      image = {
+        enabled = true,
+        doc = {
+          inline = true,
+          float = true,
+          max_width = 50,
+          max_height = 30,
+        },
+      },
     },
   },
 }
