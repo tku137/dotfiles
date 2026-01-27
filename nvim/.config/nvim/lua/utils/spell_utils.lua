@@ -223,17 +223,18 @@ function M.apply_spell_language(main_file, pattern, header_lines, desired_lang, 
     lines = vim.api.nvim_buf_get_lines(0, 0, header_lines, false)
   end
 
+  -- Set desired or default language based on pattern presence
+  -- If already set, do not spam notifications
   if find_pattern_in_lines(lines, pattern) then
-    -- If the desired language is already active, do nothing
-    if vim.bo.spelllang == desired_lang then
-      return nil
+    if vim.bo.spelllang ~= desired_lang then
+      vim.cmd("setlocal spell spelllang=" .. desired_lang)
+      vim.notify("Activated " .. desired_lang .. " language for spell checking.")
     end
-    -- Otherwise, set the spell language
-    vim.cmd("setlocal spell spelllang=" .. desired_lang)
-    vim.notify("Activated " .. desired_lang .. " language for spell checking.")
   else
-    vim.cmd("setlocal spell spelllang=" .. default_lang)
-    vim.notify("Activated " .. default_lang .. " language for spell checking.")
+    if vim.bo.spelllang ~= default_lang then
+      vim.cmd("setlocal spell spelllang=" .. default_lang)
+      vim.notify("Activated " .. default_lang .. " language for spell checking.")
+    end
   end
 
   return nil
