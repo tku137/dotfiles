@@ -2,7 +2,7 @@
 -- are shown in the blink.cmp completion menu. The higher the number,
 -- the higher the source appears in the menu.
 local source_priority = {
-  dbee = 6,
+  dadbod = 6,
   copilot = 5,
   avante = 4,
   conventional_commits = 3,

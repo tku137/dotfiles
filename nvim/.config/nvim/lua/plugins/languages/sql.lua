@@ -49,138 +49,76 @@ return {
     opts = { formatters_by_ft = { sql = { "sqlfluff" } } },
   },
 
+  -- Dadbod backend
+  { "tpope/vim-dadbod", cmd = { "DB" } },
+
+  -- Completion source (also provides the blink provider module)
   {
-    "kndndrj/nvim-dbee",
+    "kristijanhusak/vim-dadbod-completion",
+    dependencies = { "tpope/vim-dadbod" },
+    ft = sql_ft,
+  },
+
+  -- Dadbod UI
+  {
+    "kristijanhusak/vim-dadbod-ui",
     dependencies = {
-      "MunifTanjim/nui.nvim",
+      "tpope/vim-dadbod",
+      "kristijanhusak/vim-dadbod-completion",
     },
-    cmd = { "Dbee" },
-    build = function()
-      -- Install tries to automatically detect the install method.
-      -- if it fails, try calling it with one of these parameters:
-      --    "curl", "wget", "bitsadmin", "go"
-      require("dbee").install()
-    end,
-    config = function()
-      local uv = vim.uv or vim.loop
+    cmd = { "DBUI", "DBUIToggle", "DBUIAddConnection", "DBUIFindBuffer" },
+    ft = sql_ft,
+    keys = {
+      { "<leader>D", "<cmd>DBUIToggle<cr>", desc = "Dadbod UI" },
+
+      { prefix .. "r", ":%DB<cr>", ft = sql_ft, desc = "Run buffer" },
+      { prefix .. "r", ":DB<cr>", mode = "v", ft = sql_ft, desc = "Run selection" },
+      { prefix .. "p", "vip:DB<cr>", ft = sql_ft, desc = "Run paragraph" },
+      { prefix .. "l", ":.DB<cr>", ft = sql_ft, desc = "Run line" },
+
+      { prefix .. "i", "<cmd>DBUILastQueryInfo<cr>", ft = sql_ft, desc = "Last query info" },
+      { prefix .. "u", "<cmd>DBUIToggle<cr>", ft = sql_ft, desc = "Toggle drawer" },
+      { prefix .. "b", "<cmd>DBUIFindBuffer<cr>", ft = sql_ft, desc = "Find buffer" },
+      { prefix .. "B", "<cmd>DBUIRenameBuffer<cr>", ft = sql_ft, desc = "Rename buffer" },
+    },
+    init = function()
       local project_root = require("utils.helpers").project_root_path()
 
-      -- Project-local connections file and scratchpad directory
-      local project_file = vim.fs.joinpath(project_root, ".dbee-connections.json")
-      local local_scratch = vim.fs.joinpath(project_root, ".dbee-scratchpad")
+      -- UI niceties
+      vim.g.db_ui_use_nerd_fonts = true
+      vim.g.db_ui_show_database_icon = true
+      vim.g.db_ui_use_nvim_notify = true
 
-      -- Global scratchpad directory
-      local global_scratch = vim.fs.joinpath(vim.fn.stdpath("state"), "dbee", "scratch")
+      -- Dont execute on every save
+      vim.g.db_ui_execute_on_save = false
 
-      -- Prefer local scratch if it already exists OR if there is a connections file
-      local scratch_dir
-      if uv.fs_stat(local_scratch) or uv.fs_stat(project_file) then
-        scratch_dir = local_scratch
-      else
-        scratch_dir = global_scratch
-      end
+      -- Reads env vars like DB_UI_DEV, DB_UI_PROD, …
+      vim.g.db_ui_dotenv_variable_prefix = "DB_UI_"
 
-      -- Make sure scratch dir exists
-      vim.fn.mkdir(scratch_dir, "p")
-
-      require("dbee").setup({
-        result = {
-          mappings = {
-            -- next/previous page
-            { key = "L", mode = "", action = "page_next" },
-            { key = "H", mode = "", action = "page_prev" },
-            { key = "E", mode = "", action = "page_last" },
-            { key = "F", mode = "", action = "page_first" },
-
-            -- yank rows as csv/json
-            { key = prefix .. "j", mode = "n", action = "yank_current_json", opts = { desc = "copy row as JSON" } },
-            {
-              key = prefix .. "j",
-              mode = "v",
-              action = "yank_selection_json",
-              opts = { desc = "copy selection as JSON" },
-            },
-            { key = prefix .. "J", mode = "", action = "yank_all_json", opts = { desc = "copy all as JSON" } },
-            { key = prefix .. "c", mode = "n", action = "yank_current_csv", opts = { desc = "copy row as CSV" } },
-            {
-              key = prefix .. "c",
-              mode = "v",
-              action = "yank_selection_csv",
-              opts = { desc = "copy selection as CSV" },
-            },
-            { key = prefix .. "C", mode = "", action = "yank_all_csv", opts = { desc = "copy all as CSV" } },
-
-            -- cancel current call execution
-            { key = "<C-c>", mode = "", action = "cancel_call" },
-          },
-        },
-        editor = {
-          -- store scratchpad files to persistent directory defined above
-          directory = scratch_dir,
-        },
-        sources = {
-          -- load project specific connections, reads a `.dbee-connections.json` file
-          -- from the project root path with following content:
-          -- [
-          --   {
-          --     "id": "dev_db",
-          --     "name": "Dev DB",
-          --     "type": "postgres",
-          --     "url": "postgres://user:pass@host:5432/mydb?sslmode=disable"
-          --   }
-          -- ]
-          require("dbee.sources").FileSource:new(project_file),
-        },
-      })
-
-      -- Only load cmp-dbee when nvim-dbee is loaded
-      pcall(function()
-        require("lazy").load({ plugins = { "cmp-dbee" } })
-      end)
+      -- Always store DBUI state inside the project
+      local base = vim.fs.joinpath(project_root, ".dbui")
+      vim.g.db_ui_save_location = base
+      vim.g.db_ui_tmp_query_location = vim.fs.joinpath(base, "tmp")
+      vim.fn.mkdir(vim.g.db_ui_save_location, "p")
+      vim.fn.mkdir(vim.g.db_ui_tmp_query_location, "p")
     end,
-    keys = {
-      {
-        "<leader>D",
-        "<cmd>Dbee toggle<cr>",
-        desc = "DBee UI",
-      },
-    },
   },
-  -- using blink.compat to get suggestions of this nvim-cmp source
-  {
-    "MattiasMTS/cmp-dbee",
-    lazy = true,
-    dependencies = { "kndndrj/nvim-dbee" },
-    opts = {}, -- needed
-  },
+
+  -- blink.cmp: inject provider + per-filetype sources
   {
     "saghen/blink.cmp",
-    dependencies = {
-      {
-        "saghen/blink.compat",
-        version = "2.*",
-        lazy = true,
-        opts = {}, -- needed
+    dependencies = { "kristijanhusak/vim-dadbod-completion" },
+    opts = {
+      sources = {
+        providers = {
+          dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+        },
+        per_filetype = {
+          sql = { "dadbod", "snippets", "buffer" },
+          mysql = { "dadbod", "snippets", "buffer" },
+          plsql = { "dadbod", "snippets", "buffer" },
+        },
       },
     },
-    opts = function(_, opts)
-      local function is_loaded(name)
-        local ok, cfg = pcall(require, "lazy.core.config")
-        return ok and cfg.plugins[name] and cfg.plugins[name]._.loaded
-      end
-
-      opts.sources = opts.sources or {}
-      opts.sources.default = opts.sources.default or { "dbee" }
-      opts.sources.providers = opts.sources.providers or {}
-
-      opts.sources.providers.dbee = {
-        name = "cmp-dbee",
-        module = "blink.compat.source",
-        enabled = function()
-          return vim.tbl_contains(sql_ft, vim.bo.filetype) and is_loaded("cmp-dbee")
-        end,
-        opts = {},
-      }
-    end,
   },
 }

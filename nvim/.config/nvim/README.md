@@ -589,24 +589,67 @@ It needs a connection string set via the environment variable `POSTGRESQL_URL`, 
 postgres://user:pass@database.url:port/db_name
 ```
 
-### Using databases with nvim-dbee
+### Using databases with vim-dadbod + vim-dadbod-ui
 
-To use nvim-dbee to connect to databases, it is advised to first create a connections file `.dbee-connections.json` in the project directory:
+This setup uses vim-dadbod (query execution), vim-dadbod-ui (UI), and vim-dadbod-completion (completion via `blink.cmp`).
 
-```json
-[
-  {
-    "id": "dev_db",
-    "name": "Dev DB",
-    "type": "postgres",
-    "url": "postgres://user:pass@host:5432/mydb?sslmode=disable"
-  }
-]
+#### Connections via `.envrc` (direnv)
+
+Define project-specific connections as environment variables with prefix `DB_UI_`:
+
+```bash
+# .envrc (git-ignored)
+export DB_UI_DEV="postgres://user:pass@host:5432/mydb?sslmode=disable"
+export DB_UI_TEST="sqlite:test.db"
 ```
 
-If a project-local connections file exists, the nvim-dbee scratchpad directory is set to the project-local `.dbee-scratchpad`, otherwise use the default directory in `~/.local/state/nvim`. If the project-local scratchpad directory exists, it is used even without a connections file present.
+Then run:
 
-This ensures that you can have project-specific database connections and scratchpad files at the project level, and minimize risk of loss or "loosing" precious project-specific scratch files.
+```bash
+direnv allow
+```
+
+DBUI will automatically pick up these connections.
+
+#### Connections via `mise.local.toml`
+
+Define project-specific connections as environment variables with prefix `DB_UI_`:
+
+```toml
+# mise.local.toml (git-ignored)
+[env]
+DB_UI_DEV  = "postgres://user:pass@host:5432/mydb?sslmode=disable"
+DB_UI_TEST = "sqlite:test.db"
+
+# alternatively, load them from a dotenv file (.env contains KEY=value, no `export`)
+# _.file = ".env"
+```
+
+Then run:
+
+```bash
+mise trust
+```
+
+DBUI will automatically pick up these connections.
+
+#### Project-local persistence: `.dbui/`
+
+Connections added interactively via DBUI menu or `:DBUIAddConnection` and saved queries created in DBUI are stored project-local in:
+
+`./.dbui/` (state + saved queries + connections)
+
+`./.dbui/tmp/` (temporary query buffers)
+
+Add this to `.gitignore`:
+
+```bash
+.dbui/
+```
+
+#### Query execution shortcuts
+
+In SQL buffers (`sql`, `mysql`, `plsql`), the `<localLeader>` menu provides shortcuts to execute queries (buffer/selection/paragraph/line) and toggle/find DBUI buffers.
 
 ## Prerequisites
 
