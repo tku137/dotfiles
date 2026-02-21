@@ -1,8 +1,23 @@
 # Font configuration
-font-family = "JetBrainsMono Nerd Font"
+font-size = 16
+# font-family = "JetBrainsMono Nerd Font"
+# font-family = "LythMono Nerd Font"
+font-family = "AtkynsonMono Nerd Font"
+
 font-family-italic = "Maple Mono NF"
 font-family-bold-italic = "Maple Mono NF"
-font-size = 16
+# font-family-italic = "VictorMono NF"
+# font-family-bold-italic = "VictorMono NF"
+# font-family-italic = "RecMonoCasualMono NF"
+# font-family-bold-italic = "RecMonoCasualMono NF"
+
+# font-thicken = true
+font-style = "Medium"
+
+# Increase line spacing by
+adjust-cell-height = 10%
+
+# Background settings
 background-blur = 20
 background-opacity = 1.0
 
