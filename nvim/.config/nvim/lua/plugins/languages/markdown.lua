@@ -41,21 +41,19 @@ return {
     opts_extend = { "file_types" }, -- important to convince lazy.nvim to merge this!
     opts = {
       code = {
-        sign = false,
-        width = "block",
-        right_pad = 1,
+        sign = true,
+        -- width = "block",
+        -- right_pad = 1,
       },
       heading = {
-        sign = false,
-        icons = {},
+        sign = true,
+        -- icons = {},
       },
       checkbox = {
-        enabled = false,
+        enabled = true,
       },
       completions = {
-        lsp = {
-          enabled = true,
-        },
+        blink = { enabled = true },
       },
       filetypes = { "Avante", "markdown", "norg", "rmd", "org", "codecompanion" },
     },

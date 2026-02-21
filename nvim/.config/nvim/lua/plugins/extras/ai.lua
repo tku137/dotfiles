@@ -4,7 +4,7 @@
 local prefix = "<Leader>a"
 
 -- Define a 0x default model for copilot to preserve premium requests
-local free_model_copilot = "gpt-5-mini"
+local free_model_copilot = "claude-sonnet-4.5"
 
 -- Used in codecompanion config
 local cc_base = vim.fn.stdpath("config") .. "/ai/codecompanion"
