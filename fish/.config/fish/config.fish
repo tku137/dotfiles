@@ -44,7 +44,8 @@ for p in /opt/homebrew/bin \
     /home/linuxbrew/.linuxbrew/opt/fzf/bin \
     $HOME/.linuxbrew/bin \
     $HOME/.linuxbrew/opt/fzf/bin \
-    $HOME/.local/bin
+    $HOME/.local/bin \
+    $HOME/.opencode/bin
     fish_add_path $p
 end
 
