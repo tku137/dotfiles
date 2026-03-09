@@ -33,15 +33,6 @@
       "disabled": true,
       "disabled_tools": []
     },
-    "git": {
-      "args": [
-        "mcp-server-git",
-        "--repository",
-        "${env:GIT_ROOT}"
-      ],
-      "command": "uvx",
-      "disabled": false
-    },
     "memory": {
       "args": [
         "-y",

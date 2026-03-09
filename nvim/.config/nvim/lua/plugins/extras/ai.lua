@@ -62,12 +62,7 @@ return {
       "nvim-lua/plenary.nvim",
     },
     config = function()
-      require("mcphub").setup({
-        global_env = {
-          GIT_ROOT = require("utils.helpers").git_root(),
-          DEFAULT_MINIMUM_TOKENS = "6000",
-        },
-      })
+      require("mcphub").setup()
     end,
     keys = {
       {
@@ -77,11 +72,6 @@ return {
         mode = "n",
       },
     },
-  },
-  {
-    "Davidyz/VectorCode",
-    version = "*", -- optional, depending on whether you're on nightly or release
-    dependencies = { "nvim-lua/plenary.nvim" },
   },
   {
     "olimorris/codecompanion.nvim",
@@ -109,8 +99,6 @@ return {
                 "full_stack_dev",
 
                 -- useful MCP servers
-                "git",
-                "vectorcode",
                 "context7",
 
                 -- web stuff
@@ -132,8 +120,6 @@ return {
                   -- but we make them explicitly available here so
                   -- the chat does not need to go through the @{mcp} tool
                   -- to get to these very important ones
-                  "git",
-                  "vectorcode",
                   "context7",
 
                   -- meta-group containing all MCP server tools
@@ -165,7 +151,7 @@ return {
           callback = "mcphub.extensions.codecompanion",
           opts = {
             -- expose MCP resources as #{mcp:*} variables
-            make_vars = true,
+            make_vars = false, -- broken with CodeCompanion v19 (variables renamed to editor_context)
             -- add MCP prompts as /mcp:* slash commands
             make_slash_commands = true,
             -- show MCP tool results directly in chat
@@ -175,26 +161,6 @@ return {
             -- optionally show each server tool individually in chat UI
             show_server_tools_in_chat = true,
             -- add_mcp_prefix_to_tool_names = false,
-          },
-        },
-        -- register VectorCode as a CodeCompanion extension
-        vectorcode = {
-          opts = {
-            add_tool = true,
-            add_slash_command = true,
-          },
-          tool_opts = {
-            -- configure all tools with common settings
-            ["*"] = {
-              require_approval_before = false,
-              include_in_toolbox = true,
-            },
-            -- specific config for querying vectorcode DB
-            query = {
-              chunk_mode = false,
-              max_num = 10, -- max files to retrieve
-              default_num = 5, -- default files to retrieve
-            },
           },
         },
         -- register history extension
@@ -270,24 +236,6 @@ return {
                 system_prompt = nil, -- custom system prompt (string or function)
                 format_summary = nil, -- custom function to format generated summary e.g to remove <think/> tags from summary
               },
-            },
-
-            -- Memory system (requires VectorCode CLI)
-            memory = {
-              -- Automatically index summaries when they are generated
-              auto_create_memories_on_summary_generation = true,
-              -- Path to the VectorCode executable
-              vectorcode_exe = "vectorcode",
-              -- Tool configuration
-              tool_opts = {
-                -- Default number of memories to retrieve
-                default_num = 10,
-              },
-              -- Enable notifications for indexing progress
-              notify = true,
-              -- Index all existing memories on startup
-              -- (requires VectorCode 0.6.12+ for efficient incremental indexing)
-              index_on_startup = true,
             },
           },
         },
