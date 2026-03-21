@@ -82,8 +82,6 @@ return {
       { prefix .. "B", "<cmd>DBUIRenameBuffer<cr>", ft = sql_ft, desc = "Rename buffer" },
     },
     init = function()
-      local project_root = require("utils.helpers").project_root_path()
-
       -- UI niceties
       vim.g.db_ui_use_nerd_fonts = true
       vim.g.db_ui_show_database_icon = true
@@ -95,12 +93,33 @@ return {
       -- Reads env vars like DB_UI_DEV, DB_UI_PROD, …
       vim.g.db_ui_dotenv_variable_prefix = "DB_UI_"
 
-      -- Always store DBUI state inside the project
+      -- Set path globals here so dadbod-ui reads the correct location when it loads
+      -- (dadbod-ui reads these globals before DBUIOpened fires, so they must be set in init)
+      -- The actual directories are NOT created here, only when DBUI is first opened (see config below)
+      local project_root = require("utils.helpers").project_root_path()
       local base = vim.fs.joinpath(project_root, ".dbui")
       vim.g.db_ui_save_location = base
       vim.g.db_ui_tmp_query_location = vim.fs.joinpath(base, "tmp")
-      vim.fn.mkdir(vim.g.db_ui_save_location, "p")
-      vim.fn.mkdir(vim.g.db_ui_tmp_query_location, "p")
+    end,
+    config = function()
+      -- Only create .dbui/ dirs when DBUI is actually opened (once per session)
+      -- Re-resolves the project root here because LSP may now be attached and give a more
+      -- accurate root than what init() computed at startup. Also re-sets the globals for
+      -- consistency, but the primary purpose is the mkdir, which is intentionally deferred
+      -- from init() to avoid creating .dbui/ in every project just by opening neovim
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "DBUIOpened",
+        once = true,
+        callback = function()
+          -- Re-resolve root now that LSP/context may be available
+          local project_root = require("utils.helpers").project_root_path()
+          local base = vim.fs.joinpath(project_root, ".dbui")
+          vim.g.db_ui_save_location = base
+          vim.g.db_ui_tmp_query_location = vim.fs.joinpath(base, "tmp")
+          vim.fn.mkdir(vim.g.db_ui_save_location, "p")
+          vim.fn.mkdir(vim.g.db_ui_tmp_query_location, "p")
+        end,
+      })
     end,
   },
 
