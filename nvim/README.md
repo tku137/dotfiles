@@ -518,45 +518,6 @@ return {
 
 ## Notes
 
-### Using vectorcode for CodeCompanion
-
-> [!INFO]
-> It is recommended to use vectorcode for larger codebases. It will have a negligible impact on small projects and imo is not worth the maintenance hassle.
-
-See the vectorcode [CLI](https://github.com/Davidyz/VectorCode/blob/main/docs/cli.md) and [plugin](https://github.com/Davidyz/VectorCode/blob/main/docs/neovim/README.md) docs. Quick reference:
-
-```bash
-vectorcode init
-vectorcode vectorise **/*.py
-```
-
-or multiple filetypes at once:
-
-```bash
-vectorcode vectorise **/*.{py,rs,ts,md}
-```
-
-or just vectorise _everything_ in the project:
-
-```bash
-vectorcode vectorise . -r
-```
-
-Use this git hook to automatically index your codebase with vectorcode:
-
-```bash
-# .pre-commit-config.yaml
-repos:
-  - repo: local
-    hooks:
-      - id: vectorcode-vectorise
-        name: vectorcode: index staged changes
-        entry: vectorcode vectorise
-        language: system
-        pass_filenames: true
-        stages: [pre-commit]
-```
-
 ### Project-specific CodeCompanion rules
 
 Allow CodeCompanion to load repo-scoped rules by adding `.codecompanion/rules.md` like below (see the [official docs](https://codecompanion.olimorris.dev/configuration/rules)).
@@ -710,7 +671,6 @@ In SQL buffers (`sql`, `mysql`, `plsql`), the `<localLeader>` menu provides shor
    - **Additional Tools:**
      - **ipython** - Interactive Python REPL (`brew install ipython` or `mise use -g pipx:ipython@latest`)
      - **mcp-hub** - MCP Hub management and server interface (`mise use -g npm:mcp-hub@latest`)
-     - **vectorcode** - used by CodeCompanion, provides efficient codebase indexing (`uv tool install "vectorcode<1.0.0"` or `mise use -g pipx:vectorcode@latest`)
      - **pplatex** - latex error parsing (optional, for vimtex)
      - **uv** - python package manager (used by dap-python for auto-detection)
      - **typescript** - TypeScript compiler (`brew install typescript` or `mise use -g npm:typescript@latest`)
@@ -754,16 +714,14 @@ mise use -g lazygit@latest
 Other than basic packages, the following might be relevant to versioning, for example formatters, so it is advised to use something like mise to be able to have consistent tooling across projects.
 
 > [!WARNING]
-> Postgrestools and debugpy are not available with homebrew! Recommended install method for vectorcode is uv!
+> Postgrestools and debugpy are not available with homebrew!
 
 ```bash
 brew install ruff basedpyright llvm lua-language-server marksman vscode-langservers-extracted jsonlint yaml-language-server tinymist texlab fish-lsp sql-language-server stylua prettier prettierd typstyle taplo sqlfluff biome typescript ipython
-uv tool install "vectorcode<1.0.0" --python 3.11
 ```
 
 ```bash
 mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest
-uv tool install "vectorcode<1.0.0" --python 3.11
 ```
 
 ## Troubleshooting
