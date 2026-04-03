@@ -720,6 +720,9 @@ Other than basic packages, the following might be relevant to versioning, for ex
 brew install ruff basedpyright llvm lua-language-server marksman vscode-langservers-extracted jsonlint yaml-language-server tinymist texlab fish-lsp sql-language-server stylua prettier prettierd typstyle taplo sqlfluff biome typescript ipython
 ```
 
+> [!WARNING]
+> The mise tool list in `nvim/README.md` mirrors the one in `.dotter/post_deploy.sh`. If you add or remove a Neovim tool dependency, update both files.
+
 ```bash
 mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest
 ```

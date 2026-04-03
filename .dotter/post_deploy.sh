@@ -3,6 +3,8 @@
 # Sections are conditionally included based on which packages are selected
 # in local.toml, using the dotter.packages built-in variable.
 
+# WARNING: this list is mirrored in the nvim/README.md, update both!
+#
 {{#if dotter.packages.nvim}}
 {{#if (is_executable "mise")}}
 echo "==> Installing Neovim tool prerequisites via mise..."

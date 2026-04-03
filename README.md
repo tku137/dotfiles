@@ -103,13 +103,14 @@ Dotter runs `.dotter/pre_deploy.sh` before and `.dotter/post_deploy.sh` after ev
 
 `post_deploy.sh` runs package-specific setup steps using `{{#if dotter.packages.<name>}}` conditionals:
 
-| Package | What runs |
-| ------- | --------- |
-| nvim    | Installs all Neovim tool prerequisites via `mise use -g` (LSP servers, formatters, linters, DAP adapters). Skipped if `mise` is not on PATH. |
-| core    | Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available. |
+| Package | What runs                                                                                                                                                       |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| nvim    | Installs all Neovim tool prerequisites via `mise use -g` (LSP servers, formatters, linters, DAP adapters). Skipped if `mise` is not on PATH.                    |
+| core    | Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available.                                                    |
 | tmux    | Runs TPM's `install_plugins` script to install declared tmux plugins. Skipped if TPM is not yet cloned (it will auto-bootstrap on first `tmux` launch instead). |
 
-The mise tool list in `post_deploy.sh` mirrors the one in `nvim/README.md`. If you add or remove a Neovim tool dependency, update both files.
+> [!WARNING]
+> The mise tool list in `.dotter/post_deploy.sh` mirrors the one in `nvim/README.md`. If you add or remove a Neovim tool dependency, update both files.
 
 ## Common commands
 
