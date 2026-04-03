@@ -1,0 +1,56 @@
+[settings]
+default_target_type = "symbolic"
+
+[nvim.files]
+"nvim/.config/nvim" = "~/.config/nvim"
+
+[fish.files]
+"fish/.config/fish" = "~/.config/fish"
+
+[ghostty.files]
+"ghostty/.config/ghostty" = "~/.config/ghostty"
+
+[wezterm.files]
+"wezterm/.config/wezterm" = "~/.config/wezterm"
+
+[zellij.files]
+"zellij/.config/zellij" = "~/.config/zellij"
+
+[tmux.files]
+"tmux/.config/tmux" = "~/.config/tmux"
+
+[bat.files]
+"bat/.config/bat" = "~/.config/bat"
+
+[btop.files]
+"btop/.config/btop" = "~/.config/btop"
+
+[starship.files]
+"starship/.config/starship.toml" = "~/.config/starship.toml"
+
+[mcphub.files]
+"mcphub/.config/mcphub" = "~/.config/mcphub"
+
+[git.files]
+"git/.gitconfig" = "~/.gitconfig"
+
+[amethyst.files]
+"amethyst/.amethyst.yml" = "~/.amethyst.yml"
+
+[alacritty.files]
+"alacritty/.config/alacritty" = "~/.config/alacritty"
+
+[hatch.files]
+"hatch/.config/hatch" = "~/.config/hatch"
+
+[ipython.files]
+"ipython/.ipython" = "~/.ipython"
+
+[iterm2.files]
+"iterm2/.config/iterm2" = "~/.config/iterm2"
+
+[kitty.files]
+"kitty/.config/kitty" = "~/.config/kitty"
+
+[zsh.files]
+"zsh/.zshrc" = "~/.zshrc"
