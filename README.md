@@ -95,6 +95,22 @@ git_email = "work@example.com"
 
 This is useful for adjusting font sizes on high-DPI displays or using different git credentials on work machines.
 
+## Hooks
+
+Dotter runs `.dotter/pre_deploy.sh` before and `.dotter/post_deploy.sh` after every deploy. Both scripts are rendered as Handlebars templates, so they have access to all variables and built-ins.
+
+`pre_deploy.sh` removes `.DS_Store` files from the repo before dotter walks directories.
+
+`post_deploy.sh` runs package-specific setup steps using `{{#if dotter.packages.<name>}}` conditionals:
+
+| Package | What runs |
+| ------- | --------- |
+| nvim    | Installs all Neovim tool prerequisites via `mise use -g` (LSP servers, formatters, linters, DAP adapters). Skipped if `mise` is not on PATH. |
+| core    | Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available. |
+| tmux    | Runs TPM's `install_plugins` script to install declared tmux plugins. Skipped if TPM is not yet cloned (it will auto-bootstrap on first `tmux` launch instead). |
+
+The mise tool list in `post_deploy.sh` mirrors the one in `nvim/README.md`. If you add or remove a Neovim tool dependency, update both files.
+
 ## Common commands
 
 ```bash
