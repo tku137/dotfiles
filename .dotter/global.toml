@@ -1,56 +1,110 @@
 [settings]
-default_target_type = "symbolic"
+default_target_type = "automatic"
+
+# Core: always-deployed CLI tools
+[core]
+depends = []
+
+[core.files]
+"fish" = "~/.config/fish"
+"git/gitconfig" = "~/.gitconfig"
+"starship/starship.toml" = "~/.config/starship.toml"
+"bat" = "~/.config/bat"
+"btop" = "~/.config/btop"
+
+[core.variables]
+git_name = "Tony Fischer (tku137)"
+git_email = "tku137@mailbox.org"
+
+# Terminal: shared font variables (no files)
+[terminal]
+depends = []
+
+[terminal.variables]
+font_family = "AtkynsonMono Nerd Font"
+font_size = 16
+font_family_italic = "Maple Mono NF"
+
+# Editor
+[nvim]
+depends = ["mcphub"]
 
 [nvim.files]
 "nvim" = "~/.config/nvim"
 
-[fish.files]
-"fish" = "~/.config/fish"
-
-[ghostty.files]
-"ghostty" = "~/.config/ghostty"
-
-[wezterm.files]
-"wezterm" = "~/.config/wezterm"
-
-[zellij.files]
-"zellij" = "~/.config/zellij"
-
-[tmux.files]
-"tmux/tmux.conf" = "~/.config/tmux/tmux.conf"
-
-[bat.files]
-"bat" = "~/.config/bat"
-
-[btop.files]
-"btop" = "~/.config/btop"
-
-[starship.files]
-"starship/starship.toml" = "~/.config/starship.toml"
+# MCP Hub (pulled in by nvim)
+[mcphub]
+depends = []
 
 [mcphub.files]
 "mcphub" = "~/.config/mcphub"
 
-[git.files]
-"git/gitconfig" = "~/.gitconfig"
+# Terminal emulators
+[ghostty]
+depends = ["terminal"]
+
+[ghostty.files]
+"ghostty" = "~/.config/ghostty"
+
+[wezterm]
+depends = ["terminal"]
+
+[wezterm.files]
+"wezterm" = "~/.config/wezterm"
+
+# Multiplexers
+[tmux]
+depends = []
+
+[tmux.files]
+"tmux/tmux.conf" = "~/.config/tmux/tmux.conf"
+
+[zellij]
+depends = []
+
+[zellij.files]
+"zellij" = "~/.config/zellij"
+
+# macOS window manager
+[amethyst]
+depends = []
 
 [amethyst.files]
 "amethyst/amethyst.yml" = "~/.amethyst.yml"
 
+# Reference only (not in any standard profile)
+[alacritty]
+depends = ["terminal"]
+
 [alacritty.files]
 "alacritty" = "~/.config/alacritty"
+
+[hatch]
+depends = []
 
 [hatch.files]
 "hatch" = "~/.config/hatch"
 
+[ipython]
+depends = []
+
 [ipython.files]
 "ipython/ipython_config.py" = "~/.ipython/profile_default/ipython_config.py"
+
+[iterm2]
+depends = []
 
 [iterm2.files]
 "iterm2/com.googlecode.iterm2.plist" = "~/.config/iterm2/com.googlecode.iterm2.plist"
 
+[kitty]
+depends = ["terminal"]
+
 [kitty.files]
 "kitty" = "~/.config/kitty"
+
+[zsh]
+depends = []
 
 [zsh.files]
 "zsh/zshrc" = "~/.zshrc"

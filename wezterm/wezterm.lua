@@ -53,8 +53,8 @@ end
 -- --------------------------------------------------------------------
 -- FONT & RENDERING
 -- --------------------------------------------------------------------
-config.font = wezterm.font("JetBrainsMono Nerd Font")
-config.font_size = wezterm.target_triple:find("apple") and 16.0 or 12.0
+config.font = wezterm.font("{{font_family}}")
+config.font_size = {{font_size}}
 config.line_height = 1.1
 config.front_end = "WebGpu" -- modern renderer
 config.enable_kitty_graphics = true

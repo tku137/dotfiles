@@ -1,5 +1,0 @@
-packages = ["bat", "btop", "fish", "git", "mcphub", "nvim", "starship", "tmux", "zellij"]
-
-[variables]
-git_name = "Tony Fischer"
-git_email = "tku137@mailbox.org"

@@ -1,11 +1,11 @@
 # Font configuration
-font-size = 16
+font-size = {{font_size}}
 # font-family = "JetBrainsMono Nerd Font"
 # font-family = "LythMono Nerd Font"
-font-family = "AtkynsonMono Nerd Font"
+font-family = "{{font_family}}"
 
-font-family-italic = "Maple Mono NF"
-font-family-bold-italic = "Maple Mono NF"
+font-family-italic = "{{font_family_italic}}"
+font-family-bold-italic = "{{font_family_italic}}"
 # font-family-italic = "VictorMono NF"
 # font-family-bold-italic = "VictorMono NF"
 # font-family-italic = "RecMonoCasualMono NF"
