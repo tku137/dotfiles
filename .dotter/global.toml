@@ -2,55 +2,55 @@
 default_target_type = "symbolic"
 
 [nvim.files]
-"nvim/.config/nvim" = "~/.config/nvim"
+"nvim" = "~/.config/nvim"
 
 [fish.files]
-"fish/.config/fish" = "~/.config/fish"
+"fish" = "~/.config/fish"
 
 [ghostty.files]
-"ghostty/.config/ghostty" = "~/.config/ghostty"
+"ghostty" = "~/.config/ghostty"
 
 [wezterm.files]
-"wezterm/.config/wezterm" = "~/.config/wezterm"
+"wezterm" = "~/.config/wezterm"
 
 [zellij.files]
-"zellij/.config/zellij" = "~/.config/zellij"
+"zellij" = "~/.config/zellij"
 
 [tmux.files]
-"tmux/.config/tmux" = "~/.config/tmux"
+"tmux/tmux.conf" = "~/.config/tmux/tmux.conf"
 
 [bat.files]
-"bat/.config/bat" = "~/.config/bat"
+"bat" = "~/.config/bat"
 
 [btop.files]
-"btop/.config/btop" = "~/.config/btop"
+"btop" = "~/.config/btop"
 
 [starship.files]
-"starship/.config/starship.toml" = "~/.config/starship.toml"
+"starship/starship.toml" = "~/.config/starship.toml"
 
 [mcphub.files]
-"mcphub/.config/mcphub" = "~/.config/mcphub"
+"mcphub" = "~/.config/mcphub"
 
 [git.files]
-"git/.gitconfig" = "~/.gitconfig"
+"git/gitconfig" = "~/.gitconfig"
 
 [amethyst.files]
-"amethyst/.amethyst.yml" = "~/.amethyst.yml"
+"amethyst/amethyst.yml" = "~/.amethyst.yml"
 
 [alacritty.files]
-"alacritty/.config/alacritty" = "~/.config/alacritty"
+"alacritty" = "~/.config/alacritty"
 
 [hatch.files]
-"hatch/.config/hatch" = "~/.config/hatch"
+"hatch" = "~/.config/hatch"
 
 [ipython.files]
-"ipython/.ipython" = "~/.ipython"
+"ipython/ipython_config.py" = "~/.ipython/profile_default/ipython_config.py"
 
 [iterm2.files]
-"iterm2/.config/iterm2" = "~/.config/iterm2"
+"iterm2/com.googlecode.iterm2.plist" = "~/.config/iterm2/com.googlecode.iterm2.plist"
 
 [kitty.files]
-"kitty/.config/kitty" = "~/.config/kitty"
+"kitty" = "~/.config/kitty"
 
 [zsh.files]
-"zsh/.zshrc" = "~/.zshrc"
+"zsh/zshrc" = "~/.zshrc"

@@ -22,6 +22,7 @@ tmux/.config/tmux/plugins/tmux-sensible/
 tmux/.config/tmux/plugins/tmux-resurrect/
 tmux/.config/tmux/plugins/tmux.nvim/
 tmux/.config/tmux/plugins/tmux/
+tmux/plugins/
 
 # iterm stuff #
 ###############
@@ -31,44 +32,44 @@ iterm2/.config/iterm2/AppSupport
 ########
 
 # Ignore generated fish variables file
-fish/.config/fish/fish_variables
+fish/fish_variables
 
-# Ignore everything under fish/.config/fish
-fish/.config/fish/*
+# Ignore everything under fish/
+fish/*
 
 # Un-ignore the main configuration files
-!fish/.config/fish/config.fish
-!fish/.config/fish/fish_plugins
+!fish/config.fish
+!fish/fish_plugins
 
 # Un-ignore themes
-!fish/.config/fish/themes
+!fish/themes
 
 # Un-ignore the functions directory
-!fish/.config/fish/functions/
+!fish/functions/
 
 # Ignore everything in functions…
-fish/.config/fish/functions/*
+fish/functions/*
 
 # …except your my functions in myfunctions
-!fish/.config/fish/functions/myfunctions/
-!fish/.config/fish/functions/myfunctions/**
+!fish/functions/myfunctions/
+!fish/functions/myfunctions/**
 
 # Un-ignore the functions directory
-!fish/.config/fish/conf.d/
+!fish/conf.d/
 
-# Ignore everything in functions…
-fish/.config/fish/conf.d/*
+# Ignore everything in conf.d…
+fish/conf.d/*
 
-# …except your my functions in myfunctions
-!fish/.config/fish/conf.d/01-init.fish
-!fish/.config/fish/conf.d/05-mise.fish
-!fish/.config/fish/conf.d/10-starship.fish
-!fish/.config/fish/conf.d/15-direnv.fish
-!fish/.config/fish/conf.d/20-zoxide.fish
-!fish/.config/fish/conf.d/25-fzf.fish
-!fish/.config/fish/conf.d/35-pyenv.fish
-!fish/.config/fish/conf.d/40‑fisher-bootstrap.fish
-!fish/.config/fish/conf.d/rustup.fish
+# …except named conf files
+!fish/conf.d/01-init.fish
+!fish/conf.d/05-mise.fish
+!fish/conf.d/10-starship.fish
+!fish/conf.d/15-direnv.fish
+!fish/conf.d/20-zoxide.fish
+!fish/conf.d/25-fzf.fish
+!fish/conf.d/35-pyenv.fish
+!fish/conf.d/40‑fisher-bootstrap.fish
+!fish/conf.d/rustup.fish
 #--------------------------------------------------#
 # The following was generated with gitignore.nvim: #
 #--------------------------------------------------#
@@ -177,7 +178,9 @@ Temporary Items
 
 # TPM and other runtime clones
 tmux/.config/tmux/plugins/
+tmux/plugins/
 alacritty/.config/alacritty/catppuccin/
+alacritty/catppuccin/
 
 # dotter
 .dotter/local.toml
