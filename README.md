@@ -1,76 +1,111 @@
-# Dotfiles Management with GNU Stow
+# Dotfiles
 
-This guide provides instructions on how to use GNU Stow for managing your dotfiles. Stow is a symlink farm manager that makes it easy to manage project installations in your home directory.
+Dotter-managed dotfiles for macOS and Linux.
 
-## Installing GNU Stow
+Each top-level directory is a dotter package. Packages define file mappings and template variables in `.dotter/global.toml`. Machine-specific package selection and variable overrides live in `.dotter/local.toml` (gitignored).
 
-### On macOS:
+## Prerequisites
 
-Use Homebrew to install Stow:
+- [dotter](https://github.com/SuperCuber/dotter) — install via `cargo install dotter` or your package manager
+- [mise](https://mise.jdx.dev/) (optional) — runtime manager for Python, Node, Go, etc.
 
-```bash
-brew install stow
-```
-
-### On Ubuntu/Debian:
-
-Use APT to install Stow:
+## Quick start
 
 ```bash
-sudo apt-get update && sudo apt-get install stow
-```
-
-## Cloning This Dotfiles Repository
-
-```bash
-git git@github.com:tku137/dotfiles.git ~/dotfiles
+git clone git@github.com:tku137/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-## Using Stow to Manage Your Dotfiles
+Create `.dotter/local.toml` with the packages you want:
 
-Navigate to the dotfiles directory and use Stow to symlink the dotfiles to the home directory.
-
-```bash
-cd ~/dotfiles
-stow folder_name
+```toml
+packages = ["core", "nvim", "ghostty", "tmux"]
 ```
 
-Replace `folder_name` with the name of the folder containing the dotfiles you want to manage.
-
-For example, to stow `fish` and `starship` configuration, call:
+Optional check:
 
 ```bash
-cd ~/dotfiles
-stow fish starship
+dotter deploy --dry-run -v
 ```
 
-### Common Stow Commands
-
-- To symlink files/folders:
+Deploy:
 
 ```bash
-stow folder_name
+dotter deploy
 ```
 
-- To remove symlinks:
+If existing files conflict with the deployment, use `--force` to overwrite them:
 
 ```bash
-stow -D folder_name
+dotter deploy --force
 ```
 
-- To restow (useful for updating symlinks):
+## Packages
+
+| Package  | Description                        | Dependencies |
+| -------- | ---------------------------------- | ------------ |
+| core     | fish, git, starship, bat, btop     | —            |
+| terminal | Shared font variables (no files)   | —            |
+| nvim     | Neovim configuration               | mcphub       |
+| mcphub   | MCP Hub config (pulled in by nvim) | —            |
+| ghostty  | Ghostty terminal emulator          | terminal     |
+| wezterm  | WezTerm terminal emulator          | terminal     |
+| tmux     | tmux multiplexer                   | —            |
+| zellij   | Zellij multiplexer                 | —            |
+| amethyst | Amethyst tiling window manager     | —            |
+
+The remaining packages are kept in `global.toml` for reference but are not part of any standard setup, at least right now.
+
+## Template variables
+
+Some config files contain `{{ variable }}` markers. Dotter auto-detects these and renders the file as a template during deploy. Templated files are copied to their target (not symlinked), so edits at the target location won't reflect back to the repo.
+
+| Variable           | Default                | Defined in | Used by                             |
+| ------------------ | ---------------------- | ---------- | ----------------------------------- |
+| git_name           | Tony Fischer (tku137)  | core       | git/gitconfig                       |
+| git_email          | tku137@mailbox.org     | core       | git/gitconfig                       |
+| font_family        | AtkynsonMono Nerd Font | terminal   | ghostty/config, wezterm/wezterm.lua |
+| font_size          | 16                     | terminal   | ghostty/config, wezterm/wezterm.lua |
+| font_family_italic | Maple Mono NF          | terminal   | ghostty/config                      |
+
+## local.toml setup
+
+`.dotter/local.toml` is gitignored and must be created on each machine. At minimum it needs a `packages` field:
+
+```toml
+packages = ["core", "nvim", "ghostty", "tmux"]
+```
+
+You don't need to list dependency packages explicitly — selecting `ghostty` automatically pulls in `terminal`, and selecting `nvim` pulls in `mcphub`.
+
+### Overriding variables
+
+To override any variable defined in `global.toml`, add a
+`[<package>.variables]` section:
+
+```toml
+packages = ["core", "nvim", "ghostty", "tmux"]
+
+[terminal.variables]
+font_size = 14
+
+[core.variables]
+git_email = "work@example.com"
+```
+
+This is useful for adjusting font sizes on high-DPI displays or using different git credentials on work machines.
+
+## Common commands
 
 ```bash
-stow -R folder_name
+dotter deploy            # deploy all packages from local.toml
+dotter deploy --force    # deploy, overwriting existing files
+dotter undeploy          # remove all deployed files
 ```
 
-### Using the `--adopt` Flag
+## Adding a new package
 
-The `--adopt` flag is used to tell Stow to adopt existing files into the Stow package. This means that if a file already exists in the target location, Stow will move it into the Stow package directory and create a symlink in its place.
-
-**Use with caution**, as this will move the existing files into the Stow directory.
-
-```bash
-stow --adopt folder_name
-```
+1. Create a directory for the package at the repo root.
+2. Add a `[<name>]`, `[<name>.files]`, and optionally `[<name>.variables]` section in `.dotter/global.toml`.
+3. Add the package name to `packages` in `.dotter/local.toml`.
+4. Run `dotter deploy`.
