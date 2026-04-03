@@ -50,9 +50,9 @@ fish/*
 # Ignore everything in functions…
 fish/functions/*
 
-# …except your my functions in myfunctions
-!fish/functions/myfunctions/
-!fish/functions/myfunctions/**
+# …except your my functions in my_functions
+!fish/functions/my_functions/
+!fish/functions/my_functions/**
 
 # Un-ignore the functions directory
 !fish/conf.d/
