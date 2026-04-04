@@ -634,7 +634,7 @@ In SQL buffers (`sql`, `mysql`, `plsql`), the `<localLeader>` menu provides shor
    - **LSPs:**
      - **ruff** - Python LSP and linter (`brew install ruff` or `mise use -g ruff@latest`)
      - **basedpyright** - Python type checker (`brew install basedpyright` or `mise use -g pipx:basedpyright@latest`)
-     - **clangd** - C/C++ LSP (`brew install llvm` or `mise use -g clang@latest`)
+     - **clangd** - C/C++ LSP (`brew install llvm` or `mise use -g clang@latest`, mise compiles from source, which takes _ages_)
      - **lua-language-server** - Lua LSP (`brew install lua-language-server` or `mise use -g lua-language-server@latest`)
      - **marksman** - Markdown LSP (`brew install marksman` or `mise use -g marksman@latest`)
      - **vscode-langservers-extracted** - JSON LSP (`brew install vscode-langservers-extracted` or `mise use -g npm:vscode-langservers-extracted@latest`)
@@ -687,6 +687,7 @@ brew install neovim
 brew install git
 brew install luarocks
 brew install gcc  # or use xcode-select --install for macOS
+brew install llvm
 brew install curl
 brew install tree-sitter
 brew install fzf
@@ -724,7 +725,7 @@ brew install ruff basedpyright llvm lua-language-server marksman vscode-langserv
 > The mise tool list in `nvim/README.md` mirrors the one in `.dotter/post_deploy.sh`. If you add or remove a Neovim tool dependency, update both files.
 
 ```bash
-mise use -g ruff@latest pipx:basedpyright@latest clang@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest
+mise use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest
 ```
 
 ## Troubleshooting
