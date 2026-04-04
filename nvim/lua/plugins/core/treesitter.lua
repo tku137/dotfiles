@@ -23,6 +23,7 @@ return {
       install_dir = vim.fn.stdpath("data") .. "/site",
       sync_install = false,
 
+      -- NOTE: these are custom config flags, not plugin config!
       highlight = { enable = true },
       indent = { enable = true },
       fold = { enable = false },
@@ -65,14 +66,34 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         group = group,
         callback = function(args)
+          local buf = args.buf
+
+          -- 0.12: get_parser() returns nil instead of throwing,
+          -- so we can use language.add() as a clean guard.
+          local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
+          if not lang then
+            return
+          end
+
+          -- Check if a parser actually exists for this language.
+          -- On 0.12, this returns false (no throwing anymore) if missing.
+          if not vim.treesitter.language.add(lang) then
+            return
+          end
+
+          -- Core: highlighting (vim.treesitter.start)
           if opts.highlight and opts.highlight.enable then
-            pcall(vim.treesitter.start, args.buf)
+            vim.treesitter.start(buf)
           end
 
+          -- Plugin: indentation (still lives in nvim-treesitter, not core yet)
+          -- This is the LAST feature dependency on the plugin.
+          -- When this moves to core, it becomes vim.treesitter.indentexpr()
           if opts.indent and opts.indent.enable then
-            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
           end
 
+          -- Core: folding (vim.treesitter.foldexpr)
           if opts.fold and opts.fold.enable then
             vim.wo[0][0].foldmethod = "expr"
             vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
