@@ -41,3 +41,12 @@ fi
 echo "==> Skipping tmux setup: mise not found."
 {{/if}}
 {{/if}}
+
+{{#if dotter.packages.bat}}
+{{#if (is_executable "bat")}}
+echo "==> Rebuilding bat cache to apply theme..."
+bat cache --build
+{{else}}
+echo "==> Skipping bat cache rebuild: bat not found."
+{{/if}}
+{{/if}}
