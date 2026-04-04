@@ -24,10 +24,20 @@ fi
 {{/if}}
 
 {{#if dotter.packages.tmux}}
-if [ -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
-  echo "==> Installing tmux plugins via TPM..."
-  "$HOME/.tmux/plugins/tpm/bin/install_plugins"
+{{#if (is_executable "mise")}}
+echo "==> Installing tpack via mise..."
+mise use -g ubi:tmuxpack/tpack@latest
+if command -v tpack &>/dev/null; then
+  echo "==> Installing tmux plugins via tpack..."
+  # swallow tmux-powerkit download errors (vibe-coded stuff...), it works anyways
+  tmux start-server \; \
+    source-file "$HOME/.config/tmux/tmux.conf" \; \
+    run-shell "tpack install" \; \
+    kill-server || true
 else
-  echo "==> Skipping tmux plugin install: TPM not found (will auto-install on first tmux launch)."
+  echo "==> Skipping tmux plugin install: tpack not available (will install on first tmux launch)."
 fi
+{{else}}
+echo "==> Skipping tmux setup: mise not found."
+{{/if}}
 {{/if}}
