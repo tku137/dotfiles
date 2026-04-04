@@ -42,19 +42,27 @@ dotter deploy --force
 
 ## Packages
 
-| Package  | Description                        | Dependencies |
-| -------- | ---------------------------------- | ------------ |
-| core     | fish, git, starship, bat, btop     | —            |
-| terminal | Shared font variables (no files)   | —            |
-| nvim     | Neovim configuration               | mcphub       |
-| mcphub   | MCP Hub config (pulled in by nvim) | —            |
-| ghostty  | Ghostty terminal emulator          | terminal     |
-| wezterm  | WezTerm terminal emulator          | terminal     |
-| tmux     | tmux multiplexer                   | —            |
-| zellij   | Zellij multiplexer                 | —            |
-| amethyst | Amethyst tiling window manager     | —            |
+| Package  | Description                        | Dependencies                   |
+| -------- | ---------------------------------- | ------------------------------ |
+| core     | Meta-package for CLI tools         | fish, git, starship, bat, btop |
+| fish     | Fish shell config                  | —                              |
+| git      | Git config                         | —                              |
+| starship | Starship prompt                    | —                              |
+| bat      | bat config                         | —                              |
+| btop     | btop config                        | —                              |
+| terminal | Shared font variables (no files)   | —                              |
+| nvim     | Neovim configuration               | mcphub                         |
+| zed      | Zed editor configuration           | —                              |
+| mcphub   | MCP Hub config (pulled in by nvim) | —                              |
+| ghostty  | Ghostty terminal emulator          | terminal                       |
+| wezterm  | WezTerm terminal emulator          | terminal                       |
+| tmux     | tmux multiplexer                   | —                              |
+| zellij   | Zellij multiplexer                 | —                              |
+| amethyst | Amethyst tiling window manager     | —                              |
 
-The remaining packages are kept in `global.toml` for reference but are not part of any standard setup, at least right now.
+`core` is a convenience meta-package — selecting it in `local.toml` pulls in all five CLI tool packages via `depends`. You can also select them individually.
+
+The remaining packages are kept in `global.toml` for reference but are not part of any standard setup: alacritty, kitty, hatch, ipython, iterm2, zsh.
 
 ## Template variables
 
@@ -62,8 +70,8 @@ Some config files contain `{{ variable }}` markers. Dotter auto-detects these an
 
 | Variable           | Default                | Defined in | Used by                             |
 | ------------------ | ---------------------- | ---------- | ----------------------------------- |
-| git_name           | Tony Fischer (tku137)  | core       | git/gitconfig                       |
-| git_email          | tku137@mailbox.org     | core       | git/gitconfig                       |
+| git_name           | Tony Fischer (tku137)  | git        | git/gitconfig                       |
+| git_email          | tku137@mailbox.org     | git        | git/gitconfig                       |
 | font_family        | AtkynsonMono Nerd Font | terminal   | ghostty/config, wezterm/wezterm.lua |
 | font_size          | 16                     | terminal   | ghostty/config, wezterm/wezterm.lua |
 | font_family_italic | Maple Mono NF          | terminal   | ghostty/config                      |
@@ -89,7 +97,7 @@ packages = ["core", "nvim", "ghostty", "tmux"]
 [terminal.variables]
 font_size = 14
 
-[core.variables]
+[git.variables]
 git_email = "work@example.com"
 ```
 
@@ -103,11 +111,12 @@ Dotter runs `.dotter/pre_deploy.sh` before and `.dotter/post_deploy.sh` after ev
 
 `post_deploy.sh` runs package-specific setup steps using `{{#if dotter.packages.<name>}}` conditionals:
 
-| Package | What runs                                                                                                                                                       |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| nvim    | Installs all Neovim tool prerequisites via `mise use -g` (LSP servers, formatters, linters, DAP adapters). Skipped if `mise` is not on PATH.                    |
-| core    | Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available.                                                    |
-| tmux    | Runs TPM's `install_plugins` script to install declared tmux plugins. Skipped if TPM is not yet cloned (it will auto-bootstrap on first `tmux` launch instead). |
+| Package | What runs |
+| ------- | --------- |
+| nvim    | Installs all Neovim tool prerequisites via `mise use -g` (LSP servers, formatters, linters, DAP adapters). Skipped if `mise` is not on PATH. |
+| fish    | Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available. |
+| tmux    | Installs `tpack` via mise, then runs `tpack install` inside a headless tmux server to install declared plugins. Skipped if `mise` is not on PATH. |
+| bat     | Runs `bat cache --build` to apply the custom theme. Skipped if `bat` is not on PATH. |
 
 > [!WARNING]
 > The mise tool list in `.dotter/post_deploy.sh` mirrors the one in `nvim/README.md`. If you add or remove a Neovim tool dependency, update both files.

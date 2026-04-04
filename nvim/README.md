@@ -738,7 +738,7 @@ mise use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest mark
 
 ### LSP Issues
 
-1. Check `<Leader>cl` or `:LspInfo` for server status
+1. Check `<Leader>cl` or `:checkhealth vim.lsp` for server status
 2. Verify language servers are installed
 3. Check `after/lsp/` files for custom configurations
 
