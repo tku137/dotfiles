@@ -65,6 +65,12 @@ depends = []
 [zellij.files]
 "zellij" = "~/.config/zellij"
 
+[zed]
+depends = []
+
+[zed.files]
+"zed" = "~/.config/zed"
+
 # macOS window manager
 [amethyst]
 depends = []
