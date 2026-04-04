@@ -14,7 +14,7 @@ echo "==> Skipping Neovim tool prerequisites: mise not found."
 {{/if}}
 {{/if}}
 
-{{#if dotter.packages.core}}
+{{#if dotter.packages.fish}}
 if command -v fish &>/dev/null && fish -c "type -q fisher"; then
   echo "==> Updating fish plugins via fisher..."
   fish -c "fisher update"
