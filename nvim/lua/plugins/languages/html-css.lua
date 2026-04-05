@@ -1,6 +1,19 @@
 local prefix = "<Leader>ch"
 
 return {
+
+  {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        {
+          mode = { "n", "v" },
+          { prefix, group = "HTML/CSS" },
+        },
+      },
+    },
+  },
+
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",

@@ -2,6 +2,19 @@ local prefix = "<Leader>cn"
 local opts = { noremap = true, silent = true }
 
 return {
+
+  {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        {
+          mode = { "n", "v" },
+          { prefix, group = "Angular" },
+        },
+      },
+    },
+  },
+
   -- Treesitter for Angular templates
   {
     "nvim-treesitter/nvim-treesitter",

@@ -1,4 +1,5 @@
-local prefix = "<Leader>cI"
+local prefix_ipy = "<Leader>cI"
+local prefix_dap = "<Leader>dy"
 
 -- Helper functions
 
@@ -61,6 +62,18 @@ Snacks.toggle
 
 return {
 
+  {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        {
+          mode = { "n", "v" },
+          { prefix_dap, group = "python" },
+        },
+      },
+    },
+  },
+
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
@@ -95,7 +108,7 @@ return {
     -- Keys for debugging tests (uses built-in methods)
     keys = {
       {
-        "<leader>dyt",
+        prefix_dap .. "t",
         function()
           require("dap-python").test_method()
         end,
@@ -103,7 +116,7 @@ return {
         ft = "python",
       },
       {
-        "<leader>dyc",
+        prefix_dap .. "c",
         function()
           require("dap-python").test_class()
         end,
@@ -193,12 +206,12 @@ return {
     keys = {
       -- Normal mode keymaps
       {
-        prefix,
+        prefix_ipy,
         "",
         desc = "iPython Terminal",
       },
       {
-        prefix .. "r",
+        prefix_ipy .. "r",
         function()
           require("nvim-python-repl").send_statement_definition()
         end,
@@ -214,7 +227,7 @@ return {
         mode = "n",
       },
       {
-        prefix .. "b",
+        prefix_ipy .. "b",
         function()
           require("nvim-python-repl").send_buffer_to_repl()
         end,
@@ -222,7 +235,7 @@ return {
         mode = "n",
       },
       {
-        prefix .. "E",
+        prefix_ipy .. "E",
         function()
           require("nvim-python-repl").toggle_execute()
           vim.notify(
@@ -234,7 +247,7 @@ return {
         mode = "n",
       },
       {
-        prefix .. "V",
+        prefix_ipy .. "V",
         function()
           require("nvim-python-repl").toggle_vertical()
           vim.notify(

@@ -2,6 +2,20 @@
 local prefix = "<Leader>g"
 
 return {
+
+  {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        {
+          mode = { "n", "v" },
+          { prefix, group = "git" },
+          { prefix .. "h", group = "hunks" },
+        },
+      },
+    },
+  },
+
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",

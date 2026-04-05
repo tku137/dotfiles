@@ -1,3 +1,5 @@
+local prefix = "<Leader>d"
+
 local icons = require("config.icons").dap
 
 -- Helper function to prompt user for debug arguments and return modified config
@@ -20,6 +22,20 @@ local function get_args(config)
 end
 
 return {
+  {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        {
+          mode = { "n", "v" },
+          { prefix, group = "debug" },
+          { prefix .. "p", group = "profiler" },
+          { prefix .. "v", group = "dap-view" },
+        },
+      },
+    },
+  },
+
   {
     "mfussenegger/nvim-dap",
     dependencies = {

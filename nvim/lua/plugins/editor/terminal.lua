@@ -2,6 +2,17 @@ local prefix = "<Leader>k"
 
 return {
   {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        {
+          mode = { "n", "v" },
+          { prefix, group = "terminal" },
+        },
+      },
+    },
+  },
+  {
     "akinsho/toggleterm.nvim",
     version = "*",
     cmd = { "ToggleTerm", "TermSelect", "ToggleTermSendCurrentLine", "ToggleTermSendVisualSelection" },
