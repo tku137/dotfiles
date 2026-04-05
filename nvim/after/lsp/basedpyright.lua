@@ -9,9 +9,9 @@ return {
         --   reportUnknownVariableType = "none",
         -- },
         inlayHints = {
-          variableTypes = false,
-          functionReturnTypes = false,
-          callArgumentNames = false,
+          variableTypes = true,
+          functionReturnTypes = true,
+          callArgumentNames = true,
           -- genericTypes = false,
         },
       },

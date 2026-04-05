@@ -74,26 +74,14 @@ function M.toggle_basedpyright_settings(opts)
   -- flip the mode
   analysis.typeCheckingMode = (analysis.typeCheckingMode == "basic") and "recommended" or "basic"
 
-  -- flip the three inlay-hint booleans
-  analysis.inlayHints = analysis.inlayHints or {}
-  local hints = analysis.inlayHints
-  hints.variableTypes = not hints.variableTypes
-  hints.functionReturnTypes = not hints.functionReturnTypes
-  hints.callArgumentNames = not hints.callArgumentNames
-
   -- push the change to the running server
   client.config.settings = settings
   ---@diagnostic disable-next-line: param-type-mismatch
   client:notify("workspace/didChangeConfiguration", { settings = settings })
 
-  -- Refresh inlay hints display for all buffers attached to this client
-  for buf in pairs(client.attached_buffers) do
-    vim.lsp.inlay_hint.enable(true, { bufnr = buf })
-  end
-
   if not opts.silent then
     vim.notify(
-      ("BasedPyright: %s, inlay-hints %s"):format(analysis.typeCheckingMode, hints.variableTypes and "on" or "off"),
+      ("BasedPyright: %s"):format(analysis.typeCheckingMode),
       vim.log.levels.INFO
     )
   end
