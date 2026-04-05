@@ -73,6 +73,12 @@ return {
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           if client and client:supports_method("textDocument/inlayHint", args.buf) then
             vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+            -- retry after a short delay for servers that are still initializing (lua_ls...)
+            vim.defer_fn(function()
+              if vim.api.nvim_buf_is_valid(args.buf) then
+                vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+              end
+            end, 500)
           end
         end,
       })
