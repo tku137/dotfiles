@@ -79,12 +79,17 @@ function M.toggle_basedpyright_settings(opts)
   local hints = analysis.inlayHints
   hints.variableTypes = not hints.variableTypes
   hints.functionReturnTypes = not hints.functionReturnTypes
-  hints.parameterNames = not hints.parameterNames
+  hints.callArgumentNames = not hints.callArgumentNames
 
   -- push the change to the running server
   client.config.settings = settings
   ---@diagnostic disable-next-line: param-type-mismatch
   client.notify("workspace/didChangeConfiguration", { settings = settings })
+
+  -- Refresh inlay hints display for all buffers attached to this client
+  for _, buf in ipairs(vim.lsp.get_buffers_by_client_id(client.id)) do
+    vim.lsp.inlay_hint.enable(true, { bufnr = buf })
+  end
 
   if not opts.silent then
     vim.notify(

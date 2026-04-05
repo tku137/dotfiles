@@ -68,9 +68,10 @@ return {
       -- Enable inlay hints by default for any server that supports them.
       -- Use <leader>uh to toggle them off/on per buffer.
       vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("lsp-inlay-hints", { clear = true }),
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if client and client.supports_method("textDocument/inlayHint") then
+          if client and client:supports_method("textDocument/inlayHint", args.buf) then
             vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
           end
         end,
