@@ -21,6 +21,8 @@ return {
           { "[", group = "prev" },
           { "]", group = "next" },
           { "g", group = "goto" },
+          { "gl", group = "lsp picker" },
+          { "gr", group = "lsp actions" },
           { "gs", group = "surround" },
           { "z", group = "fold" },
           {
