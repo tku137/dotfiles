@@ -32,35 +32,6 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.HINT] = icons.Hint,
     },
   },
-  -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
-  -- Be aware that you also will need to properly configure your LSP server to
-  -- provide the inlay hints.
-  inlay_hints = {
-    enabled = true,
-    exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
-  },
-  -- Enable this to enable the builtin LSP code lenses on Neovim >= 0.10.0
-  -- Be aware that you also will need to properly configure your LSP server to
-  -- provide the code lenses.
-  codelens = {
-    enabled = false,
-  },
-  -- add any global capabilities here
-  capabilities = {
-    workspace = {
-      fileOperations = {
-        didRename = true,
-        willRename = true,
-      },
-    },
-  },
-  -- options for vim.lsp.buf.format
-  -- `bufnr` and `filter` is handled by the formatter,
-  -- but can be also overridden when specified
-  format = {
-    formatting_options = nil,
-    timeout_ms = nil,
-  },
 })
 
 return {
@@ -93,6 +64,17 @@ return {
       -- opts.servers is a list of servers to enable, merged from all
       -- language specific config files
       vim.lsp.enable(opts.servers)
+
+      -- Enable inlay hints by default for any server that supports them.
+      -- Use <leader>uh to toggle them off/on per buffer.
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.supports_method("textDocument/inlayHint") then
+            vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+          end
+        end,
+      })
 
       -- Which-Key toggle to switch between displaying of diagnostics
       -- as either virtual text or virtual lines

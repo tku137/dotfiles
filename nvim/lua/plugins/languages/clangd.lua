@@ -6,6 +6,19 @@ return {
     opts = { ensure_installed = { "c", "cpp", "objc", "cuda", "proto", "printf" } },
   },
 
+  -- which-key group for C/C++ specific actions
+  {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        {
+          mode = { "n", "v" },
+          { "<leader>cx", group = "C/C++" },
+        },
+      },
+    },
+  },
+
   -- LSP
   -- brew install llvm
   -- OR
@@ -15,13 +28,13 @@ return {
     opts = { servers = { "clangd" } },
     keys = {
       {
-        "<leader>ch",
+        "<leader>cxh",
         "<cmd>LspClangdSwitchSourceHeader<cr>",
         desc = "Switch Source/Header (C/C++)",
         ft = { "c", "cpp", "objc", "cuda" },
       },
       {
-        "<leader>ck",
+        "<leader>cxk",
         "<cmd>LspClangdShowSymbolInfo<cr>",
         desc = "Show Symbol Info (C/C++)",
         ft = { "c", "cpp", "objc", "cuda" },
@@ -94,19 +107,19 @@ return {
     },
     keys = {
       {
-        "<leader>ct",
+        "<leader>cxt",
         "<cmd>ClangdAST<cr>",
         desc = "View AST (C/C++)",
         ft = { "c", "cpp", "objc", "cuda" },
       },
       {
-        "<leader>cT",
+        "<leader>cxT",
         "<cmd>ClangdTypeHierarchy<cr>",
         desc = "Type Hierarchy (C/C++)",
         ft = { "c", "cpp", "objc", "cuda" },
       },
       {
-        "<leader>cm",
+        "<leader>cxm",
         "<cmd>ClangdMemoryUsage<cr>",
         desc = "Memory Usage (C/C++)",
         ft = { "c", "cpp", "objc", "cuda" },

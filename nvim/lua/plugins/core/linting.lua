@@ -3,11 +3,11 @@ return {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
     opts_extend = { "linters_by_ft" },
-    config = function()
+    config = function(_, opts)
       local lint = require("lint")
 
       -- No global, default nvim-lint linters_by_ft; languages configure themselves via opts
-      lint.linters_by_ft = {}
+      lint.linters_by_ft = opts.linters_by_ft or {}
 
       -- TODO: add this to readme
       -- INFO: To add language specific linters in their own config file, use this snippet:
