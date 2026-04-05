@@ -3,6 +3,32 @@
 -- Where AI plugin keymaps should be put
 local prefix = "<Leader>a"
 
+-- Default opencode terminal width (evaluated lazily so vim.o.columns is correct)
+local function default_width()
+  return math.floor(vim.o.columns * 0.35)
+end
+
+--- Returns the window handle of the currently open opencode terminal, if any.
+---@return integer|nil
+local function opencode_win()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.api.nvim_buf_get_name(buf):match("opencode") then
+      return win
+    end
+  end
+end
+
+--- Resizes the opencode terminal window to the given column width.
+--- Does nothing if the window is not open.
+---@param cols integer
+local function opencode_resize(cols)
+  local win = opencode_win()
+  if win then
+    vim.api.nvim_win_set_width(win, cols)
+  end
+end
+
 return {
   {
     "folke/which-key.nvim",
@@ -12,6 +38,7 @@ return {
           mode = { "n", "v" },
           { "<leader>a", group = "ai" },
           { "<leader>ap", group = "prompts" },
+          { "<leader>aw", group = "width" },
         },
       },
     },
@@ -90,7 +117,23 @@ return {
     config = function()
       ---@type opencode.Opts
       vim.g.opencode_opts = {
-        -- Your configuration, if any; goto definition on the type or field for details
+        server = {
+          start = function()
+            require("opencode.terminal").open("opencode --port", {
+              split = "right",
+              width = default_width(),
+            })
+          end,
+          toggle = function()
+            require("opencode.terminal").toggle("opencode --port", {
+              split = "right",
+              width = default_width(),
+            })
+          end,
+          stop = function()
+            require("opencode.terminal").close()
+          end,
+        },
       }
 
       vim.o.autoread = true -- Required for `opts.events.reload`
@@ -121,6 +164,12 @@ return {
 
       -- sessions
       { prefix .. "X", function() require("opencode").command("session.interrupt") end, desc = "Interrupt opencode", mode = "n" },
+
+      -- width
+      { prefix .. "w4", function() opencode_resize(math.floor(vim.o.columns * 0.25)) end, desc = "1/4 width  (25%)", mode = "n" },
+      { prefix .. "wd", function() opencode_resize(default_width()) end, desc = "Default    (35%)", mode = "n" },
+      { prefix .. "w2", function() opencode_resize(math.floor(vim.o.columns * 0.50)) end, desc = "1/2 width  (50%)", mode = "n" },
+      { prefix .. "ww", function() opencode_resize(math.floor(vim.o.columns * 0.66)) end, desc = "Wide       (66%)", mode = "n" },
 
       -- misc
       { "<S-C-u>", function() require("opencode").command("session.half.page.up") end, desc = "Scroll opencode up", mode = "n" },
