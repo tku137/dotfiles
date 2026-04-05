@@ -3,7 +3,6 @@
 --- This module provides helper functions used by the statusline / lualine
 --- configuration. It encapsulates logic for:
 --- - LSP status (spinner / attached indicator)
---- - MCPHub status + color
 --- - Angular `ng serve` status
 --- - Spell-check language display
 ---
@@ -13,7 +12,6 @@
 ---   -- In lualine sections:
 ---   { sl.simple_lsp_status, ... }
 ---   { sl.ng_status, ... }
----   { sl.mcphub_status, color = sl.mcphub_color, ... }
 ---   {
 ---     function() return icons.statusline.spell .. (sl.spell_status() or "") end,
 ---     cond = function() return sl.spell_status() ~= nil end,
@@ -27,8 +25,6 @@
 ---@class StatuslineHelpers
 ---@field spell_status fun(): string|nil
 ---@field simple_lsp_status fun(): string
----@field mcphub_status fun(): string
----@field mcphub_color fun(): { fg: string }
 ---@field ng_status fun(): string
 local M = {} ---@type StatuslineHelpers
 
@@ -156,61 +152,6 @@ function M.lsp_status_color()
   end
 
   return { fg = colors.fg }
-end
-
---- MCPHub status helper.
---- Uses global variables maintained by mcphub.nvim:
----   - vim.g.loaded_mcphub
----   - vim.g.mcphub_status
----   - vim.g.mcphub_servers_count
----   - vim.g.mcphub_executing
----
---- Documented states commonly used:
----   "starting", "ready", "stopped", "restarting", "restarted"
---- @return string
-function M.mcphub_status()
-  local icon = icons.statusline.mcphub
-
-  if not vim.g.loaded_mcphub then
-    return icon .. " -"
-  end
-
-  ---@type string
-  local status = vim.g.mcphub_status or "stopped"
-  local executing = vim.g.mcphub_executing
-
-  if executing or status == "starting" or status == "restarting" then
-    local frames = icons.misc.running_animated
-    ---@diagnostic disable-next-line: undefined-field
-    local idx = (math.floor(uv.now() / 100) % #frames) + 1
-    return icon .. " " .. frames[idx]
-  end
-
-  return icon
-end
-
---- Color helper for MCPHub status component.
---- - gray when not loaded
---- - fg when ready / restarted
---- - orange when starting / restarting
---- - red when error / stopped / unknown
----
---- @return { fg: string }
-function M.mcphub_color()
-  if not vim.g.loaded_mcphub then
-    return { fg = colors.comment }
-  end
-
-  ---@type string
-  local status = vim.g.mcphub_status or "stopped"
-
-  if status == "ready" or status == "restarted" then
-    return { fg = colors.fg }
-  elseif status == "starting" or status == "restarting" then
-    return { fg = colors.orange }
-  else
-    return { fg = colors.red }
-  end
 end
 
 --- Angular `ng serve` status.

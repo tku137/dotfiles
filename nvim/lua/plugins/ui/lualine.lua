@@ -185,16 +185,24 @@ return {
           separator = "",
           padding = { left = 0, right = 0 },
           on_click = function()
-            require("codecompanion.adapters.http.copilot.stats").show()
+            vim.ui.open("https://github.com/settings/copilot")
           end,
         },
-        -- Show MCPHub status:
         {
-          sl.mcphub_status,
-          color = sl.mcphub_color,
+          -- Wrap in function to avoid errors in case opencode isnt loaded yet
+          function()
+            local ok, opencode = pcall(require, "opencode")
+            if ok then
+              return opencode.statusline()
+            end
+            return ""
+          end,
+          cond = function()
+            return package.loaded["opencode"] ~= nil
+          end,
           padding = { left = 0, right = 1 },
           on_click = function()
-            vim.cmd("MCPHub")
+            require("opencode").toggle()
           end,
         },
 

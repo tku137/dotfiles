@@ -113,7 +113,7 @@ Language-specific configurations:
 
 Optional plugins for extended functionality:
 
-- **`ai.lua`** - AI integration (Copilot, CodeCompanion)
+- **`ai.lua`** - AI integration (Copilot, opencode.nvim)
 - **`git.lua`** - Advanced Git tools like Neogit, resolve.nvim (conflict visuals), `.gitignore` generation
 - **`surround.lua`** - Text object surrounding
 - **`yank.lua`** - Enhanced clipboard functionality
@@ -518,37 +518,11 @@ return {
 
 ## Notes
 
-### Project-specific CodeCompanion rules
+### Project-specific AI rules (opencode.nvim)
 
-Allow CodeCompanion to load repo-scoped rules by adding `.codecompanion/rules.md` like below (see the [official docs](https://codecompanion.olimorris.dev/configuration/rules)).
+opencode.nvim picks up project-scoped rules from `AGENTS.md` (or `.agents.md`, `.opencode/AGENTS.md`) at the repo root.
 
-```markdown
----
-description: Project rules for CodeCompanion
----
-
-## System Prompt
-
-You are working in this repository. Follow these repo-specific rules:
-
-- Prefer existing patterns and conventions in this codebase.
-- Keep changes minimal and incremental unless asked otherwise.
-- If you touch public APIs, update docs/tests where appropriate.
-
-## Context
-
-(Optional) Add links to key docs, architecture notes, conventions, etc.
-```
-
-### Using the postgres MCP server
-
-The `postgres` MCP server has read-only access to a PostgreSQL databases. It is disabled by default. To enable it, call `<Leader>am` and toggle `postgres`.
-
-It needs a connection string set via the environment variable `POSTGRESQL_URL`, which should contain a full connection string like this:
-
-```bash
-postgres://user:pass@database.url:port/db_name
-```
+See the [opencode docs](https://opencode.ai/docs) for the full rule file spec.
 
 ### Using databases with vim-dadbod + vim-dadbod-ui
 
@@ -670,7 +644,6 @@ In SQL buffers (`sql`, `mysql`, `plsql`), the `<localLeader>` menu provides shor
      - **live-server** - HTML development server (`mise use -g npm:live-server@latest`)
    - **Additional Tools:**
      - **ipython** - Interactive Python REPL (`brew install ipython` or `mise use -g pipx:ipython@latest`)
-     - **mcp-hub** - MCP Hub management and server interface (`mise use -g npm:mcp-hub@latest`)
      - **pplatex** - latex error parsing (optional, for vimtex)
      - **uv** - python package manager (used by dap-python for auto-detection)
      - **typescript** - TypeScript compiler (`brew install typescript` or `mise use -g npm:typescript@latest`)
@@ -725,7 +698,7 @@ brew install ruff basedpyright llvm lua-language-server marksman vscode-langserv
 > The mise tool list in `nvim/README.md` mirrors the one in `.dotter/post_deploy.sh`. If you add or remove a Neovim tool dependency, update both files.
 
 ```bash
-mise use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest
+mise use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest
 ```
 
 ## Troubleshooting

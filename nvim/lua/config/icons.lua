@@ -17,12 +17,11 @@ icons = {
   },
   statusline = {
     root = "󱉭",
-    separator = "",
-    spell = " ",
-    debug = "  ",
-    clock = " ",
-    mcphub = " ",
-    lsp = " ",
+    separator = "",
+    spell = " ",
+    debug = "  ",
+    clock = " ",
+    lsp = " ",
     lsp_disabled = "󱏎 ",
   },
   dap = {

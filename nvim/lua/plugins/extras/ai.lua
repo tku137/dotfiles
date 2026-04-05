@@ -1,18 +1,20 @@
--- Everything related to AI plugins, such as Copilot, CodeCompanion, MCPHub, etc.
+-- Everything related to AI plugins, such as Copilot and opencode.nvim.
 
 -- Where AI plugin keymaps should be put
 local prefix = "<Leader>a"
 
--- Define a 0x default model for copilot to preserve premium requests
-local free_model_copilot = "claude-sonnet-4.5"
-
--- Used in codecompanion config
-local cc_base = vim.fn.stdpath("config") .. "/ai/codecompanion"
-
 return {
   {
     "folke/which-key.nvim",
-    opts = { spec = { { mode = { "n", "v" }, { "<leader>a", group = "ai" } } } },
+    opts = {
+      spec = {
+        {
+          mode = { "n", "v" },
+          { "<leader>a", group = "ai" },
+          { "<leader>ap", group = "prompts" },
+        },
+      },
+    },
   },
   {
     "zbirenbaum/copilot.lua",
@@ -56,325 +58,73 @@ return {
       },
     },
   },
+
   {
-    "ravitemer/mcphub.nvim",
+    "nickjvandyke/opencode.nvim",
+    version = "*", -- Latest stable release
     dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    config = function()
-      require("mcphub").setup()
-    end,
-    keys = {
       {
-        prefix .. "m",
-        "<Cmd>MCPHub<CR>",
-        desc = "Open MCPHub",
-        mode = "n",
-      },
-    },
-  },
-  {
-    "olimorris/codecompanion.nvim",
-    event = "VeryLazy",
-    lazy = true,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      "ravitemer/mcphub.nvim",
-      "folke/snacks.nvim",
-      "ravitemer/codecompanion-history.nvim",
-    },
-    opts = {
-      -- adapters and models
-      interactions = {
-        chat = {
-          adapter = {
-            name = "copilot",
-            model = free_model_copilot,
-          },
-          tools = {
-            opts = {
-              default_tools = {
-                -- core bundle with most of CCs tools
-                "full_stack_dev",
-
-                -- useful MCP servers
-                "context7",
-
-                -- web stuff
-                "duckduckgo_search",
-                "fetch_webpage",
-              },
-            },
-
-            groups = {
-              -- one group to rule them all :)
-              ["all_the_tools"] = {
-                description = "All CC tools + MCP + web",
-                tools = {
-                  -- core bundle with most of CCs tools
-                  "full_stack_dev",
-
-                  -- useful MCP servers
-                  -- NOTE: these are available in the mcp group,
-                  -- but we make them explicitly available here so
-                  -- the chat does not need to go through the @{mcp} tool
-                  -- to get to these very important ones
-                  "context7",
-
-                  -- meta-group containing all MCP server tools
-                  "mcp",
-
-                  -- web stuff
-                  "duckduckgo_search",
-                  "fetch_webpage",
-
-                  -- probably nice to have?
-                  "next_edit_suggestion",
-                },
-                opts = { collapse_tools = true },
-              },
-            },
-          },
-        },
-        inline = {
-          adapter = {
-            name = "copilot",
-            model = free_model_copilot,
-          },
-        },
-      },
-
-      extensions = {
-        -- register MCP Hub as a CodeCompanion extension (official integration)
-        mcphub = {
-          callback = "mcphub.extensions.codecompanion",
-          opts = {
-            -- expose MCP resources as #{mcp:*} variables
-            make_vars = false, -- broken with CodeCompanion v19 (variables renamed to editor_context)
-            -- add MCP prompts as /mcp:* slash commands
-            make_slash_commands = true,
-            -- show MCP tool results directly in chat
-            show_result_in_chat = true,
-            -- convert MCP servers and tools to CodeCompanion tools/groups
-            make_tools = true,
-            -- optionally show each server tool individually in chat UI
-            show_server_tools_in_chat = true,
-            -- add_mcp_prefix_to_tool_names = false,
-          },
-        },
-        -- register history extension
-        history = {
-          enabled = true,
-          opts = {
-            -- Keymap to open history from chat buffer (default: gh)
-            keymap = "gh",
-            -- Keymap to save the current chat manually (when auto_save is disabled)
-            save_chat_keymap = "gH",
-            -- Save all chats by default (disable to save only manually using 'sc')
-            auto_save = true,
-            -- Number of days after which chats are automatically deleted (0 to disable)
-            expiration_days = 0,
-            -- Picker interface (auto resolved to a valid picker)
-            picker = "snacks", --- ("telescope", "snacks", "fzf-lua", or "default")
-            ---Optional filter function to control which chats are shown when browsing
-            chat_filter = function(chat_data)
-              -- only use chats from cwd
-              local same_cwd = (chat_data.cwd == vim.fn.getcwd())
-
-              -- only keep chats from last 14 days
-              local last_seven_days = os.time() - (14 * 24 * 60 * 60)
-              local is_recent = chat_data.updated_at ~= nil and chat_data.updated_at >= last_seven_days
-
-              return same_cwd and is_recent
-            end,
-            -- Customize picker keymaps (optional)
-            picker_keymaps = {
-              rename = { n = "r", i = "<M-r>" },
-              delete = { n = "d", i = "<M-d>" },
-              duplicate = { n = "<C-y>", i = "<C-y>" },
-            },
-            ---Automatically generate titles for new chats
-            auto_generate_title = true,
-            title_generation_opts = {
-              ---Adapter for generating titles (defaults to current chat adapter)
-              adapter = "copilot", -- "copilot"
-              ---Model for generating titles (defaults to current chat model)
-              model = free_model_copilot, -- "gpt-4o"
-              ---Number of user prompts after which to refresh the title (0 to disable)
-              refresh_every_n_prompts = 3, -- e.g., 3 to refresh after every 3rd user prompt
-              ---Maximum number of times to refresh the title (default: 3)
-              max_refreshes = 3,
-              format_title = function(original_title)
-                -- this can be a custom function that applies some custom
-                -- formatting to the title.
-                return original_title
+        -- `snacks.nvim` integration is recommended, but optional
+        ---@module "snacks" <- Loads `snacks.nvim` types for configuration intellisense
+        "folke/snacks.nvim",
+        optional = true,
+        opts = {
+          input = {}, -- Enhances `ask()`
+          picker = { -- Enhances `select()`
+            actions = {
+              opencode_send = function(...)
+                return require("opencode").snacks_picker_send(...)
               end,
             },
-            ---On exiting and entering neovim, loads the last chat on opening chat
-            continue_last_chat = false,
-            ---When chat is cleared with `gx` delete the chat from history
-            delete_on_clearing_chat = false,
-            ---Directory path to save the chats
-            dir_to_save = vim.fn.stdpath("data") .. "/codecompanion-history",
-            ---Enable detailed logging for history extension
-            enable_logging = false,
-
-            -- Summary system
-            summary = {
-              -- Keymap to generate summary for current chat (default: "gcs")
-              create_summary_keymap = "gZ",
-              -- Keymap to browse summaries (default: "gbs")
-              browse_summaries_keymap = "gz",
-
-              generation_opts = {
-                adapter = "copilot", -- defaults to current chat adapter
-                model = free_model_copilot, -- defaults to current chat model
-                context_size = 90000, -- max tokens that the model supports
-                include_references = true, -- include slash command content
-                include_tool_outputs = true, -- include tool execution results
-                system_prompt = nil, -- custom system prompt (string or function)
-                format_summary = nil, -- custom function to format generated summary e.g to remove <think/> tags from summary
+            win = {
+              input = {
+                keys = {
+                  ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
+                },
               },
             },
           },
         },
       },
-
-      -- UI preferences
-      display = {
-        action_palette = { provider = "snacks" },
-        chat = {
-          -- needs to be false, otherwise cant switch adapters :rolleyes:
-          show_settings = false,
-          show_context = true,
-        },
-      },
-
-      prompt_library = {
-        markdown = {
-          dirs = {
-            -- globel prompts in this config
-            cc_base .. "/prompts",
-
-            -- project local prompts
-            ".codecompanion/prompts",
-          },
-        },
-      },
-
-      rules = {
-        -- Personal defaults (live nvim config)
-        personal = {
-          description = "Personal defaults (always loaded)",
-          parser = "codecompanion",
-          files = {
-            cc_base .. "/rules/personal.md",
-          },
-        },
-
-        -- task rules (loaded per-prompt via opts.rules)
-        task_research = {
-          description = "Task: Search then answer",
-          parser = "codecompanion",
-          files = {
-            cc_base .. "/rules/task/research.md",
-            cc_base .. "/rules/output/research.md",
-          },
-        },
-        task_gtd = {
-          description = "Task: GTD (plan + execute)",
-          parser = "codecompanion",
-          files = { cc_base .. "/rules/task/gtd.md" },
-        },
-        task_change_summary = {
-          description = "Task: Summarize git changes",
-          parser = "codecompanion",
-          files = { cc_base .. "/rules/task/change-summary.md" },
-        },
-        task_write_docs = {
-          description = "Task: Write documentation",
-          parser = "codecompanion",
-          files = {
-            cc_base .. "/rules/task/research.md",
-            cc_base .. "/rules/task/write-docs.md",
-            cc_base .. "/rules/output/docs.md",
-          },
-        },
-        task_review_changes = {
-          description = "Task: Review staged/unstaged diffs",
-          parser = "codecompanion",
-          files = {
-            cc_base .. "/rules/task/review-changes.md",
-            cc_base .. "/rules/output/review-changes.md",
-          },
-        },
-        task_write_tests = {
-          description = "Task: Write tests",
-          parser = "codecompanion",
-          files = {
-            cc_base .. "/rules/task/write-tests.md",
-            cc_base .. "/rules/output/write-tests.md",
-          },
-        },
-        task_explain_arch = {
-          description = "Task: Explain architecture",
-          parser = "codecompanion",
-          files = {
-            cc_base .. "/rules/task/explain-architecture.md",
-            cc_base .. "/rules/output/explain-architecture.md",
-          },
-        },
-
-        -- project rules (autoloaded when present in the repo)
-        project = {
-          description = "Collection of common files for all projects",
-          files = {
-            ".clinerules",
-            ".cursorrules",
-            ".goosehints",
-            ".rules",
-            ".windsurfrules",
-            ".github/copilot-instructions.md",
-            "AGENT.md",
-            "AGENTS.md",
-            { path = "CLAUDE.md", parser = "claude" },
-            { path = "CLAUDE.local.md", parser = "claude" },
-            { path = "~/.claude/CLAUDE.md", parser = "claude" },
-            ".codecompanion/rules/project.md",
-          },
-          is_preset = true,
-        },
-
-        -- additional project rules (load on demand)
-        project_extra = {
-          description = "Additional project rules (load on demand)",
-          files = {
-            ".codecompanion/rules/**/*.md",
-          },
-        },
-
-        opts = {
-          chat = {
-            enabled = true,
-            autoload = { "personal", "project" },
-          },
-        },
-      },
     },
+    config = function()
+      ---@type opencode.Opts
+      vim.g.opencode_opts = {
+        -- Your configuration, if any; goto definition on the type or field for details
+      }
 
+      vim.o.autoread = true -- Required for `opts.events.reload`
+    end,
+    -- stylua: ignore
     keys = {
-      { prefix .. "a", "<cmd>CodeCompanionActions<cr>", desc = "Actions palette", mode = { "n", "v" } },
-      { prefix .. "c", "<cmd>CodeCompanionChat Toggle<cr>", desc = "Chat toggle", mode = { "n", "v" } },
-      -- stylua: ignore
-      { prefix .. "C", function() require("codecompanion.adapters.http.copilot.stats").show() end, desc = "Copilot stats", mode = "n" },
-      { prefix .. "A", "<cmd>CodeCompanionChat Add<cr>", desc = "Add selection to chat", mode = "v" },
-      { prefix .. "B", "<cmd>CodeCompanionChat Add<cr>", desc = "Add current buffer to chat", mode = "n" },
-      { prefix .. "i", "<cmd>CodeCompanion<cr>", desc = "Inline assistant", mode = { "n", "v" } },
-      { prefix .. "e", ":'<,'>CodeCompanion /explain<cr>", desc = "Explain selection", mode = "v" },
-      { prefix .. "f", ":'<,'>CodeCompanion /fix<cr>", desc = "Fix selection", mode = "v" },
-      { prefix .. "t", ":'<,'>CodeCompanion /tests<cr>", desc = "Generate tests", mode = "v" },
-      { prefix .. "R", "<cmd>CodeCompanionChat RefreshCache<cr>", desc = "Refresh tool cache", mode = "n" },
+      -- core
+      { prefix .. "o", function() require("opencode").toggle() end, desc = "Toggle opencode", mode = { "n", "t" } },
+      { prefix .. "a", function() require("opencode").ask("", { submit = true }) end, desc = "Ask opencode…", mode = { "n", "x" } },
+      { prefix .. "q", function() require("opencode").ask("@this: ", { submit = true }) end, desc = "Quick ask with context", mode = { "n", "x" } },
+      { prefix .. "A", function() require("opencode").select() end, desc = "Execute opencode action…", mode = { "n", "x" } },
+      { prefix .. "c", function() require("opencode").command("agent.cycle") end, desc = "Cycle agent", mode = { "n", "x" } },
+      { prefix .. "s", function() require("opencode").command("prompt.submit") end, desc = "Submit current prompt", mode = { "n", "x" } },
+      { prefix .. "x", function() require("opencode").command("prompt.clear") end, desc = "Clear current prompt", mode = { "n", "x" } },
+
+      -- prompts
+      { prefix .. "pe", function() require("opencode").prompt("explain") end, desc = "Explain", mode = { "n", "x" } },
+      { prefix .. "pf", function() require("opencode").prompt("fix") end, desc = "Fix", mode = { "n", "x" } },
+      { prefix .. "pr", function() require("opencode").prompt("review") end, desc = "Review", mode = { "n", "x" } },
+      { prefix .. "pt", function() require("opencode").prompt("test") end, desc = "Write tests", mode = { "n", "x" } },
+      { prefix .. "pd", function() require("opencode").prompt("document") end, desc = "Document", mode = { "n", "x" } },
+      { prefix .. "pp", function() require("opencode").prompt("optimize") end, desc = "Optimize", mode = { "n", "x" } },
+      { prefix .. "pD", function() require("opencode").prompt("diff") end, desc = "Review git diff", mode = { "n", "x" } },
+
+      -- operator (dot-repeatable, range-aware)
+      { prefix .. "r",  function() return require("opencode").operator("@this ") end, desc = "Send range to opencode", mode = { "n", "x" }, expr = true },
+      { prefix .. "l", function() return require("opencode").operator("@this ") .. "_" end, desc = "Send line to opencode",  mode = "n", expr = true },
+
+      -- sessions
+      { prefix .. "X", function() require("opencode").command("session.interrupt") end, desc = "Interrupt opencode", mode = "n" },
+
+      -- misc
+      { "<S-C-u>", function() require("opencode").command("session.half.page.up") end, desc = "Scroll opencode up", mode = "n" },
+      { "<S-C-d>", function() require("opencode").command("session.half.page.down") end, desc = "Scroll opencode down", mode = "n" },
     },
   },
 }
