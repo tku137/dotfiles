@@ -102,7 +102,7 @@ return {
         desc = "Angular: ng build",
       },
       {
-        prefix .. "t",
+        prefix .. "n",
         function()
           local T = require("toggleterm.terminal").Terminal
           _NG_TEST = _NG_TEST

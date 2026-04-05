@@ -21,8 +21,8 @@ return {
   -- mise use -g aqua:Enter-tainer/typstyle@latest
   {
     "stevearc/conform.nvim",
+    opts_extend = { "formatters_by_ft.typst" }, -- important to convince lazy.nvim to merge this!
     opts = {
-      opts_extend = { "formatters_by_ft.typst" }, -- important to convince lazy.nvim to merge this!
       formatters_by_ft = {
         typst = { "typstyle", lsp_format = "prefer" },
       },

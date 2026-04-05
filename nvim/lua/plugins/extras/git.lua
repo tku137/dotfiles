@@ -11,6 +11,7 @@ return {
           mode = { "n", "v" },
           { prefix, group = "git" },
           { prefix .. "h", group = "hunks" },
+          { prefix .. "H", group = "GitHub" },
         },
       },
     },

@@ -10,7 +10,7 @@ local function project_root(bufnr)
   local path = vim.api.nvim_buf_get_name(bufnr or 0)
   local markers = { ".git", "pyproject.toml", "setup.cfg", "setup.py" }
   local hit = vim.fs.find(markers, { upward = true, path = path })[1]
-  return hit and vim.fs.dirname(hit) or vim.loop.cwd()
+  return hit and vim.fs.dirname(hit) or vim.uv.cwd()
 end
 
 ---Return an env table with PYTHONPATH prefixed by root (and root/src if present).

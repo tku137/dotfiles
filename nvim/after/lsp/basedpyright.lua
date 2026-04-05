@@ -2,7 +2,7 @@ return {
   settings = {
     basedpyright = {
       analysis = {
-        typeCheckingMode = "basic", -- possible values: "off", "basic", "strict"
+        typeCheckingMode = "basic", -- possible values: "off", "basic", "standard", "recommended", "all"
         -- diagnosticSeverityOverrides = {
         --   reportUnknownParameterType = "none",
         --   reportMissingParameterType = "none",

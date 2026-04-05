@@ -141,7 +141,7 @@ return {
             or Terminal:new({
               count = 112,
               cmd = fm,
-              dir = vim.loop.cwd(),
+              dir = vim.uv.cwd(),
               direction = "float",
               hidden = true,
               close_on_exit = false,
