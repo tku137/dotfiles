@@ -46,19 +46,26 @@ end
 -- Add a keymap for toggling BasedPyright settings
 -- This toggles BasedPyright's typeCheckingMode between "basic" and "recommended"
 -- and additionally enables/disables inlay hints
-Snacks.toggle
-  .new({
-    name = "BasedPyright Strict Mode",
-    get = function()
-      local client = vim.lsp.get_clients({ name = "basedpyright" })[1]
-      ---@diagnostic disable-next-line: undefined-field
-      return client and client.config.settings.basedpyright.analysis.typeCheckingMode == "recommended"
-    end,
-    set = function()
-      require("utils.lsp_utils").toggle_basedpyright_settings({ silent = true })
-    end,
-  })
-  :map("<leader>cb")
+-- Deferred to VeryLazy because Snacks is not available at spec-parse time
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy",
+  once = true,
+  callback = function()
+    Snacks.toggle
+      .new({
+        name = "BasedPyright Strict Mode",
+        get = function()
+          local client = vim.lsp.get_clients({ name = "basedpyright" })[1]
+          ---@diagnostic disable-next-line: undefined-field
+          return client and client.config.settings.basedpyright.analysis.typeCheckingMode == "recommended"
+        end,
+        set = function()
+          require("utils.lsp_utils").toggle_basedpyright_settings({ silent = true })
+        end,
+      })
+      :map("<leader>cb")
+  end,
+})
 
 return {
 

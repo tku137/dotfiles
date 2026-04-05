@@ -84,10 +84,10 @@ function M.toggle_basedpyright_settings(opts)
   -- push the change to the running server
   client.config.settings = settings
   ---@diagnostic disable-next-line: param-type-mismatch
-  client.notify("workspace/didChangeConfiguration", { settings = settings })
+  client:notify("workspace/didChangeConfiguration", { settings = settings })
 
   -- Refresh inlay hints display for all buffers attached to this client
-  for _, buf in ipairs(vim.lsp.get_buffers_by_client_id(client.id)) do
+  for buf in pairs(client.attached_buffers) do
     vim.lsp.inlay_hint.enable(true, { bufnr = buf })
   end
 
@@ -123,7 +123,7 @@ function M.toggle_yaml_schema_store(opts)
 
   client.config.settings = cfg
   ---@diagnostic disable-next-line: param-type-mismatch
-  client.notify("workspace/didChangeConfiguration", { settings = cfg })
+  client:notify("workspace/didChangeConfiguration", { settings = cfg })
 
   if not opts.silent then
     vim.notify(

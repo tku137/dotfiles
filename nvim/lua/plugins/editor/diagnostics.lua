@@ -15,7 +15,11 @@ return {
       opts = function(_, opts)
         return vim.tbl_deep_extend("force", opts or {}, {
           picker = {
-            actions = require("trouble.sources.snacks").actions,
+            actions = {
+              trouble_open = function(...)
+                require("trouble.sources.snacks").actions.trouble_open(...)
+              end,
+            },
             win = {
               input = {
                 keys = {

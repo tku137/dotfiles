@@ -28,13 +28,22 @@
 ---@field ng_status fun(): string
 local M = {} ---@type StatuslineHelpers
 
----@type table<string, string>
-local colors = require("tokyonight.colors").setup()
-
 ---@type table
 local icons = require("config.icons")
 
 local uv = vim.uv or vim.loop
+
+--- Lazily resolved tokyonight colors (not available at module load time)
+---@type table<string, string>|nil
+local _colors
+
+--- @return table<string, string>
+local function colors()
+  if not _colors then
+    _colors = require("tokyonight.colors").setup()
+  end
+  return _colors
+end
 
 --------------------------------------------------------------------------------
 -- Internal helpers
@@ -102,15 +111,10 @@ local function lsp_state(bufnr)
     return "none"
   end
 
-  -- Check for LSP progress messages (if supported).
-  local ok, util = pcall(require, "vim.lsp.util")
-  if ok and util.get_progress_messages then
-    local msgs = util.get_progress_messages()
-    for _, msg in ipairs(msgs) do
-      if msg.name and not LSP_IGNORE[msg.name] then
-        return "progress"
-      end
-    end
+  -- Check for active LSP progress
+  local status = vim.lsp.status()
+  if status and status ~= "" then
+    return "progress"
   end
 
   return "ready"
@@ -148,10 +152,10 @@ function M.lsp_status_color()
   local state = lsp_state(bufnr)
 
   if state == "none" then
-    return { fg = colors.comment }
+    return { fg = colors().comment }
   end
 
-  return { fg = colors.fg }
+  return { fg = colors().fg }
 end
 
 --- Angular `ng serve` status.

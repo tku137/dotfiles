@@ -4,17 +4,24 @@ local sql_ft = { "sql", "mysql", "plsql" }
 -- Add a keymap for toggling postgres_lsp
 -- This toggles postgres_lsp on/off to reduce clutter
 -- in projects where we do not use postgres sql files.
-Snacks.toggle
-  .new({
-    name = "Postgres LSP",
-    get = function()
-      return vim.lsp.is_enabled("postgres_lsp")
-    end,
-    set = function()
-      require("utils.lsp_utils").toggle_postgres({ silent = true })
-    end,
-  })
-  :map("<leader>cp")
+-- Deferred to VeryLazy because Snacks is not available at spec-parse time
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy",
+  once = true,
+  callback = function()
+    Snacks.toggle
+      .new({
+        name = "Postgres LSP",
+        get = function()
+          return vim.lsp.is_enabled("postgres_lsp")
+        end,
+        set = function()
+          require("utils.lsp_utils").toggle_postgres({ silent = true })
+        end,
+      })
+      :map("<leader>cp")
+  end,
+})
 
 return {
 
