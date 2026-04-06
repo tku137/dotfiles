@@ -129,6 +129,7 @@ Helper functions and utilities:
 - **`lsp_utils.lua`** - LSP-specific utilities like toggling BasedPyright typechecking mode and advanced YAML schema validation
 - **`spell_utils.lua`** - Spell checking utilities
 - **`ft_helpers.lua`** - Filetype-specific helpers
+- **`ai_terminal.lua`** - General-purpose AI CLI terminal integration (see [AI CLI Terminal](#ai-cli-terminal))
 
 ### After Directory (`after/`)
 
@@ -496,7 +497,8 @@ This configuration follows several key principles:
 
 This configuration includes some custom functionality coded inside this config (not available as plugins):
 
-- **BasedPyright Dynamic Toggle**: Live switching between basic and strict type checking modes with inlay hints toggle without LSP restart (`lsp_utils.toggle_basedpyright_settings()`) with `<Leader>cb`
+- **Global Inlay Hints**: Inlay hints are enabled by default for every LSP that supports `textDocument/inlayHint`, via an `LspAttach` autocmd in `lsp.lua`. A 500 ms deferred retry ensures hints appear even for slow-starting servers (e.g. `lua_ls`). Toggle per-buffer with `<Leader>uh`.
+- **BasedPyright Dynamic Toggle**: Live switching between basic and strict type checking modes without LSP restart (`lsp_utils.toggle_basedpyright_settings()`) with `<Leader>cb`
 - **YAML Schema Validation**: Validate YAML files with custom schema loading from `.yamlls.extra.lua` files and live schema store toggle (`lsp_utils.toggle_yaml_schema_store()`) with `<Leader>uy`. Custom schema file declaration can be achieved using for example
 
 ```lua
@@ -513,6 +515,7 @@ return {
 
 - **Intelligent Spell Language Detection**: Automatic spell language switching for LaTeX and Typst documents based on content patterns in the first N lines (e.g., German language package imports) by matching patterns, includes caching via lua meta-tables, easily configurable and extensible for other document types by modifying existing or adding new autocmds to `lua/config/autocmds.lua`
 - **PostgreSQL Dialect switching**: Additionally activate the `postgres_lsp` on demand with `<Leader>cp`. The `sqlls` LSP is used as a basis and you can specifically turn in a Postgres LSP (providing much better support), since it is impossible to distinguish dialects.
+- **AI CLI Terminal**: General-purpose terminal integration for AI CLI tools (`utils/ai_terminal.lua`). Provides a Snacks picker (`<Leader>at`) to launch any AI CLI found on `$PATH` in a `toggleterm` vertical split, a toggle for the last-used terminal (`<Leader>aT`), and a `send_file_ref` function (`<Leader>af`) that sends the current file path — or `path:startline-endline` when invoked from a visual selection — to the active terminal without submitting, so you can review before pressing Enter. The list of supported CLIs is defined in `utils/ai_terminal.lua` in the `clis` table; add new entries there to support additional tools.
 - **Project Root Detection**: Smart project and git root discovery functions for consistent workspace navigation (`helpers.project_root()`, `helpers.git_root()`)
 - **Filetype-Aware UI Components**: Conditional lualine components with filetype-based visibility logic for cleaner status line management (`ft_helpers.is_ft()`, `ft_helpers.is_not_ft()`)
 
