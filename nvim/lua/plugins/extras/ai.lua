@@ -174,6 +174,11 @@ return {
       -- misc
       { "<S-C-u>", function() require("opencode").command("session.half.page.up") end, desc = "Scroll opencode up", mode = "n" },
       { "<S-C-d>", function() require("opencode").command("session.half.page.down") end, desc = "Scroll opencode down", mode = "n" },
+
+      -- ai terminal
+      { prefix .. "t", function() require("utils.ai_terminal").pick() end, desc = "CLI: Open picker" },
+      { prefix .. "T", function() require("utils.ai_terminal").toggle() end, desc = "CLI: Toggle last" },
+      { prefix .. "f", function() require("utils.ai_terminal").send_file_ref() end, desc = "CLI: Send file ref", mode = { "n", "v" } },
     },
   },
 }
