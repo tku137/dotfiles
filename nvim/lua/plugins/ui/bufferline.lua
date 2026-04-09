@@ -1,7 +1,11 @@
 return {
   "akinsho/bufferline.nvim",
   event = "VeryLazy",
-  dependencies = "nvim-tree/nvim-web-devicons",
+  -- NOTE: bufferline must load after catppuccin (catppuccin has lazy=false, priority=1000)
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+    "catppuccin/nvim",
+  },
   -- stylua: ignore
   keys = {
     -- TODO: use proper snacks toggle
@@ -52,6 +56,9 @@ return {
     },
   },
   config = function(_, opts)
+    -- Defer catppuccin highlights require to config time (catppuccin lazy=false, priority=1000)
+    -- so the module is guaranteed to be on the rtp before this runs.
+    opts.highlights = require("catppuccin.special.bufferline").get_theme()
     require("bufferline").setup(opts)
     -- Fix bufferline when restoring a session
     vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {

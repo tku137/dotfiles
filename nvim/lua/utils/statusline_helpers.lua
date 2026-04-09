@@ -33,14 +33,14 @@ local icons = require("config.icons")
 
 local uv = vim.uv or vim.loop
 
---- Lazily resolved tokyonight colors (not available at module load time)
+--- Lazily resolved catppuccin macchiato colors (not available at module load time)
 ---@type table<string, string>|nil
 local _colors
 
 --- @return table<string, string>
 local function colors()
   if not _colors then
-    _colors = require("tokyonight.colors").setup()
+    _colors = require("catppuccin.palettes").get_palette("macchiato")
   end
   return _colors
 end
@@ -152,10 +152,10 @@ function M.lsp_status_color()
   local state = lsp_state(bufnr)
 
   if state == "none" then
-    return { fg = colors().comment }
+    return { fg = colors().overlay1 }
   end
 
-  return { fg = colors().fg }
+  return { fg = colors().text }
 end
 
 --- Angular `ng serve` status.

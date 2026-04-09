@@ -81,7 +81,7 @@ end
 # =============================================================================
 
 # Set fish shell theme
-fish_config theme choose tokyonight_moon
+fish_config theme choose catppuccin-macchiato
 
 # =============================================================================
 # NOTE

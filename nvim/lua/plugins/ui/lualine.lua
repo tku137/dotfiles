@@ -16,7 +16,7 @@ return {
     "folke/snacks.nvim", -- ensure snacks loads first
   },
   opts = function()
-    local colors = require("tokyonight.colors").setup()
+    local colors = require("catppuccin.palettes").get_palette("macchiato")
     local icons = require("config.icons")
     local Snacks = require("snacks")
     local cond = require("utils.ft_helpers")
@@ -142,7 +142,7 @@ return {
           {
             sl.ng_status,
           -- stylua: ignore
-          color = function() return { fg = colors.orange } end,
+          color = function() return { fg = colors.peach } end,
             separator = "",
             padding = { left = 1, right = 1 },
           },
@@ -167,10 +167,10 @@ return {
               status = {
                 icons = icons.copilot,
                 hl = {
-                  enabled = colors.fg,
+                  enabled = colors.text,
                   sleep = colors.teal,
-                  disabled = colors.fg_dark,
-                  warning = colors.orange,
+                  disabled = colors.subtext1,
+                  warning = colors.peach,
                   unknown = colors.red,
                 },
               },

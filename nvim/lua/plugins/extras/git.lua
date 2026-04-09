@@ -73,29 +73,29 @@ return {
       -- setup with opts defined above
       require("resolve").setup(opts)
 
-      -- load tokyonight colors and utils for blending colors
-      -- (otherwise its too mich highlighting)
-      local colors = require("tokyonight.colors").setup()
-      local util = require("tokyonight.util")
+      -- load catppuccin colors and utils for blending colors
+      -- (otherwise its too much highlighting)
+      local U = require("catppuccin.utils.colors")
+      local C = require("catppuccin.palettes").get_palette("macchiato")
 
       -- set colors for highlights
-      local OursBaseColor = colors.green
-      local TheirsBaseColor = colors.blue
-      local AncestorBaseColor = colors.magenta
-      local SeparatorBaseColor = colors.orange
+      local OursBaseColor = C.green
+      local TheirsBaseColor = C.blue
+      local AncestorBaseColor = C.mauve
+      local SeparatorBaseColor = C.peach
 
-      -- apply based on above colors
+      -- apply based on above colors (alpha: 0 = pure base, 1 = pure color)
       local highlights = {
-        ResolveOursMarker = { bg = util.blend_bg(OursBaseColor, 0.4), bold = true },
-        ResolveOursSection = { bg = util.blend_bg(OursBaseColor, 0.15) },
+        ResolveOursMarker = { bg = U.blend(OursBaseColor, C.base, 0.4), bold = true },
+        ResolveOursSection = { bg = U.blend(OursBaseColor, C.base, 0.15) },
 
-        ResolveTheirsMarker = { bg = util.blend_bg(TheirsBaseColor, 0.4), bold = true },
-        ResolveTheirsSection = { bg = util.blend_bg(TheirsBaseColor, 0.15) },
+        ResolveTheirsMarker = { bg = U.blend(TheirsBaseColor, C.base, 0.4), bold = true },
+        ResolveTheirsSection = { bg = U.blend(TheirsBaseColor, C.base, 0.15) },
 
-        ResolveAncestorMarker = { bg = util.blend_bg(AncestorBaseColor, 0.4), bold = true },
-        ResolveAncestorSection = { bg = util.blend_bg(AncestorBaseColor, 0.15) },
+        ResolveAncestorMarker = { bg = U.blend(AncestorBaseColor, C.base, 0.4), bold = true },
+        ResolveAncestorSection = { bg = U.blend(AncestorBaseColor, C.base, 0.15) },
 
-        ResolveSeparatorMarker = { bg = util.blend_bg(SeparatorBaseColor, 0.3), bold = true },
+        ResolveSeparatorMarker = { bg = U.blend(SeparatorBaseColor, C.base, 0.3), bold = true },
       }
 
       for group, settings in pairs(highlights) do

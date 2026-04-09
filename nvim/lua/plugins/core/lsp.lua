@@ -43,8 +43,15 @@ return {
     dependencies = {
       {
         -- Useful status updates for LSP.
+        -- Special catppuccin setup: winblend must be 0 for correct bg color
         "j-hui/fidget.nvim",
-        opts = {},
+        opts = {
+          notification = {
+            window = {
+              winblend = 0,
+            },
+          },
+        },
       },
       -- Allows extra capabilities provided by blink.cmp
       "saghen/blink.cmp",

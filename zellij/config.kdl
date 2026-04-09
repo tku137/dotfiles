@@ -319,8 +319,8 @@ default_shell "fish"
 // Default: default
 //
 // theme "default"
-// theme "catppuccin-macchiato"
-theme "tokyonight_moon"
+theme "catppuccin-macchiato"
+// theme "tokyonight_moon"
 
 // The name of the default layout to load on startup
 // Default: "default"

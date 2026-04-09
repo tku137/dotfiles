@@ -22,7 +22,7 @@ background-blur = 20
 background-opacity = 1.0
 
 # Theme configuration
-theme = light:TokyoNight Day,dark:TokyoNight Moon
+theme = light:Catppuccin Latte,dark:Catppuccin Macchiato
 
 # Window dimensions
 window-width = 130
