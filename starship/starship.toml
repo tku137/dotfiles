@@ -150,11 +150,11 @@ symbol = " "
 symbol = " "
 # format = 'via [${symbol}${pyenv_prefix}(\($virtualenv\) )]($style)'
 python_binary = [
-  './venv/bin/python',
-  './.venv/bin/python',
-  'python',
-  'python3',
-  'python2',
+    './venv/bin/python',
+    './.venv/bin/python',
+    'python',
+    'python3',
+    'python2',
 ]
 
 [rlang]
@@ -184,7 +184,7 @@ symbol = " "
 
 # Disable native container detector
 [container]
-disabled = true
+disabled = false
 
 # Detect if in container but NOT via SSH
 [custom.real_container]

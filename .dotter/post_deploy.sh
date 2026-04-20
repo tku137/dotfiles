@@ -8,7 +8,7 @@
 {{#if dotter.packages.nvim}}
 {{#if (is_executable "mise")}}
 echo "==> Installing Neovim tool prerequisites via mise..."
-mise use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest ubi:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest
+mise use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest github:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:mcp-hub@latest
 {{else}}
 echo "==> Skipping Neovim tool prerequisites: mise not found."
 {{/if}}
@@ -26,7 +26,7 @@ fi
 {{#if dotter.packages.tmux}}
 {{#if (is_executable "mise")}}
 echo "==> Installing tpack via mise..."
-mise use -g ubi:tmuxpack/tpack@latest
+mise use -g github:tmuxpack/tpack@latest
 if command -v tpack &>/dev/null; then
   echo "==> Installing tmux plugins via tpack..."
   # swallow tmux-powerkit download errors (vibe-coded stuff...), it works anyways
