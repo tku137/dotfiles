@@ -51,14 +51,17 @@ dotter deploy --force
 | bat      | bat config                         | —                              |
 | btop     | btop config                        | —                              |
 | terminal | Shared font variables (no files)   | —                              |
-| nvim     | Neovim configuration               | mcphub                         |
+| nvim     | Neovim configuration               | —                              |
 | zed      | Zed editor configuration           | —                              |
-| mcphub   | MCP Hub config (pulled in by nvim) | —                              |
+| mcphub   | MCP Hub config                     | —                              |
 | ghostty  | Ghostty terminal emulator          | terminal                       |
 | wezterm  | WezTerm terminal emulator          | terminal                       |
 | tmux     | tmux multiplexer                   | —                              |
 | zellij   | Zellij multiplexer                 | —                              |
 | amethyst | Amethyst tiling window manager     | —                              |
+| desktop  | Meta-package for personal desktop  | (fill in local.toml)           |
+| headless | Meta-package for headless machines | (fill in local.toml)           |
+| work     | Meta-package for work machines     | (fill in local.toml)           |
 
 `core` is a convenience meta-package — selecting it in `local.toml` pulls in all five CLI tool packages via `depends`. You can also select them individually.
 
@@ -84,7 +87,7 @@ Some config files contain `{{ variable }}` markers. Dotter auto-detects these an
 packages = ["core", "nvim", "ghostty", "tmux"]
 ```
 
-You don't need to list dependency packages explicitly — selecting `ghostty` automatically pulls in `terminal`, and selecting `nvim` pulls in `mcphub`.
+You don't need to list dependency packages explicitly — selecting `ghostty` automatically pulls in `terminal`.
 
 ### Overriding variables
 
@@ -111,12 +114,15 @@ Dotter runs `.dotter/pre_deploy.sh` before and `.dotter/post_deploy.sh` after ev
 
 `post_deploy.sh` runs package-specific setup steps using `{{#if dotter.packages.<name>}}` conditionals:
 
-| Package | What runs |
-| ------- | --------- |
-| nvim    | Installs all Neovim tool prerequisites via `mise use -g` (LSP servers, formatters, linters, DAP adapters). Skipped if `mise` is not on PATH. |
-| fish    | Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available. |
-| tmux    | Installs `tpack` via mise, then runs `tpack install` inside a headless tmux server to install declared plugins. Skipped if `mise` is not on PATH. |
-| bat     | Runs `bat cache --build` to apply the custom theme. Skipped if `bat` is not on PATH. |
+| Package  | What runs |
+| -------- | --------- |
+| nvim     | Warns if `nvim` binary missing (with install link). Installs all Neovim tool prerequisites via `mise use -g` (LSP servers, formatters, linters, DAP adapters), then runs `mise prune --yes`. Skipped if `mise` is not on PATH. |
+| fish     | Warns if `fish` binary missing. Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available. |
+| tmux     | Warns if `tmux` binary missing. Installs `tpack` via mise (then prunes), runs `tpack install` inside a headless tmux server. Skipped if `mise` is not on PATH. |
+| bat      | Warns if `bat` binary missing. Runs `bat cache --build` to apply the custom theme. |
+| starship | Warns if `starship` binary missing (with install link). |
+| btop     | Warns if `btop` binary missing (with install link). |
+| ghostty  | Warns if `ghostty` binary missing (with install link). |
 
 > [!WARNING]
 > The mise tool list in `.dotter/post_deploy.sh` mirrors the one in `nvim/README.md`. If you add or remove a Neovim tool dependency, update both files.
