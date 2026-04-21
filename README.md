@@ -16,10 +16,10 @@ git clone git@github.com:tku137/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-Create `.dotter/local.toml` with the packages you want:
+Create `.dotter/local.toml` with your machine profile:
 
 ```toml
-packages = ["core", "nvim", "ghostty", "tmux"]
+packages = ["desktop", "zellij"]
 ```
 
 Optional check:
@@ -42,28 +42,26 @@ dotter deploy --force
 
 ## Packages
 
-| Package  | Description                        | Dependencies                   |
-| -------- | ---------------------------------- | ------------------------------ |
-| core     | Meta-package for CLI tools         | fish, git, starship, bat, btop |
-| fish     | Fish shell config                  | —                              |
-| git      | Git config                         | —                              |
-| starship | Starship prompt                    | —                              |
-| bat      | bat config                         | —                              |
-| btop     | btop config                        | —                              |
-| terminal | Shared font variables (no files)   | —                              |
-| nvim     | Neovim configuration               | —                              |
-| zed      | Zed editor configuration           | —                              |
-| mcphub   | MCP Hub config                     | —                              |
-| ghostty  | Ghostty terminal emulator          | terminal                       |
-| wezterm  | WezTerm terminal emulator          | terminal                       |
-| tmux     | tmux multiplexer                   | —                              |
-| zellij   | Zellij multiplexer                 | —                              |
-| amethyst | Amethyst tiling window manager     | —                              |
-| desktop  | Meta-package for personal desktop  | (fill in local.toml)           |
-| headless | Meta-package for headless machines | (fill in local.toml)           |
-| work     | Meta-package for work machines     | (fill in local.toml)           |
+| Package  | Description                                             | Dependencies               |
+| -------- | ------------------------------------------------------- | -------------------------- |
+| shell    | Meta-package for the terminal shell environment         | fish, git, starship, tools |
+| tools    | CLI & utility tools (bat, btop, eza, fd, fzf, rg, lua)  | —                          |
+| fish     | Fish shell config                                       | —                          |
+| git      | Git config                                              | —                          |
+| starship | Starship prompt                                         | —                          |
+| terminal | Shared font variables (no files)                        | —                          |
+| nvim     | Neovim configuration                                    | tools                      |
+| zed      | Zed editor configuration                                | —                          |
+| mcphub   | MCP Hub config                                          | —                          |
+| ghostty  | Ghostty terminal emulator                               | terminal                   |
+| wezterm  | WezTerm terminal emulator                               | terminal                   |
+| tmux     | tmux multiplexer                                        | —                          |
+| zellij   | Zellij multiplexer                                      | —                          |
+| amethyst | Amethyst tiling window manager                          | —                          |
+| headless | Meta-package for headless/server machines               | shell, tmux, nvim          |
+| desktop  | Meta-package for personal desktop                       | headless, ghostty          |
 
-`core` is a convenience meta-package — selecting it in `local.toml` pulls in all five CLI tool packages via `depends`. You can also select them individually.
+`shell` bundles your entire terminal environment (fish + git + starship + tools). `headless` and `desktop` are the two machine-type meta-packages you actually select in `local.toml` — everything else is pulled in transitively.
 
 The remaining packages are kept in `global.toml` for reference but are not part of any standard setup: alacritty, kitty, hatch, ipython, iterm2, zsh.
 
@@ -84,10 +82,10 @@ Some config files contain `{{ variable }}` markers. Dotter auto-detects these an
 `.dotter/local.toml` is gitignored and must be created on each machine. At minimum it needs a `packages` field:
 
 ```toml
-packages = ["core", "nvim", "ghostty", "tmux"]
+packages = ["desktop", "zellij"]
 ```
 
-You don't need to list dependency packages explicitly — selecting `ghostty` automatically pulls in `terminal`.
+You don't need to list dependency packages explicitly — `desktop` pulls in `headless`, which pulls in `shell`, `tmux`, and `nvim` automatically.
 
 ### Overriding variables
 
@@ -95,7 +93,7 @@ To override any variable defined in `global.toml`, add a
 `[<package>.variables]` section:
 
 ```toml
-packages = ["core", "nvim", "ghostty", "tmux"]
+packages = ["desktop", "zellij"]
 
 [terminal.variables]
 font_size = 14
@@ -114,15 +112,14 @@ Dotter runs `.dotter/pre_deploy.sh` before and `.dotter/post_deploy.sh` after ev
 
 `post_deploy.sh` runs package-specific setup steps using `{{#if dotter.packages.<name>}}` conditionals:
 
-| Package  | What runs |
-| -------- | --------- |
+| Package  | What runs                                                                                                                                                                                                                      |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| tools    | Installs `bat`, `btop`, `eza`, `fd`, `fzf`, `ripgrep`, `lua` (+ luarocks) via `mise use -g`, then runs `mise prune --yes` and `bat cache --build`. Warns if `mise` is not on PATH.                                             |
 | nvim     | Warns if `nvim` binary missing (with install link). Installs all Neovim tool prerequisites via `mise use -g` (LSP servers, formatters, linters, DAP adapters), then runs `mise prune --yes`. Skipped if `mise` is not on PATH. |
-| fish     | Warns if `fish` binary missing. Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available. |
-| tmux     | Warns if `tmux` binary missing. Installs `tpack` via mise (then prunes), runs `tpack install` inside a headless tmux server. Skipped if `mise` is not on PATH. |
-| bat      | Warns if `bat` binary missing. Runs `bat cache --build` to apply the custom theme. |
-| starship | Warns if `starship` binary missing (with install link). |
-| btop     | Warns if `btop` binary missing (with install link). |
-| ghostty  | Warns if `ghostty` binary missing (with install link). |
+| fish     | Warns if `fish` binary missing. Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available.                                                                                   |
+| tmux     | Warns if `tmux` binary missing. Installs `tpack` via mise (then prunes), runs `tpack install` inside a headless tmux server. Skipped if `mise` is not on PATH.                                                                 |
+| starship | Warns if `starship` binary missing (with install link).                                                                                                                                                                        |
+| ghostty  | Warns if `ghostty` binary missing (with install link).                                                                                                                                                                         |
 
 > [!WARNING]
 > The mise tool list in `.dotter/post_deploy.sh` mirrors the one in `nvim/README.md`. If you add or remove a Neovim tool dependency, update both files.

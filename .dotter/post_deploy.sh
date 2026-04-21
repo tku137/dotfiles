@@ -25,21 +25,18 @@ if ! command -v starship &>/dev/null; then
 fi
 {{/if}}
 
-{{#if dotter.packages.bat}}
-echo "[bat]"
-if ! command -v bat &>/dev/null; then
-  echo "  WARNING: bat not found."
-else
-  echo "  Rebuilding cache..."
-  bat cache --build 2>&1 >/dev/null
-fi
+{{#if dotter.packages.tools}}
+echo "[tools]"
+{{#if (is_executable "mise")}}
+echo "  Installing tools via mise..."
+mise --quiet use -g bat@latest btop@latest eza@latest fd@latest fzf@latest ripgrep@latest lua@latest 2>&1 >/dev/null
+echo "  Pruning old versions..."
+mise --quiet prune --yes 2>&1 >/dev/null
+echo "  Rebuilding bat cache..."
+bat cache --build 2>&1 >/dev/null
+{{else}}
+echo "  WARNING: mise not found, skipping tool installation."
 {{/if}}
-
-{{#if dotter.packages.btop}}
-echo "[btop]"
-if ! command -v btop &>/dev/null; then
-  echo "  WARNING: btop not found."
-fi
 {{/if}}
 
 # WARNING: this mise tool list is mirrored in nvim/README.md, update both!

@@ -1,11 +1,11 @@
 [settings]
 default_target_type = "automatic"
 
-# Core: meta-package that pulls in always-deployed CLI tools
-[core]
-depends = ["fish", "git", "starship", "bat", "btop"]
+# Shell: meta-package for the terminal shell environment
+[shell]
+depends = ["fish", "git", "starship", "tools"]
 
-# Individual core tools
+# Individual shell tools
 [fish.files]
 "fish" = "~/.config/fish"
 
@@ -18,10 +18,9 @@ git_email = "tku137@mailbox.org"
 [starship.files]
 "starship/starship.toml" = "~/.config/starship.toml"
 
-[bat.files]
+# CLI and utility tools — configs deployed here, binaries installed via mise in post_deploy.sh
+[tools.files]
 "bat" = "~/.config/bat"
-
-[btop.files]
 "btop" = "~/.config/btop"
 
 # Terminal: shared font variables (no files)
@@ -32,6 +31,7 @@ font_family_italic = "Maple Mono NF"
 
 # Editors
 [nvim]
+depends = ["tools"]
 
 [nvim.files]
 "nvim" = "~/.config/nvim"
@@ -94,7 +94,7 @@ depends = ["terminal"]
 
 # Machine-type meta-packages
 [headless]
-depends = ["core", "tmux", "nvim"]
+depends = ["shell", "tmux", "nvim"]
 
 [desktop]
 depends = ["headless", "ghostty"]

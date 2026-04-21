@@ -591,6 +591,9 @@ In SQL buffers (`sql`, `mysql`, `plsql`), the `<localLeader>` menu provides shor
 
 ## Prerequisites
 
+> [!NOTE]
+> If you are using this config as part of the [tku137/dotfiles](https://github.com/tku137/dotfiles) repo, all prerequisites below (fzf, ripgrep, fd, luarocks, and all LSP/formatter/linter tools) are installed automatically by `dotter deploy` via the post-deploy hook. You can skip the manual installation steps.
+
 1. **Prerequisites**:
    - Neovim 0.11+ required (this config uses the new `vim.lsp` API)
    - Git
