@@ -6,35 +6,30 @@ Each top-level directory is a dotter package. Packages define file mappings and 
 
 ## Prerequisites
 
-- [dotter](https://github.com/SuperCuber/dotter) — install via `cargo install dotter` or your package manager
-- [mise](https://mise.jdx.dev/) (optional) — runtime manager for Python, Node, Go, etc.
+- [mise](https://mise.jdx.dev/) — runtime manager used to install dotter and all tools
+- [fish](https://fishshell.com/) — install via your system package manager
+- `git`, `curl`, a C compiler — install via your system package manager
 
 ## Quick start
+
+On a fresh machine, run the bootstrap script first:
 
 ```bash
 git clone git@github.com:tku137/dotfiles.git ~/dotfiles
 cd ~/dotfiles
+bash setup.sh
 ```
 
-Create `.dotter/local.toml` with your machine profile:
+`setup.sh` checks system dependencies, installs mise and dotter, and creates a `.dotter/local.toml` template for you.
 
-```toml
-packages = ["desktop", "zellij"]
-```
-
-Optional check:
+Edit `.dotter/local.toml` and uncomment your machine profile, then preview and deploy:
 
 ```bash
 dotter deploy --dry-run -v
-```
-
-Deploy:
-
-```bash
 dotter deploy
 ```
 
-If existing files conflict with the deployment, use `--force` to overwrite them:
+If existing files conflict, force overwrite:
 
 ```bash
 dotter deploy --force

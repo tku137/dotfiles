@@ -20,18 +20,19 @@ fi
 
 {{#if dotter.packages.starship}}
 echo "[starship]"
-if ! command -v starship &>/dev/null; then
-  echo "  WARNING: starship not found."
-fi
+{{#if (is_executable "mise")}}
+echo "  Installing starship via mise..."
+mise --quiet use -g starship@latest 2>&1 >/dev/null
+{{else}}
+echo "  WARNING: mise not found, starship not installed. See https://starship.rs/"
+{{/if}}
 {{/if}}
 
 {{#if dotter.packages.tools}}
 echo "[tools]"
 {{#if (is_executable "mise")}}
 echo "  Installing tools via mise..."
-mise --quiet use -g bat@latest btop@latest eza@latest fd@latest fzf@latest ripgrep@latest lua@latest 2>&1 >/dev/null
-echo "  Pruning old versions..."
-mise --quiet prune --yes 2>&1 >/dev/null
+mise --quiet use -g bat@latest btop@latest eza@latest fd@latest fzf@latest ripgrep@latest lua@latest zoxide@latest 2>&1 >/dev/null
 echo "  Rebuilding bat cache..."
 bat cache --build 2>&1 >/dev/null
 {{else}}
@@ -42,14 +43,11 @@ echo "  WARNING: mise not found, skipping tool installation."
 # WARNING: this mise tool list is mirrored in nvim/README.md, update both!
 {{#if dotter.packages.nvim}}
 echo "[nvim]"
-if ! command -v nvim &>/dev/null; then
-  echo "  WARNING: nvim not found."
-fi
 {{#if (is_executable "mise")}}
+echo "  Installing neovim via mise..."
+mise --quiet use -g neovim@latest 2>&1 >/dev/null
 echo "  Installing tool prerequisites via mise..."
 mise --quiet use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest github:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest 2>&1 >/dev/null
-echo "  Pruning old versions..."
-mise --quiet prune --yes 2>&1 >/dev/null
 {{else}}
 echo "  mise not found, skipping tool prerequisites."
 {{/if}}
@@ -57,14 +55,11 @@ echo "  mise not found, skipping tool prerequisites."
 
 {{#if dotter.packages.tmux}}
 echo "[tmux]"
-if ! command -v tmux &>/dev/null; then
-  echo "  WARNING: tmux not found."
-fi
 {{#if (is_executable "mise")}}
+echo "  Installing tmux via mise..."
+mise --quiet use -g tmux@latest 2>&1 >/dev/null
 echo "  Installing tpack..."
 mise --quiet use -g github:tmuxpack/tpack@latest 2>&1 >/dev/null
-echo "  Pruning old versions..."
-mise --quiet prune --yes 2>&1 >/dev/null
 if command -v tpack &>/dev/null; then
   echo "  Installing plugins via tpack..."
   # swallow tmux-powerkit download errors (vibe-coded stuff...), it works anyways
@@ -85,4 +80,19 @@ echo "[ghostty]"
 if ! command -v ghostty &>/dev/null; then
   echo "  WARNING: ghostty not found."
 fi
+{{/if}}
+
+{{#if dotter.packages.zellij}}
+echo "[zellij]"
+{{#if (is_executable "mise")}}
+echo "  Installing zellij via mise..."
+mise --quiet use -g zellij@latest 2>&1 >/dev/null
+{{else}}
+echo "  WARNING: mise not found, skipping zellij installation."
+{{/if}}
+{{/if}}
+
+{{#if (is_executable "mise")}}
+echo "[mise] Pruning old versions..."
+mise --quiet prune --yes 2>&1 >/dev/null
 {{/if}}
