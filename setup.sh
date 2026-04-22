@@ -13,13 +13,12 @@ set -e
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
-BOLD='\033[1m'
 RESET='\033[0m'
 
-info()    { echo -e "${BOLD}${GREEN}==>${RESET} $*"; }
-warn()    { echo -e "${BOLD}${YELLOW}  WARNING:${RESET} $*"; }
-error()   { echo -e "${BOLD}${RED}  ERROR:${RESET} $*"; }
-section() { echo -e "\n${BOLD}$*${RESET}"; }
+info()    { echo -e "${GREEN}==>${RESET} $*"; }
+warn()    { echo -e "${YELLOW}  WARNING:${RESET} $*"; }
+error()   { echo -e "${RED}  ERROR:${RESET} $*"; }
+section() { echo -e "\n$*"; }
 
 # Ensure mise is on PATH regardless of shell activation state
 export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
@@ -27,8 +26,8 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
 # ── 0. Verify running from repo root ─────────────────────────────────────────
 
 if [ ! -f "./setup.sh" ] || [ ! -d "./.dotter" ]; then
-  echo -e "${BOLD}${RED}ERROR:${RESET} setup.sh must be run from the dotfiles repo root."
-  echo -e "  cd into the repo directory first, then run: ${BOLD}bash setup.sh${RESET}"
+  echo -e "${RED}ERROR:${RESET} setup.sh must be run from the dotfiles repo root."
+  echo -e "  cd into the repo directory first, then run: bash setup.sh"
   exit 1
 fi
 
@@ -88,8 +87,8 @@ if command -v mise &>/dev/null; then
   info "mise already installed: $(command -v mise)"
 else
   echo ""
-  echo -e "  ${BOLD}mise${RESET} is not installed. It is required to install dotter and all other tools."
-  echo -e "  Installer: ${BOLD}curl https://mise.run | sh${RESET}"
+  echo -e "  mise is not installed. It is required to install dotter and all other tools."
+  echo -e "  Installer: curl https://mise.run | sh"
   echo ""
   read -r -p "  Install mise now? [y/N] " confirm
   case "$confirm" in
@@ -187,34 +186,35 @@ FISH_PATH="$(command -v fish 2>/dev/null || true)"
 CURRENT_SHELL="$(getent passwd "$USER" 2>/dev/null | cut -d: -f7 || echo "$SHELL")"
 
 echo ""
-echo -e "${BOLD}${GREEN}Bootstrap complete.${RESET}"
+echo -e "${GREEN}Bootstrap complete.${RESET}"
 echo ""
 
+echo -e "Next steps:"
+echo ""
+echo -e "  1. Edit .dotter/local.toml and uncomment your machine profile."
+echo ""
+echo -e "  2. Preview what will be deployed (recommended on first run):"
+echo ""
+echo -e "       dotter deploy --dry-run -v"
+echo ""
+echo -e "  3. Deploy:"
+echo ""
+echo -e "       dotter deploy"
+echo ""
+echo -e "     If existing config files conflict, force overwrite with:"
+echo ""
+echo -e "       dotter deploy --force"
+echo ""
 # Warn if ~/.local/bin is not on the current PATH (dotter may not be reachable)
 case ":$PATH:" in
   *":$HOME/.local/bin:"*) ;;
   *)
-    echo -e "${BOLD}${YELLOW}  NOTE:${RESET} $HOME/.local/bin is not on your current PATH."
+    echo -e "${YELLOW}  NOTE:${RESET} $HOME/.local/bin is not on your current PATH."
     echo -e "  Paste this to use dotter in this session:"
     echo ""
-    echo -e "       ${BOLD}export PATH=\"\$HOME/.local/bin:\$PATH\"${RESET}"
+    echo -e "       bash/zsh: export PATH=\"\$HOME/.local/bin:\$PATH\""
+    echo -e "       fish: fish_add_path ~/.local/bin"
     echo ""
     ;;
 esac
 
-echo -e "${BOLD}Next steps:${RESET}"
-echo ""
-echo -e "  1. Edit ${BOLD}.dotter/local.toml${RESET} and uncomment your machine profile."
-echo ""
-echo -e "  2. Preview what will be deployed (recommended on first run):"
-echo ""
-echo -e "       ${BOLD}dotter deploy --dry-run -v${RESET}"
-echo ""
-echo -e "  3. Deploy:"
-echo ""
-echo -e "       ${BOLD}dotter deploy${RESET}"
-echo ""
-echo -e "     If existing config files conflict, force overwrite with:"
-echo ""
-echo -e "       ${BOLD}dotter deploy --force${RESET}"
-echo ""

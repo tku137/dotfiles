@@ -68,7 +68,7 @@ fish/conf.d/*
 !fish/conf.d/20-zoxide.fish
 !fish/conf.d/25-fzf.fish
 !fish/conf.d/35-pyenv.fish
-!fish/conf.d/40‑fisher-bootstrap.fish
+!fish/conf.d/40-fisher.fish
 !fish/conf.d/rustup.fish
 #--------------------------------------------------#
 # The following was generated with gitignore.nvim: #

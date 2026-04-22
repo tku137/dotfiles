@@ -188,6 +188,7 @@ disabled = false
 
 # Detect if in container but NOT via SSH
 [custom.real_container]
+ignore_timeout = true
 when = 'test -f /run/.containerenv && [ -z "$SSH_CONNECTION" ]'
 command = '''
   name=$(cat /run/systemd/container 2>/dev/null || echo container)
