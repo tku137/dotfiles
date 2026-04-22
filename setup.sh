@@ -21,6 +21,9 @@ warn()    { echo -e "${BOLD}${YELLOW}  WARNING:${RESET} $*"; }
 error()   { echo -e "${BOLD}${RED}  ERROR:${RESET} $*"; }
 section() { echo -e "\n${BOLD}$*${RESET}"; }
 
+# Ensure mise and its shims are on PATH regardless of shell activation state
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+
 # ── 0. Verify running from repo root ─────────────────────────────────────────
 
 if [ ! -f "./setup.sh" ] || [ ! -d "./.dotter" ]; then
