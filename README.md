@@ -6,7 +6,7 @@ Each top-level directory is a dotter package. Packages define file mappings and 
 
 ## Prerequisites
 
-- [mise](https://mise.jdx.dev/) — runtime manager used to install dotter and all tools
+- [mise](https://mise.jdx.dev/) — runtime manager used to install all tools (installed by `setup.sh`)
 - [fish](https://fishshell.com/) — install via your system package manager
 - `git`, `curl`, a C compiler — install via your system package manager
 
@@ -20,7 +20,7 @@ cd ~/dotfiles
 bash setup.sh
 ```
 
-`setup.sh` checks system dependencies, installs mise and dotter, and creates a `.dotter/local.toml` template for you.
+`setup.sh` checks system dependencies, installs mise, and downloads the `dotter` binary to `~/.local/bin/dotter`.
 
 Edit `.dotter/local.toml` and uncomment your machine profile, then preview and deploy:
 
@@ -40,7 +40,7 @@ dotter deploy --force
 | Package  | Description                                             | Dependencies               |
 | -------- | ------------------------------------------------------- | -------------------------- |
 | shell    | Meta-package for the terminal shell environment         | fish, git, starship, tools |
-| tools    | CLI & utility tools (bat, btop, eza, fd, fzf, rg, lua)  | —                          |
+| tools    | CLI & utility tools (bat, btop, eza, fd, fzf, rg, zoxide) | —                          |
 | fish     | Fish shell config                                       | —                          |
 | git      | Git config                                              | —                          |
 | starship | Starship prompt                                         | —                          |

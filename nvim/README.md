@@ -18,7 +18,6 @@ A modern, modular and highly opinionated Neovim configuration.
    - a [Nerd Font](https://www.nerdfonts.com/)
    - Treesitter CLI
    - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
-   - [luarocks](https://www.lua.org/start.html#installing)
    - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
    - [fzf](https://github.com/junegunn/fzf)
    - [ripgrep](https://github.com/BurntSushi/ripgrep)
@@ -592,7 +591,7 @@ In SQL buffers (`sql`, `mysql`, `plsql`), the `<localLeader>` menu provides shor
 ## Prerequisites
 
 > [!NOTE]
-> If you are using this config as part of the [tku137/dotfiles](https://github.com/tku137/dotfiles) repo, all prerequisites below (fzf, ripgrep, fd, luarocks, and all LSP/formatter/linter tools) are installed automatically by `dotter deploy` via the post-deploy hook. You can skip the manual installation steps.
+> If you are using this config as part of the [tku137/dotfiles](https://github.com/tku137/dotfiles) repo, all prerequisites below (fzf, ripgrep, fd, and all LSP/formatter/linter tools) are installed automatically by `dotter deploy` via the post-deploy hook. You can skip the manual installation steps.
 
 1. **Prerequisites**:
    - Neovim 0.11+ required (this config uses the new `vim.lsp` API)
@@ -600,7 +599,6 @@ In SQL buffers (`sql`, `mysql`, `plsql`), the `<localLeader>` menu provides shor
    - a [Nerd Font](https://www.nerdfonts.com/)
    - Treesitter CLI
    - a C compiler for nvim-treesitter. See [here](https://github.com/nvim-treesitter/nvim-treesitter#requirements)
-   - [luarocks](https://www.lua.org/start.html#installing)
    - curl for [blink.cmp](https://github.com/Saghen/blink.cmp) (completion engine)
    - [fzf](https://github.com/junegunn/fzf)
    - [ripgrep](https://github.com/BurntSushi/ripgrep)
@@ -664,7 +662,6 @@ Using homebrew:
 ```bash
 brew install neovim
 brew install git
-brew install luarocks
 brew install gcc  # or use xcode-select --install for macOS
 brew install llvm
 brew install curl

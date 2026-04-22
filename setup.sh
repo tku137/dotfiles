@@ -5,7 +5,7 @@
 # What it does:
 #   1. Checks hard system dependencies (exits with instructions if any are missing)
 #   2. Installs mise (with confirmation)
-#   3. Installs dotter via mise
+#   3. Installs dotter binary directly to ~/.local/bin/dotter
 #   4. Prints next steps
 
 set -e
@@ -21,7 +21,7 @@ warn()    { echo -e "${BOLD}${YELLOW}  WARNING:${RESET} $*"; }
 error()   { echo -e "${BOLD}${RED}  ERROR:${RESET} $*"; }
 section() { echo -e "\n${BOLD}$*${RESET}"; }
 
-# Ensure mise and its shims are on PATH regardless of shell activation state
+# Ensure mise is on PATH regardless of shell activation state
 export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
 
 # ── 0. Verify running from repo root ─────────────────────────────────────────
@@ -63,18 +63,12 @@ else
   MISSING=1
 fi
 
-# Check fish — warn if missing, also warn if not set as login shell
+# Check fish
 if ! command -v fish &>/dev/null; then
   error "'fish' not found. Install via your system package manager (e.g. apt install fish)."
   MISSING=1
 else
   info "fish: $(command -v fish)"
-  FISH_PATH="$(command -v fish)"
-  CURRENT_SHELL="$(getent passwd "$USER" 2>/dev/null | cut -d: -f7 || echo "$SHELL")"
-  if [ "$CURRENT_SHELL" != "$FISH_PATH" ]; then
-    warn "fish is installed but is not your login shell (current: $CURRENT_SHELL)."
-    warn "To set fish as your login shell, run: chsh -s $FISH_PATH"
-  fi
 fi
 
 if [ "$MISSING" -ne 0 ]; then
@@ -106,7 +100,7 @@ else
       export PATH="$HOME/.local/bin:$PATH"
       if ! command -v mise &>/dev/null; then
         error "mise installation completed but 'mise' is still not on PATH."
-        error "Try opening a new shell and running: mise use -g github:SuperCuber/dotter"
+        error "Try: export PATH=\"\$HOME/.local/bin:\$PATH\" then re-run setup.sh."
         exit 1
       fi
       info "mise installed: $(command -v mise)"
@@ -120,12 +114,41 @@ else
   esac
 fi
 
-# ── 3. Install dotter via mise ────────────────────────────────────────────────
+# ── 3. Install dotter ────────────────────────────────────────────────────────
 
-section "Installing dotter via mise..."
+section "Installing dotter..."
 
-mise use -g github:SuperCuber/dotter@latest
-info "dotter installed: $(command -v dotter)"
+# Detect OS and arch, map to the correct GitHub release asset
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+DOTTER_ASSET=""
+
+case "$OS" in
+  Linux)
+    case "$ARCH" in
+      x86_64)        DOTTER_ASSET="dotter-linux-x64-musl"   ;;
+      aarch64|arm64) DOTTER_ASSET="dotter-linux-arm64-musl" ;;
+      *) error "Unsupported Linux arch: $ARCH. Install dotter manually from https://github.com/SuperCuber/dotter/releases"; exit 1 ;;
+    esac
+    ;;
+  Darwin)
+    case "$ARCH" in
+      arm64|aarch64) DOTTER_ASSET="dotter-macos-arm64.arm"  ;;
+      x86_64) error "No prebuilt dotter binary for Intel macOS. Install via: cargo install dotter"; exit 1 ;;
+      *) error "Unsupported macOS arch: $ARCH. Install dotter manually from https://github.com/SuperCuber/dotter/releases"; exit 1 ;;
+    esac
+    ;;
+  *)
+    error "Unsupported OS: $OS. Install dotter manually from https://github.com/SuperCuber/dotter/releases"
+    exit 1
+    ;;
+esac
+
+mkdir -p "$HOME/.local/bin"
+curl -fsSL "https://github.com/SuperCuber/dotter/releases/latest/download/$DOTTER_ASSET" \
+  -o "$HOME/.local/bin/dotter"
+chmod +x "$HOME/.local/bin/dotter"
+info "dotter installed: $HOME/.local/bin/dotter"
 
 # ── 4. Create local.toml if it doesn't exist ─────────────────────────────────
 
@@ -160,9 +183,25 @@ fi
 
 # ── 5. Next steps ─────────────────────────────────────────────────────────────
 
+FISH_PATH="$(command -v fish 2>/dev/null || true)"
+CURRENT_SHELL="$(getent passwd "$USER" 2>/dev/null | cut -d: -f7 || echo "$SHELL")"
+
 echo ""
 echo -e "${BOLD}${GREEN}Bootstrap complete.${RESET}"
 echo ""
+
+# Warn if ~/.local/bin is not on the current PATH (dotter may not be reachable)
+case ":$PATH:" in
+  *":$HOME/.local/bin:"*) ;;
+  *)
+    echo -e "${BOLD}${YELLOW}  NOTE:${RESET} $HOME/.local/bin is not on your current PATH."
+    echo -e "  Paste this to use dotter in this session:"
+    echo ""
+    echo -e "       ${BOLD}export PATH=\"\$HOME/.local/bin:\$PATH\"${RESET}"
+    echo ""
+    ;;
+esac
+
 echo -e "${BOLD}Next steps:${RESET}"
 echo ""
 echo -e "  1. Edit ${BOLD}.dotter/local.toml${RESET} and uncomment your machine profile."
