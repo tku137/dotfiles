@@ -1,13 +1,8 @@
-# fix missing fzf key bindings
-source $HOME/.config/fish/functions/fzf_configure_bindings.fish
+# =============================================================================
+# Custom user functions
+# =============================================================================
 
-# fix missing functions - DISABLED to prevent funcsave spam from fish-eza plugin
-for file in $HOME/.config/fish/functions/*.fish
-    source $file
-end
-
-# fix missing user functions
-set -gx fish_function_path $HOME/.config/fish/functions/my_functions $fish_function_path
-for file in $HOME/.config/fish/functions/my_functions/*.fish
-    source $file
+# Add custom function directory to fish_function_path so they are autoloaded
+if not contains $HOME/.config/fish/functions/my_functions $fish_function_path
+    set -gx fish_function_path $HOME/.config/fish/functions/my_functions $fish_function_path
 end

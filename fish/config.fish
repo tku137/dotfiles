@@ -16,22 +16,6 @@ if status is-interactive
 end
 
 # =============================================================================
-# PACKAGE MANAGER SETUP
-# =============================================================================
-
-# Bootstrap fisher (fish plugin manager) if not installed
-if not type -q fisher; and type -q curl
-    echo "Installing fisher plugin manager..."
-    curl -sL https://git.io/fisher | source
-    if status is-interactive
-        echo "Updating fisher plugins..."
-        fisher update
-    end
-else if not type -q fisher
-    echo "Warning: fisher not available and curl not found for installation"
-end
-
-# =============================================================================
 # PATH CONFIGURATION
 # =============================================================================
 

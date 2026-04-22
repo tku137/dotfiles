@@ -17,7 +17,16 @@ else
     echo "  Updating plugins via fisher..."
     fish -c "fisher update" 2>&1 >/dev/null
   else
-    echo "  fisher not available, skipping plugin update."
+    # Remove any leftover Fisher-managed files that would conflict with a fresh install
+    echo "  Cleaning stale completions/functions for Fisher bootstrap..."
+    rm -f "$HOME/.config/fish/completions/fisher.fish" \
+          "$HOME/.config/fish/completions/replay.fish" \
+          "$HOME/.config/fish/completions/fzf_configure_bindings.fish" \
+          "$HOME/.config/fish/functions/fisher.fish" \
+          "$HOME/.config/fish/functions/replay.fish" \
+          "$HOME/.config/fish/functions/fzf_configure_bindings.fish" 2>/dev/null
+    echo "  Bootstrapping fisher and installing plugins..."
+    fish -c "curl -sL https://git.io/fisher | source && fisher update" 2>&1 >/dev/null
   fi
 fi
 {{/if}}
@@ -27,6 +36,8 @@ echo "[starship]"
 {{#if (is_executable "mise")}}
 echo "  Installing starship via mise..."
 mise --quiet use -g starship@latest 2>&1 >/dev/null
+# Remove cached init script so it regenerates with the correct binary path
+rm -f "$HOME/.cache/starship_init.fish"
 {{else}}
 echo "  WARNING: mise not found, starship not installed. See https://starship.rs/"
 {{/if}}
