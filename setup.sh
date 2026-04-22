@@ -171,7 +171,7 @@ else
 
 # Override default variables defined in .dotter/global.toml:
 #
-# [git.variables]
+# [variables]
 # git_name  = "Your Name"
 # git_email = "you@work.com"
 #
