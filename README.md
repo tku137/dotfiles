@@ -4,57 +4,101 @@ Dotter-managed dotfiles for macOS and Linux.
 
 Each top-level directory is a dotter package. Packages define file mappings and template variables in `.dotter/global.toml`. Machine-specific package selection and variable overrides live in `.dotter/local.toml` (gitignored).
 
-## Prerequisites
+## Requirements
 
-- [mise](https://mise.jdx.dev/) — runtime manager used to install all tools (installed by `setup.sh`)
-- [fish](https://fishshell.com/) — install via your system package manager
-- `git`, `curl`, a C compiler — install via your system package manager
+Install these manually per machine, methods vary by OS, so there's no bootstrap script (impossible to capture all platforms/archs and lots of hen-egg-problems). Use your system package manager (`apt`, `dnf`, `pacman`, `brew`, …) unless a link below says otherwise.
+
+- `git` — to clone this repo
+- `curl` — used by tool installers and deploy hooks
+- [fish](https://fishshell.com/) — the shell this config targets
+- [mise](https://mise.jdx.dev/) — runtime manager; installs node, python, neovim, LSPs, and many CLI tools via the post-deploy hook
+- [dotter](https://github.com/SuperCuber/dotter) — the deploy tool itself (see below)
+
+### Installing dotter
+
+Pick whichever is easiest on your machine:
+
+- **Homebrew** (macOS, Linuxbrew):
+
+  ```bash
+  brew install dotter
+  ```
+
+- **mise** (once mise is installed _and activated!_):
+
+  ```bash
+  mise use -g github:SuperCuber/dotter@latest
+  ```
+
+- **Prebuilt binary** — pick the right asset for your OS/arch from [dotter releases](https://github.com/SuperCuber/dotter/releases):
+
+  ```bash
+  curl -L https://github.com/SuperCuber/dotter/releases/latest/download/dotter-linux-x64-musl \
+    -o ~/.local/bin/dotter && chmod +x ~/.local/bin/dotter
+  ```
+
+> [!TIP]
+> Some packages have their own README with additional per-machine notes. For example, `nvim/README.md` lists all the LSP servers, formatters, and linters that get installed via mise on first deploy.
 
 ## Quick start
 
-On a fresh machine, run the bootstrap script first:
+Install the [requirements](#requirements) first, then:
 
 ```bash
 git clone git@github.com:tku137/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-bash setup.sh
 ```
 
-`setup.sh` checks system dependencies, installs mise, and downloads the `dotter` binary to `~/.local/bin/dotter`.
+Create `.dotter/local.toml` and pick your machine profile:
 
-Edit `.dotter/local.toml` and uncomment your machine profile, then preview and deploy:
+```toml
+# Select your machine profile. Common setups:
+#   headless — shell + tmux + nvim (server/remote machines)
+#   desktop  — headless + ghostty (personal workstation)
+#
+# Add optional packages after the profile, e.g. ["desktop", "zellij"]
 
-```bash
-dotter deploy --dry-run -v
-dotter deploy
+packages = ["headless"]
+# packages = ["desktop", "zellij"]
+
+# Override default variables defined in .dotter/global.toml:
+#
+# [git.variables]
+# git_name  = "Your Name"
+# git_email = "you@work.com"
+#
+# [terminal.variables]
+# font_size = 14
 ```
 
-If existing files conflict, force overwrite:
+Preview and deploy:
 
 ```bash
-dotter deploy --force
+dotter deploy --dry-run -v   # preview
+dotter deploy                # apply
+dotter deploy --force        # overwrite conflicting existing files
 ```
 
 ## Packages
 
-| Package  | Description                                             | Dependencies               |
-| -------- | ------------------------------------------------------- | -------------------------- |
-| shell    | Meta-package for the terminal shell environment         | fish, git, starship, tools |
+| Package  | Description                                               | Dependencies               |
+| -------- | --------------------------------------------------------- | -------------------------- |
+| shell    | Meta-package for the terminal shell environment           | fish, git, starship, tools |
 | tools    | CLI & utility tools (bat, btop, eza, fd, fzf, rg, zoxide) | —                          |
-| fish     | Fish shell config                                       | —                          |
-| git      | Git config                                              | —                          |
-| starship | Starship prompt                                         | —                          |
-| terminal | Shared font variables (no files)                        | —                          |
-| nvim     | Neovim configuration                                    | tools                      |
-| zed      | Zed editor configuration                                | —                          |
-| mcphub   | MCP Hub config                                          | —                          |
-| ghostty  | Ghostty terminal emulator                               | terminal                   |
-| wezterm  | WezTerm terminal emulator                               | terminal                   |
-| tmux     | tmux multiplexer                                        | —                          |
-| zellij   | Zellij multiplexer                                      | —                          |
-| amethyst | Amethyst tiling window manager                          | —                          |
-| headless | Meta-package for headless/server machines               | shell, tmux, nvim          |
-| desktop  | Meta-package for personal desktop                       | headless, ghostty          |
+| fish     | Fish shell config                                         | —                          |
+| git      | Git config                                                | —                          |
+| starship | Starship prompt                                           | —                          |
+| terminal | Shared font variables (no files)                          | —                          |
+| nvim     | Neovim configuration                                      | tools                      |
+| zed      | Zed editor configuration                                  | —                          |
+| mcphub   | MCP Hub config                                            | —                          |
+| ghostty  | Ghostty terminal emulator                                 | terminal                   |
+| wezterm  | WezTerm terminal emulator                                 | terminal                   |
+| tmux     | tmux multiplexer                                          | —                          |
+| zellij   | Zellij multiplexer                                        | —                          |
+| amethyst | Amethyst tiling window manager                            | —                          |
+| headless | Meta-package for headless/server machines                 | shell, tmux, nvim          |
+| desktop  | Meta-package for personal desktop                         | headless, ghostty          |
 
 `shell` bundles your entire terminal environment (fish + git + starship + tools). `headless` and `desktop` are the two machine-type meta-packages you actually select in `local.toml` — everything else is pulled in transitively.
 
@@ -107,14 +151,15 @@ Dotter runs `.dotter/pre_deploy.sh` before and `.dotter/post_deploy.sh` after ev
 
 `post_deploy.sh` runs package-specific setup steps using `{{#if dotter.packages.<name>}}` conditionals:
 
-| Package  | What runs                                                                                                                                                                                                                      |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| tools    | Installs `bat`, `btop`, `eza`, `fd`, `fzf`, `ripgrep`, `lua` (+ luarocks) via `mise use -g`, then runs `mise prune --yes` and `bat cache --build`. Warns if `mise` is not on PATH.                                             |
-| nvim     | Warns if `nvim` binary missing (with install link). Installs all Neovim tool prerequisites via `mise use -g` (LSP servers, formatters, linters, DAP adapters), then runs `mise prune --yes`. Skipped if `mise` is not on PATH. |
-| fish     | Warns if `fish` binary missing. Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available.                                                                                   |
-| tmux     | Warns if `tmux` binary missing. Installs `tpack` via mise (then prunes), runs `tpack install` inside a headless tmux server. Skipped if `mise` is not on PATH.                                                                 |
-| starship | Warns if `starship` binary missing (with install link).                                                                                                                                                                        |
-| ghostty  | Warns if `ghostty` binary missing (with install link).                                                                                                                                                                         |
+| Package  | What runs                                                                                                                                                                                                           |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| tools    | Installs `bat`, `btop`, `eza`, `fd`, `fzf`, `ripgrep`, `zoxide` via `mise use -g`, then runs `bat cache --build`. Warns if `mise` is not on PATH.                                                                   |
+| nvim     | Installs `neovim`, `node`, `python` and all Neovim tool prerequisites (LSP servers, formatters, linters, DAP adapters) via `mise use -g`. Skipped if `mise` is not on PATH. See `nvim/README.md` for the full list. |
+| fish     | Warns if `fish` binary missing. Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Skipped if `fisher` is not available.                                                                        |
+| tmux     | Installs `tmux` and `tpack` via mise, runs `tpack install` inside a headless tmux server. Skipped if `mise` is not on PATH.                                                                                         |
+| starship | Installs `starship` via mise. Warns if `mise` is not on PATH.                                                                                                                                                       |
+| zellij   | Installs `zellij` via mise. Warns if `mise` is not on PATH.                                                                                                                                                         |
+| ghostty  | Warns if `ghostty` binary missing (with install link).                                                                                                                                                              |
 
 > [!WARNING]
 > The mise tool list in `.dotter/post_deploy.sh` mirrors the one in `nvim/README.md`. If you add or remove a Neovim tool dependency, update both files.
