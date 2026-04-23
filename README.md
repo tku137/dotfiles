@@ -38,7 +38,7 @@ Pick whichever is easiest on your machine:
   ```
 
 > [!TIP]
-> Some packages have their own README with additional per-machine notes. For example, `nvim/README.md` lists all the LSP servers, formatters, and linters that get installed via mise on first deploy.
+> Some packages have their own README with additional per-machine notes. For example, `nvim/README.md` lists additional requirements and also all the LSP servers, formatters, and linters that get installed via mise on first deploy.
 
 ## Quick start
 
