@@ -39,7 +39,19 @@ echo "  WARNING: mise not found, starship not installed. See https://starship.rs
 echo "[tools]"
 {{#if (is_executable "mise")}}
 echo "  Installing tools via mise..."
-mise --quiet use -g bat@latest btop@latest eza@latest fd@latest fzf@latest ripgrep@latest zoxide@latest 2>&1 >/dev/null
+mise --quiet use -g bat@latest eza@latest fd@latest fzf@latest ripgrep@latest zoxide@latest 2>&1 >/dev/null
+# btop: no native macOS binary available anymore, install OS-specific
+if [ "$(uname -s)" = "Darwin" ]; then
+  if command -v brew &>/dev/null; then
+    echo "  Installing btop via brew..."
+    brew install btop >/dev/null 2>&1
+  else
+    echo "  WARNING: brew not found, btop skipped."
+  fi
+else
+  echo "  Installing btop via mise (github backend)..."
+  mise --quiet use -g github:aristocratos/btop@latest 2>&1 >/dev/null
+fi
 echo "  Rebuilding bat cache..."
 bat cache --build 2>&1 >/dev/null
 {{else}}
@@ -56,7 +68,7 @@ mise --quiet use -g neovim@latest 2>&1 >/dev/null
 echo "  Installing node and python runtimes via mise..."
 mise --quiet use -g node@latest python@latest 2>&1 >/dev/null
 echo "  Installing tool prerequisites via mise..."
-mise --quiet use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest github:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:tree-sitter-cli@latest npm:opencode-ai@latest 2>&1 >/dev/null
+mise --quiet use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest github:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:tree-sitter-cli@latest npm:opencode-ai@latest lazygit@latest 2>&1 >/dev/null
 {{else}}
 echo "  mise not found, skipping tool prerequisites."
 {{/if}}
