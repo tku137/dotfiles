@@ -1,0 +1,82 @@
+// py-ide.kdl — generic zellij layout for Python projects
+//
+// Assumptions:
+//   - cwd contains a `.venv/` with `bin/activate.fish`
+//   - `fish`, `nvim`, `opencode`, `marimo`, `btop` are on PATH
+//   - marimo will bind 127.0.0.1:2718 (one project per machine at a time)
+//
+// Tabs:
+//   terminal — venv-active fish shell
+//   code     — nvim (focused on startup)
+//   ai       — opencode
+//   run      — venv-active fish shell, project-specific run commands go here
+//   tools    — stacked: marimo (headless) | server shell | btop (expanded)
+//
+// Pane command convention:
+//   `-lc "... ; exec X"` — login shell, fish is replaced by X (no fish wrapper)
+//   `-C  "... ; echo ..."` — non-login, fish stays as the interactive shell
+//
+// Launch:
+//   zellij --layout py-ide
+//   (or use the `zj-py` fish function, which also sets a session name)
+
+layout {
+    cwd "."
+
+    default_tab_template {
+        children
+
+        pane size=1 borderless=true {
+            plugin location="zellij:compact-bar" {
+                tooltip "F1"
+            }
+        }
+    }
+
+    tab name="terminal" {
+        pane name="terminal" focus=true {
+            command "fish"
+            args "-C" "source .venv/bin/activate.fish; echo 'venv active'"
+        }
+    }
+
+    tab name="code" focus=true {
+        pane name="nvim" focus=true {
+            command "fish"
+            args "-lc" "source .venv/bin/activate.fish; exec nvim"
+        }
+    }
+
+    tab name="ai" {
+        pane name="opencode" focus=true {
+            command "fish"
+            args "-lc" "source .venv/bin/activate.fish; exec opencode"
+        }
+    }
+
+    tab name="run" {
+        pane name="run" focus=true {
+            command "fish"
+            args "-C" "source .venv/bin/activate.fish; echo 'venv active'; echo 'run shell — add project-specific commands here'"
+        }
+    }
+
+    tab name="tools" {
+        pane name="tool-stack" stacked=true {
+            pane name="marimo" {
+                command "fish"
+                args "-lc" "source .venv/bin/activate.fish; exec marimo edit --headless --host 127.0.0.1 --port 2718"
+            }
+
+            pane name="server" {
+                command "fish"
+                args "-C" "source .venv/bin/activate.fish; echo 'venv active'; echo 'server shell'"
+            }
+
+            pane name="btop" expanded=true {
+                command "fish"
+                args "-lc" "source .venv/bin/activate.fish; exec btop"
+            }
+        }
+    }
+}
