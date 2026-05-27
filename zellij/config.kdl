@@ -6,6 +6,18 @@ keybinds {
     }
     locked {
         bind "Ctrl g" { SwitchToMode "Normal"; }
+
+        // Direct tab switching while staying app-first
+        bind "Alt 1" { GoToTab 1; }
+        bind "Alt 2" { GoToTab 2; }
+        bind "Alt 3" { GoToTab 3; }
+        bind "Alt 4" { GoToTab 4; }
+        bind "Alt 5" { GoToTab 5; }
+        bind "Alt 6" { GoToTab 6; }
+
+        // Direct pane switching
+        bind "Alt ," { FocusPreviousPane; }
+        bind "Alt ." { FocusNextPane; }
     }
     resize {
         bind "Ctrl n" { SwitchToMode "Normal"; }
@@ -214,7 +226,9 @@ plugins {
     tab-bar location="zellij:tab-bar"
     status-bar location="zellij:status-bar"
     strider location="zellij:strider"
-    compact-bar location="zellij:compact-bar"
+    compact-bar location="zellij:compact-bar" {
+        tooltip "F1"
+    }
     session-manager location="zellij:session-manager"
     welcome-screen location="zellij:session-manager" {
         welcome_screen true
@@ -319,14 +333,14 @@ default_shell "fish"
 // Default: default
 //
 // theme "default"
-// theme "catppuccin-macchiato"
-theme "tokyonight_moon"
+theme_dark "tokyonight_moon"
+theme_light "tokyonight_day"
 
 // The name of the default layout to load on startup
 // Default: "default"
 // (Requires restart)
 //
-// default_layout "compact"
+default_layout "compact"
 
 // Choose the mode that zellij uses when starting up.
 // Default: normal
