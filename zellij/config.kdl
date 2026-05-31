@@ -18,6 +18,9 @@ keybinds {
         // Direct pane switching
         bind "Alt ," { FocusPreviousPane; }
         bind "Alt ." { FocusNextPane; }
+
+        // Direct floating pane
+        bind "0" { ToggleFloatingPanes; }
     }
     resize {
         bind "Ctrl n" { SwitchToMode "Normal"; }
@@ -214,9 +217,6 @@ keybinds {
     }
     shared_except "move" "locked" {
         bind "Ctrl h" { SwitchToMode "Move"; }
-    }
-    shared_except "tmux" "locked" {
-        bind "Ctrl b" { SwitchToMode "Tmux"; }
     }
 }
 
