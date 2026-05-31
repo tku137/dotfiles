@@ -29,25 +29,7 @@ return {
     },
   },
 
-  -- Other plugins
-  {
-    "kaarmu/typst.vim",
-    ft = { "typst" },
-    keys = {
-      {
-        "<localleader>c",
-        ft = "typst",
-        "<cmd>make<cr>",
-        desc = "Compile Document",
-      },
-      {
-        "<localleader>w",
-        ft = "typst",
-        "<cmd>TypstWatch<cr>",
-        desc = "Typst Watch",
-      },
-    },
-  },
+  -- Preview
   {
     "chomosuke/typst-preview.nvim",
     cmd = { "TypstPreview", "TypstPreviewToggle", "TypstPreviewUpdate" },
