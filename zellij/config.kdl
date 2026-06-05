@@ -16,8 +16,8 @@ keybinds {
         bind "Alt 6" { GoToTab 6; }
 
         // Direct pane switching
-        bind "Alt ," { FocusPreviousPane; }
-        bind "Alt ." { FocusNextPane; }
+        bind "Alt ." { FocusPreviousPane; }
+        bind "Alt ," { FocusNextPane; }
 
         // Direct floating pane
         bind "0" { ToggleFloatingPanes; }
