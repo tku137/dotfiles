@@ -333,6 +333,9 @@ default_shell "fish"
 // Default: default
 //
 // theme "default"
+// general theme for terminal emulators without support for dark/light switching
+theme "tokyonight_moon"
+// theme for terminal emulators with support for dark/light switching
 theme_dark "tokyonight_moon"
 theme_light "tokyonight_day"
 
