@@ -50,7 +50,7 @@ layout {
     tab name="ai" {
         pane name="opencode" focus=true {
             command "fish"
-            args "-lc" "source .venv/bin/activate.fish; exec opencode"
+            args "-lc" "source .venv/bin/activate.fish; echo 'venv active'"
         }
     }
 
