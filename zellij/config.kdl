@@ -10,23 +10,20 @@ keybinds {
         // Use MEH key for absolutely no clashes with other apps
 
         // Direct tab switching while staying app-first
-        bind "Ctrl Alt Shift q" { GoToTab 1; }
-        bind "Ctrl Alt Shift w" { GoToTab 2; }
-        bind "Ctrl Alt Shift e" { GoToTab 3; }
-        bind "Ctrl Alt Shift r" { GoToTab 4; }
-        bind "Ctrl Alt Shift t" { GoToTab 5; }
-
-        bind "Ctrl Alt Shift z" { GoToTab 6; }
-        bind "Ctrl Alt Shift x" { GoToTab 7; }
-        bind "Ctrl Alt Shift c" { GoToTab 8; }
-        bind "Ctrl Alt Shift v" { GoToTab 9; }
+        bind "Ctrl 1" { GoToTab 1; }
+        bind "Ctrl 2" { GoToTab 2; }
+        bind "Ctrl 3" { GoToTab 3; }
+        bind "Ctrl 4" { GoToTab 4; }
+        bind "Ctrl 5" { GoToTab 5; }
+        bind "Ctrl 6" { GoToTab 6; }
+        bind "Ctrl 7" { GoToTab 7; }
 
         // Direct pane switching
-        bind "Ctrl Alt Shift ." { FocusNextPane; }
-        bind "Ctrl Alt Shift ," { FocusPreviousPane; }
+        bind "Ctrl 9" { FocusNextPane; }
+        bind "Ctrl 8" { FocusPreviousPane; }
 
         // Direct floating pane
-        bind "Ctrl Alt Shift b" { ToggleFloatingPanes; }
+        bind "Ctrl 0" { ToggleFloatingPanes; }
     }
     resize {
         bind "Ctrl n" { SwitchToMode "Normal"; }
