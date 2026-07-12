@@ -1,5 +1,6 @@
-local prefix_ipy = "<Leader>cI"
-local prefix_dap = "<Leader>dy"
+local prefix_ipy = "<leader>cI"
+local prefix_dap = "<leader>dy"
+local repl_ft = { "python", "lua", "scala" }
 
 -- Helper functions
 
@@ -94,6 +95,16 @@ return {
   -- mise use -g pipx:basedpyright@latest
   {
     "neovim/nvim-lspconfig",
+    keys = {
+      {
+        "<localleader>b",
+        function()
+          require("utils.lsp_utils").toggle_basedpyright_settings()
+        end,
+        desc = "Toggle BasedPyright Strict Mode",
+        ft = "python",
+      },
+    },
     opts = { servers = { "ruff", "basedpyright" } },
   },
 
@@ -216,6 +227,7 @@ return {
         prefix_ipy,
         "",
         desc = "iPython Terminal",
+        ft = repl_ft,
       },
       {
         prefix_ipy .. "r",
@@ -224,14 +236,7 @@ return {
         end,
         desc = "Send to ipython terminal",
         mode = "n",
-      },
-      {
-        "<Leader>r",
-        function()
-          require("nvim-python-repl").send_statement_definition()
-        end,
-        desc = "Send to ipython terminal",
-        mode = "n",
+        ft = repl_ft,
       },
       {
         prefix_ipy .. "b",
@@ -240,6 +245,7 @@ return {
         end,
         desc = "Send entire buffer to REPL",
         mode = "n",
+        ft = repl_ft,
       },
       {
         prefix_ipy .. "E",
@@ -252,6 +258,7 @@ return {
         end,
         desc = "Toggle automatic execution",
         mode = "n",
+        ft = repl_ft,
       },
       {
         prefix_ipy .. "V",
@@ -264,18 +271,39 @@ return {
         end,
         desc = "Toggle vertical/horizontal split",
         mode = "n",
+        ft = repl_ft,
       },
       -- Visual mode keymaps
       {
-        "<Leader>r",
+        prefix_ipy .. "r",
         function()
           require("nvim-python-repl").send_visual_to_repl()
         end,
         desc = "Send to ipython terminal",
         mode = "v",
+        ft = repl_ft,
+      },
+      -- Quick-access keymaps
+      {
+        "<localleader>r",
+        function()
+          require("nvim-python-repl").send_statement_definition()
+        end,
+        desc = "Send to ipython terminal",
+        mode = "n",
+        ft = repl_ft,
+      },
+      {
+        "<localleader>r",
+        function()
+          require("nvim-python-repl").send_visual_to_repl()
+        end,
+        desc = "Send to ipython terminal",
+        mode = "v",
+        ft = repl_ft,
       },
     },
-    ft = { "python", "lua", "scala" },
+    ft = repl_ft,
     config = function()
       require("nvim-python-repl").setup({
         execute_on_send = true,

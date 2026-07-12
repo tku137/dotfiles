@@ -497,7 +497,8 @@ This configuration follows several key principles:
 This configuration includes some custom functionality coded inside this config (not available as plugins):
 
 - **Global Inlay Hints**: Inlay hints are enabled by default for every LSP that supports `textDocument/inlayHint`, via an `LspAttach` autocmd in `lsp.lua`. A 500 ms deferred retry ensures hints appear even for slow-starting servers (e.g. `lua_ls`). Toggle per-buffer with `<Leader>uh`.
-- **BasedPyright Dynamic Toggle**: Live switching between basic and strict type checking modes without LSP restart (`lsp_utils.toggle_basedpyright_settings()`) with `<Leader>cb`
+- **BasedPyright Dynamic Toggle**: Live switching between basic and strict type checking modes without LSP restart (`lsp_utils.toggle_basedpyright_settings()`) with `<Leader>cb` or `<LocalLeader>b` in Python buffers
+- **Interactive REPL**: Send a statement, definition, or visual selection with `<Leader>cIr`; use `<LocalLeader>r` for quick access in Python, Lua, and Scala buffers
 - **YAML Schema Validation**: Validate YAML files with custom schema loading from `.yamlls.extra.lua` files and live schema store toggle (`lsp_utils.toggle_yaml_schema_store()`) with `<Leader>uy`. Custom schema file declaration can be achieved using for example
 
 ```lua
