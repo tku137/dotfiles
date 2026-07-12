@@ -135,8 +135,6 @@ return {
           end,
         },
       }
-
-      vim.o.autoread = true -- Required for `opts.events.reload`
     end,
     -- stylua: ignore
     keys = {

@@ -35,14 +35,12 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
--- Checks if files have changed externally when returning to Neovim and reloads them
-vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+-- Check for external file changes when returning to Neovim or a file buffer
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "TermClose", "TermLeave" }, {
   desc = "File reload on external changes",
   group = augroup("checktime"),
   callback = function()
-    if vim.o.buftype ~= "nofile" then
-      vim.cmd("checktime")
-    end
+    vim.cmd("checktime")
   end,
 })
 
