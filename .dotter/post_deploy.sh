@@ -43,7 +43,7 @@ mise --quiet use -g bat@latest fd@latest fzf@latest ripgrep@latest zoxide@latest
 if [ "$(uname -s)" = "Darwin" ]; then
   if command -v brew &>/dev/null; then
     echo "  Installing eza via brew..."
-    brew install eza >/dev/null 2>&1
+    brew install eza 2>&1 >/dev/null
   else
     echo "  WARNING: brew not found, eza skipped."
   fi
@@ -55,7 +55,7 @@ fi
 if [ "$(uname -s)" = "Darwin" ]; then
   if command -v brew &>/dev/null; then
     echo "  Installing btop via brew..."
-    brew install btop >/dev/null 2>&1
+    brew install btop 2>&1 >/dev/null
   else
     echo "  WARNING: brew not found, btop skipped."
   fi
@@ -80,8 +80,10 @@ echo "[nvim]"
 {{#if (is_executable "mise")}}
 echo "  Installing neovim via mise..."
 mise --quiet use -g neovim@latest 2>&1 >/dev/null
-echo "  Installing node and python runtimes via mise..."
-mise --quiet use -g node@latest python@latest 2>&1 >/dev/null
+echo "  Installing node runtime via mise..."
+mise --quiet use -g node@latest 2>&1 >/dev/null
+echo "  Installing python runtime via mise..."
+mise --quiet use -g python@latest 2>&1 >/dev/null
 echo "  Installing tool prerequisites via mise..."
 mise --quiet use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest github:Myriad-Dreamin/tinymist@latest github:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest github:typstyle-rs/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:tree-sitter-cli@latest github:anomalyco/opencode@latest lazygit@latest 2>&1 >/dev/null
 {{else}}
