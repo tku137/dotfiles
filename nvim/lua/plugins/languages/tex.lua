@@ -44,7 +44,7 @@ return {
   -- LSP
   -- brew install texlab
   -- OR
-  -- mise use -g ubi:latex-lsp/texlab@latest
+  -- mise use -g github:latex-lsp/texlab@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "texlab" } },

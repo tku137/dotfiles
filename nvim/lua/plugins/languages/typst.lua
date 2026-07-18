@@ -9,7 +9,7 @@ return {
   -- LSP
   -- brew install tinymist
   -- OR
-  -- mise use -g aqua:Myriad-Dreamin/tinymist@latest
+  -- mise use -g github:Myriad-Dreamin/tinymist@latest
   {
     "neovim/nvim-lspconfig",
     opts = { servers = { "tinymist" } },
@@ -18,7 +18,7 @@ return {
   -- Formatter
   -- brew install typstyle
   -- OR
-  -- mise use -g aqua:Enter-tainer/typstyle@latest
+  -- mise use -g github:typstyle-rs/typstyle@latest
   {
     "stevearc/conform.nvim",
     opts_extend = { "formatters_by_ft.typst" }, -- important to convince lazy.nvim to merge this!

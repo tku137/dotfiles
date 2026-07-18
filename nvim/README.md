@@ -622,8 +622,8 @@ In SQL buffers (`sql`, `mysql`, `plsql`), the `<localLeader>` menu provides shor
      - **angular-language-server** - Angular LSP (`mise use -g npm:@angular/language-server@latest`)
      - **jsonlint** - JSON linting (`brew install jsonlin` or `mise use -g npm:jsonlint@latest`)
      - **yaml-language-server** - YAML LSP (`brew install yaml-language-server` or `mise use -g npm:yaml-language-server@latest`)
-     - **tinymist** - Typst LSP (`brew install tinymist` or `mise use -g aqua:Myriad-Dreamin/tinymist@latest`)
-     - **texlab** - LaTeX LSP (`brew install texlab` or `mise use -g ubi:latex-lsp/texlab@latest`)
+     - **tinymist** - Typst LSP (`brew install tinymist` or `mise use -g github:Myriad-Dreamin/tinymist@latest`)
+     - **texlab** - LaTeX LSP (`brew install texlab` or `mise use -g github:latex-lsp/texlab@latest`)
      - **fish-lsp** - Fish shell LSP (`brew install fish-lsp` or `mise use -g npm:fish-lsp@latest`)
      - **postgres_lsp** - PostgreSQL LSP (`mise use -g npm:@postgrestools/postgrestools@latest`)
      - **sql-language-server** - SQL LSP (`brew install sql-language-server` or `mise use -g npm:sql-language-server@latest`)
@@ -631,7 +631,7 @@ In SQL buffers (`sql`, `mysql`, `plsql`), the `<localLeader>` menu provides shor
    - **Formatters:**
      - **stylua** - Lua formatter (`brew install stylua` or `mise use -g stylua@latest`)
      - **prettierd/prettier** - Markdown formatter (`brew install prettier prettierd` or `mise use -g npm:@fsouza/prettierd@latest`)
-     - **typstyle** - Typst formatter (`brew install typstyle` or `mise use -g aqua:Enter-tainer/typstyle@latest`)
+     - **typstyle** - Typst formatter (`brew install typstyle` or `mise use -g github:typstyle-rs/typstyle@latest`)
      - **fish_indent** - Fish formatter (comes with fish shell)
      - **taplo** - TOML formatter (`brew install taplo` or `mise use -g taplo@latest`)
      - **sqlfluff** - SQL Formatter (`brew install sqlfluff` or `mise use -g pipx:sqlfluff@latest`)
@@ -702,7 +702,7 @@ brew install ruff basedpyright llvm lua-language-server marksman vscode-langserv
 > The mise tool list in `nvim/README.md` mirrors the one in `.dotter/post_deploy.sh`. If you add or remove a Neovim tool dependency, update both files.
 
 ```bash
-mise use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest aqua:Myriad-Dreamin/tinymist@latest github:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest aqua:Enter-tainer/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:tree-sitter-cli@latest npm:opencode-ai@latest
+mise use -g ruff@latest pipx:basedpyright@latest lua-language-server@latest marksman@latest npm:vscode-langservers-extracted@latest npm:emmet-ls@latest npm:@tailwindcss/language-server@latest npm:@angular/language-server@latest npm:jsonlint@latest npm:yaml-language-server@latest github:Myriad-Dreamin/tinymist@latest github:latex-lsp/texlab@latest npm:fish-lsp@latest npm:@postgrestools/postgrestools@latest npm:sql-language-server@latest npm:@vtsls/language-server@latest stylua@latest npm:@fsouza/prettierd@latest github:typstyle-rs/typstyle@latest taplo@latest pipx:sqlfluff@latest npm:@biomejs/biome@latest npm:eslint_d@latest pipx:debugpy@latest npm:live-server@latest npm:typescript@latest pipx:ipython@latest npm:tree-sitter-cli@latest github:anomalyco/opencode@latest
 ```
 
 ## Troubleshooting
