@@ -38,8 +38,19 @@ echo "  WARNING: mise not found, starship not installed. See https://starship.rs
 {{#if dotter.packages.tools}}
 echo "[tools]"
 {{#if (is_executable "mise")}}
-echo "  Installing tools via mise..."
-mise --quiet use -g bat@latest eza@latest fd@latest fzf@latest ripgrep@latest zoxide@latest 2>&1 >/dev/null
+echo "  Installing tools..."
+mise --quiet use -g bat@latest fd@latest fzf@latest ripgrep@latest zoxide@latest 2>&1 >/dev/null
+if [ "$(uname -s)" = "Darwin" ]; then
+  if command -v brew &>/dev/null; then
+    echo "  Installing eza via brew..."
+    brew install eza >/dev/null 2>&1
+  else
+    echo "  WARNING: brew not found, eza skipped."
+  fi
+else
+  echo "  Installing eza via mise..."
+  mise --quiet use -g eza@latest 2>&1 >/dev/null
+fi
 # btop: no native macOS binary available anymore, install OS-specific
 if [ "$(uname -s)" = "Darwin" ]; then
   if command -v brew &>/dev/null; then
@@ -52,8 +63,12 @@ else
   echo "  Installing btop via mise (github backend)..."
   mise --quiet use -g github:aristocratos/btop@latest 2>&1 >/dev/null
 fi
-echo "  Rebuilding bat cache..."
-bat cache --build 2>&1 >/dev/null
+if command -v bat &>/dev/null; then
+  echo "  Rebuilding bat cache..."
+  bat cache --build 2>&1 >/dev/null
+else
+  echo "  WARNING: bat not available, cache rebuild skipped."
+fi
 {{else}}
 echo "  WARNING: mise not found, skipping tool installation."
 {{/if}}

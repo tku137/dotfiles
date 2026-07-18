@@ -153,7 +153,7 @@ Dotter runs `.dotter/pre_deploy.sh` before and `.dotter/post_deploy.sh` after ev
 
 | Package  | What runs                                                                                                                                                                                                           |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| tools    | Installs `bat`, `btop`, `eza`, `fd`, `fzf`, `ripgrep`, `zoxide` via `mise use -g`, then runs `bat cache --build`. Warns if `mise` is not on PATH.                                                                   |
+| tools    | Installs `bat`, `fd`, `fzf`, `ripgrep`, and `zoxide` via mise. Installs `eza` and `btop` via Homebrew on macOS and mise on Linux, then rebuilds the bat cache. Warns if required package managers are unavailable. |
 | nvim     | Installs `neovim`, `node`, `python` and all Neovim tool prerequisites (LSP servers, formatters, linters, DAP adapters) via `mise use -g`. Skipped if `mise` is not on PATH. See `nvim/README.md` for the full list. |
 | fish     | Warns if `fish` binary missing. Runs `fisher update` to install/sync fish plugins from `fish_plugins`. Bootstraps fisher first if missing.                                                                                     |
 | tmux     | Installs `tmux` and `tpack` via mise, runs `tpack install` inside a headless tmux server. Skipped if `mise` is not on PATH.                                                                                         |
