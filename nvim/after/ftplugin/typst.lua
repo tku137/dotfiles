@@ -10,7 +10,7 @@ local function typst_compile()
     return
   end
 
-  local efm = vim.bo.errorformat
+  local efm = "%f:%l:%c: %t%*[^:]: %m"
 
   vim.notify("Typst: compiling…", vim.log.levels.INFO)
 
