@@ -19,8 +19,8 @@ keybinds {
         bind "Ctrl 7" { GoToTab 7; }
 
         // Direct pane switching
-        bind "Ctrl 9" { FocusNextPane; }
-        bind "Ctrl 8" { FocusPreviousPane; }
+        bind "Ctrl 9" { MoveFocus "Down"; }
+        bind "Ctrl 8" { MoveFocus "Up"; }
 
         // Direct floating pane
         bind "Ctrl 0" { ToggleFloatingPanes; }
